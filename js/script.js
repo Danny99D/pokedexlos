@@ -56,11 +56,6 @@ function load(xhttp) {
     addSelect(pokemonTypeLearn3, typeList)
     addSelect(pokemonTypeLearn4, typeList)
 
-    // loadDoc('php/searchPokemon.php?d=&type1=poison&type2=electric', drawCards)type1=fire
-    searchPokemon(pokemonData)
-        // loadDoc('php/loadPokemon.php?dexNumber=' + '1' + "&expansion=base", drawCardInfo)
-        // loadDoc('php/loadPokemon.php?dexNumber=' + '41-g' + "&expansion=base", drawCardInfo)
-
     formClose.addEventListener('click', (e) => {
         search.classList.toggle('search--show')
         e.target.classList.toggle('formClose--show')
@@ -132,57 +127,6 @@ function load(xhttp) {
         }
     })
 
-}
-
-//Funcion para buscar las cartas por los valores del formulario
-function getCards() {
-    const pokemonName = document.getElementById('pokemonName').value
-    const pokemonRarity = document.getElementById('pokemonRarity').value
-    const pokemonType1 = document.getElementById('pokemonType1').value
-    const pokemonType2 = document.getElementById('pokemonType2').value
-    const pokemonMoveName = document.getElementById('pokemonMoveName').value
-    const pokemonMoveType = document.getElementById('pokemonMoveType').value
-    const pokemonMoveStrength = document.getElementById('pokemonMoveStrength').value ? document.getElementById('pokemonMoveStrength').value : -1
-    const pokemonHealth = document.getElementById('pokemonHealth').value ? document.getElementById('pokemonHealth').value : -1
-    const pokemonInitiative = document.getElementById('pokemonInitiative').value ? document.getElementById('pokemonInitiative').value : -1
-    const pokemonEvoCost = document.getElementById('pokemonEvoCost').value ? document.getElementById('pokemonEvoCost').value : -1
-    const pokemonClimate = document.getElementById('pokemonClimate').value
-    const pokemonBiome = document.getElementById('pokemonBiome').value
-    const pokemonTypeLearn1 = document.getElementById('pokemonTypeLearn1').value
-    const pokemonTypeLearn2 = document.getElementById('pokemonTypeLearn2').value
-    const pokemonTypeLearn3 = document.getElementById('pokemonTypeLearn3').value
-    const pokemonTypeLearn4 = document.getElementById('pokemonTypeLearn4').value
-
-    //Llama la libpokemon para sacar los resultados y dibujar las cartas
-    let url = 'php/searchPokemon.php?d='
-    url += pokemonType1 == 'none' ? '' : '&type1=' + pokemonType1
-    url += pokemonType2 == 'none' ? '' : '&type2=' + pokemonType2
-    url += pokemonName == '' ? '' : '&name=' + pokemonName
-    url += pokemonRarity == 'none' ? '' : '&rarity=' + pokemonRarity
-    url += pokemonMoveName == '' ? '' : '&moveName=' + pokemonMoveName
-    url += pokemonMoveType == 'none' ? '' : '&moveType=' + pokemonMoveType
-    url += pokemonMoveStrength == -1 ? '' : '&moveStrength=' + pokemonMoveStrength
-    url += pokemonHealth == -1 ? '' : '&health=' + pokemonHealth
-    url += pokemonInitiative == -1 ? '' : '&initiative=' + pokemonInitiative
-    url += pokemonEvoCost == -1 ? '' : '&evCost=' + pokemonEvoCost
-    url += pokemonClimate == 'none' ? '' : '&climate=' + pokemonClimate
-    url += pokemonBiome == 'none' ? '' : '&biome=' + pokemonBiome
-    url += pokemonTypeLearn1 == 'none' ? '' : '&learnMove1=' + pokemonTypeLearn1
-    url += pokemonTypeLearn2 == 'none' ? '' : '&learnMove2=' + pokemonTypeLearn2
-    url += pokemonTypeLearn3 == 'none' ? '' : '&learnMove3=' + pokemonTypeLearn3
-    url += pokemonTypeLearn4 == 'none' ? '' : '&learnMove4=' + pokemonTypeLearn4
-
-    url += url.length == 24 ? 'd' : url
-
-    loadDoc(url, drawCards)
-
-    const search = document.getElementById('search')
-    const formClose = document.getElementById('formClose')
-
-    if (url.length > 24 && search.classList.contains('search--show')) {
-        search.classList.remove('search--show')
-        formClose.classList.remove('formClose--show')
-    }
 }
 
 //Funcion para dibujar las cartas obtenidas de getCards en screen

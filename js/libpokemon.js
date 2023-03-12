@@ -246,7 +246,6 @@ function searchByLearnTypes(pokemonData, moveType) {
 }
 
 function searchPokemon(pokemonData) {
-    const screen = document.getElementById('screen')
     const pokemonName = document.getElementById('pokemonName').value
     const pokemonRarity = document.getElementById('pokemonRarity').value != 'none' ? document.getElementById('pokemonRarity').value : ''
     const pokemonType1 = document.getElementById('pokemonType1').value != 'none' ? document.getElementById('pokemonType1').value : ''
@@ -314,6 +313,16 @@ function searchPokemon(pokemonData) {
         }
 
         drawPokemonCards(searchList)
+
+        //Cierra la ventana de busqueda para menu responsive
+        const search = document.getElementById('search')
+        const formClose = document.getElementById('formClose')
+
+        if (search.classList.contains('search--show') && formClose.classList.contains('formClose--show')) {
+            search.classList.remove('search--show')
+            formClose.classList.remove('formClose--show')
+            formClose.classList.remove('formClose--left')
+        }
     }
 }
 

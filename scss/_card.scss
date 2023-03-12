@@ -1,0 +1,269 @@
+.sdcard {
+    @include cubo(250px);
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 0 0 .3em $cardBorder;
+    background-color: $cardColor;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    &::after {
+        content: '';
+        @include cubo(100%);
+        position: absolute;
+        z-index: 15;
+        top: 0;
+        left: 0;
+    }
+    &:hover {
+        box-shadow: 0 0 0 .3em rgb(167, 75, 32);
+        cursor: pointer;
+    }
+    &-type {
+        @include cubo(25px);
+        margin-bottom: 2px;
+        margin-right: 2px;
+        &--last {
+            margin-left: auto;
+            margin-right: .3rem;
+        }
+    }
+    &-title,
+    &-moveInfo {
+        // background: lightblue;
+        display: flex;
+        align-items: center;
+        padding-left: 1rem;
+        & p {
+            font-weight: bold;
+            margin-left: .5rem;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+    }
+    &-info {
+        @extend %flexAround;
+        height: 65%;
+        &--stats {
+            @extend %flexAround;
+        }
+        &--box {
+            // background-color: lightgoldenrodyellow;
+            height: 100%;
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+        &--location {
+            width: 50%;
+        }
+        &--learn {
+            display: flex;
+        }
+        &--img {
+            width: 50%;
+        }
+        &--health,
+        &--initiative {
+            padding: 4px 30px 4px 4px;
+            background-color: aliceblue;
+            position: relative;
+            border-radius: 5px;
+            z-index: 10;
+            width: 50px;
+            text-align: right;
+            font-weight: bold;
+        }
+        &--initiative {
+            margin-left: .3rem;
+        }
+        &--health::after,
+        &--initiative::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 100%;
+            @extend %bgs;
+            background-size: 70% 60%;
+            right: 0;
+            top: 0;
+        }
+        &--health::after {
+            background-image: url('../assets/img/icons/health.png');
+        }
+        &--initiative::after {
+            background-image: url('../assets/img/icons/initiative.png');
+        }
+    }
+    &-moveInfo {
+        // background-color: lightseagreen;
+        padding-left: 0;
+        align-items: center;
+        padding-left: .5rem;
+        padding-right: .5rem;
+        &--strength {
+            border: 2px solid black;
+            @include cubo(1.5rem);
+            @extend %flexCenter;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-left: auto;
+            background-color: aliceblue;
+        }
+        &--name {
+            background-color: aliceblue;
+            width: 70%;
+            padding: .3rem .5rem;
+            border-radius: 5px;
+        }
+    }
+}
+
+.cardInfo {
+    background-color: $cardColor;
+    position: absolute;
+    @include cubo(100%);
+    top: 0;
+    left: 0;
+    z-index: 100;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.5rem;
+    &-close {
+        @include cubo(45px);
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 110;
+        background-image: url('../assets/img/icons/closeButton.png');
+        @extend %bgs;
+        background-size: 125% 125%;
+        background-color: #fff;
+        border-radius: 5px;
+        transition: background-image .3s ease-in;
+        &:hover {
+            background-image: url('../assets/img/icons/closeButtonB.png');
+            cursor: pointer;
+        }
+    }
+    &-title {
+        display: flex;
+        border-bottom: 4px solid $cardBorder;
+        &--types {
+            @extend %flexAround;
+        }
+    }
+    &-type {
+        @include cubo(40px);
+        &--sm {
+            @include cubo(30px);
+        }
+    }
+    &-name {
+        width: 80%;
+        font-weight: bold;
+        font-size: 1.4rem;
+        margin-left: .5rem;
+    }
+    &-info {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+        margin-bottom: 1.5rem;
+        &--img {
+            width: 100%;
+            max-width: 300px;
+        }
+        &--box {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        &--stats {
+            @extend %flexAround;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        &--learn {
+            @extend %flexCenter;
+            & div {
+                @include cubo(70px);
+                @extend %flexAround;
+                flex-wrap: wrap;
+            }
+        }
+        &--location {
+            @extend %flexCenter;
+            & img {
+                width: 70%;
+                max-width: 100px;
+            }
+            &B {
+                grid-column: 1/3;
+                & img {
+                    width: 40%;
+                    max-width: 100px;
+                }
+            }
+        }
+        &--evolution {
+            @extend %flexCenter;
+            & div {
+                @include cubo(60px);
+                @extend %flexCenter;
+                @extend %bgs;
+                background-image: url('../assets/img/icons/evolution.png');
+                font-weight: bold;
+                font-size: 2rem;
+                color: white;
+            }
+        }
+    }
+    &-box {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    &-description {
+        @extend %flexCenter;
+        font-size: 1.2rem;
+        & p {
+            margin: 0 0 0 .5rem;
+        }
+    }
+    &-move {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        &--description {
+            width: 100%;
+            background-color: aliceblue;
+            border-radius: 5px;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            text-align: justify;
+        }
+        & .sdcard-moveInfo {
+            &--name {
+                text-align: center;
+                font-weight: bold;
+                margin-left: auto;
+                margin-right: auto;
+                width: 80%;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .cardInfo {
+        &-info {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

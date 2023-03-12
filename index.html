@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex - Legend of Sinnoh</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js"></script>
+    <script src="js/libpokemon.js"></script>
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div class="pokedex">
+        <div class="formClose" id="formClose"></div>
+        <div class="search" id="search">
+            <form action="" method="post" id="pokemonSearch">
+                <div class="field field--text">
+                    <input type="text" name="pokemonName" id="pokemonName" placeholder="Pokémon Name">
+                </div>
+
+                <div class="field field--double">
+                    <div class="">
+                        <label for="pokemonRarity">Rarity</label>
+                        <select name="pokemonRarity" id="pokemonRarity">
+                        <option value="none">None</option>
+                    </select></div>
+                    <div class="">
+                        <label for="pokemonEvoCost">Evolution Cost</label>
+                        <input class="inp--short" maxlength="2" type="number" name="pokemonEvoCost" id="pokemonEvoCost">
+                    </div>
+                </div>
+
+                <div class="field field--dual">
+                    <label class="tx--center" for="pokemonType1">Pokémon Types</label>
+                    <select name="pokemonType1" id="pokemonType1">
+                        <option value="none">Type 1</option>
+                    </select>
+                    <select name="pokemonType2" id="pokemonType2" disabled>
+                        <option value="none">Type 2</option>
+                    </select>
+                </div>
+
+                <div class="field field--text">
+                    <input type="text" name="pokemonMoveName" id="pokemonMoveName" placeholder="Pokémon Move Name">
+                </div>
+
+                <div class="field field--double">
+                    <div class="">
+                        <label for="pokemonMoveType">Move Type</label>
+                        <select name="pokemonMoveType" id="pokemonMoveType">
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    <div class="">
+                        <label for="pokemonMoveStrength">Move Strength</label>
+                        <input class="inp--short" type="number" name="pokemonMoveStrength" id="pokemonMoveStrength">
+                    </div>
+                </div>
+
+                <div class="field field--double">
+                    <div class="">
+                        <label for="pokemonHealth">Health</label>
+                        <input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth">
+                    </div>
+                    <div class="">
+                        <label for="pokemonInitiative">Initiative</label>
+                        <input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative">
+                    </div>
+                </div>
+
+                <div class="field field--double">
+                    <div class="">
+                        <label for="pokemonBiome">Biome</label>
+                        <select name="pokemonBiome" id="pokemonBiome">
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                    <div class="">
+                        <label for="pokemonClimate">Climate</label>
+                        <select name="pokemonClimate" id="pokemonClimate">
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field field--cuadra">
+                    <label class="tx--center" for="pokemonTypeLearn1">Pokemon Move Types</label>
+                    <select name="pokemonTypeLearn1" id="pokemonTypeLearn1">
+                        <option value="none">Type 1</option>
+                    </select>
+                    <select name="pokemonTypeLearn2" id="pokemonTypeLearn2" disabled>
+                        <option value="none">Type 2</option>
+                    </select>
+                    <select name="pokemonTypeLearn3" id="pokemonTypeLearn3" disabled>
+                        <option value="none">Type 3</option>
+                    </select>
+                    <select name="pokemonTypeLearn4" id="pokemonTypeLearn4" disabled>
+                        <option value="none">Type 4</option>
+                    </select>
+                </div>
+
+                <!-- <div class="field">
+                    <input type="checkbox" name="" value="" id="">base
+                    <input type="checkbox" name="" value="" id="">generation
+                    <input type="checkbox" name="" value="" id="">mega
+                    <input type="checkbox" name="" value="" id="">darek
+                    <input type="checkbox" name="" value="" id="">expanded
+                </div> -->
+
+                <div class="field field--buttons">
+                    <input type="button" id="btnSearch" value="Search" />
+                    <input type="button" id="btnReset" value="Reset">
+                </div>
+            </form>
+
+        </div>
+        <div class="screen" id="screen"></div>
+    </div>
+</body>
+
+</html>

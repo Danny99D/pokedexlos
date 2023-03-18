@@ -408,9 +408,7 @@ function drawPokemonCard(pokemon) {
     dvCardTitle.appendChild(pName)
     dvCardTitle.appendChild(createImg('icon', checkRarity(pokemon.encounter_tier), 'sdcard-type sdcard-type--last', pokemon.expansion))
 
-    let expImage = createImg('exp', checkExp(pokemon.expansion), 'expansions--img expansions--img--sm', pokemon.expansion)
-
-    dvCardTitle.appendChild(expImage)
+    dvCardTitle.appendChild(createImg('exp', checkExp(pokemon.expansion), 'expansions--img expansions--img--sm', pokemon.expansion))
 
 
     //---------sdcard Info

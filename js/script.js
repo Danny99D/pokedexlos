@@ -74,11 +74,26 @@ function load(xhttp) {
     //Resetea el formulario
     btnReset.addEventListener('click', (e) => {
         if (e.target.value == 'Reset') {
+            const searchBase = document.getElementById('searchBase')
+            const searchXenonia = document.getElementById('searchXenonia')
+            const searchGenerations = document.getElementById('searchGenerations')
+            const searchEvol = document.getElementById('searchEvol')
+
+            let searchBaseVal = searchBase.checked
+            let searchXenoniaVal = searchXenonia.checked
+            let searchGenerationsVal = searchGenerations.checked
+            let searchEvolVal = searchEvol.checked
+
             pokemonSearch.reset()
             pokemonTypeLearn2.disabled = true
             pokemonTypeLearn3.disabled = true
             pokemonTypeLearn4.disabled = true
             pokemonType2.disabled = true
+
+            searchBase.checked = searchBaseVal
+            searchXenonia.checked = searchXenoniaVal
+            searchGenerations.checked = searchGenerationsVal
+            searchEvol.checked = searchEvolVal
         }
     })
 

@@ -682,7 +682,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
     const pokeImg = document.getElementById('pokeImg')
     countClickBayleef = 0;
-    if (pokemon.pokedex_number == 153) {
+    if (pokemon.pokedex_number == 153 && pokemon.expansion == 'generations') {
 
         pokeImg.addEventListener('click', (e) => {
             countClickBayleef++

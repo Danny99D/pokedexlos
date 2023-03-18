@@ -1,3 +1,4 @@
+let countClickBayleef = 0;
 //===================================== Search =========================================
 function searchByDex(pokemonData, dexNumber, expansion) {
     let pokeSearch = []
@@ -40,11 +41,21 @@ function searchByRarity(pokemonData, rarity) {
     let pokemonSearch = []
 
     if (rarity != '') {
-        pokemonData.find((pokeObj) => {
-            if (pokeObj.encounter_tier.toLowerCase() == rarity) {
-                pokemonSearch.push(pokeObj)
-            }
-        })
+        if (rarity == 'galactic') {
+            pokemonData.find((pokeObj) => {
+                if ((pokeObj.encounter_tier.toLowerCase() == 'grunt') ||
+                    (pokeObj.encounter_tier.toLowerCase() == 'commander') ||
+                    (pokeObj.encounter_tier.toLowerCase() == 'boss')) {
+                    pokemonSearch.push(pokeObj)
+                }
+            })
+        } else {
+            pokemonData.find((pokeObj) => {
+                if (pokeObj.encounter_tier.toLowerCase() == rarity) {
+                    pokemonSearch.push(pokeObj)
+                }
+            })
+        }
     }
 
     return pokemonSearch
@@ -245,6 +256,29 @@ function searchByLearnTypes(pokemonData, moveType) {
     return pokemonSearch
 }
 
+function searchByExpansion(pokemonData, expansions) {
+    let pokemonSearch = []
+    let auxExpansions = []
+
+    expansions.forEach(exp => {
+        if (exp.checked) {
+            auxExpansions.push(exp.value)
+        }
+    });
+
+    auxExpansions.forEach(expansion => {
+        pokemonData.find((pokeObj) => {
+            if ((pokeObj.expansion == expansion)) {
+                pokemonSearch.push(pokeObj)
+            }
+        })
+    });
+
+
+
+    return pokemonSearch
+}
+
 function searchPokemon(pokemonData) {
     const pokemonName = document.getElementById('pokemonName').value
     const pokemonRarity = document.getElementById('pokemonRarity').value != 'none' ? document.getElementById('pokemonRarity').value : ''
@@ -262,8 +296,14 @@ function searchPokemon(pokemonData) {
     const pokemonTypeLearn2 = document.getElementById('pokemonTypeLearn2').value != 'none' ? document.getElementById('pokemonTypeLearn2').value : ''
     const pokemonTypeLearn3 = document.getElementById('pokemonTypeLearn3').value != 'none' ? document.getElementById('pokemonTypeLearn3').value : ''
     const pokemonTypeLearn4 = document.getElementById('pokemonTypeLearn4').value != 'none' ? document.getElementById('pokemonTypeLearn4').value : ''
+    const searchExpansions = document.getElementsByName('searchExpansions')
 
-    if (checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4)) {
+    const screen = document.getElementById('screen')
+    if (screen.classList.contains('screen--noScroll')) {
+        screen.classList.remove('screen--noScroll')
+    }
+
+    if (checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4, searchExpansions)) {
         let searchList = pokemonData
 
         // Busca por tipo1 y tipo2
@@ -311,6 +351,12 @@ function searchPokemon(pokemonData) {
         if (pokemonTypeLearn1 != '' || pokemonTypeLearn2 != '' || pokemonTypeLearn3 != '' || pokemonTypeLearn4 != '') {
             searchList = searchByLearnTypes(searchList, pokemonTypeLearn1 + ' ' + pokemonTypeLearn2 + ' ' + pokemonTypeLearn3 + ' ' + pokemonTypeLearn4)
         }
+
+        // Busca pokemon por expansion
+        searchList = searchByExpansion(searchList, searchExpansions)
+
+        // Ordena la lista por pokedex_number
+        searchList = sortByDexNumber(searchList)
 
         drawPokemonCards(searchList)
 
@@ -361,6 +407,15 @@ function drawPokemonCard(pokemon) {
 
     dvCardTitle.appendChild(pName)
     dvCardTitle.appendChild(createImg('icon', checkRarity(pokemon.encounter_tier), 'sdcard-type sdcard-type--last', pokemon.expansion))
+
+    let expImage = document.createElement('IMG')
+    expImage.src = 'assets/img/icons/expansions/' + checkExp(pokemon.expansion)
+    expImage.alt = checkExp(pokemon.expansion) + '.png'
+    expImage.title = firstUpperCase(pokemon.expansion)
+    expImage.classList.add('expansions--img')
+    expImage.classList.add('expansions--img--sm')
+
+    dvCardTitle.appendChild(expImage)
 
 
     //---------sdcard Info
@@ -416,6 +471,7 @@ function drawPokemonCard(pokemon) {
     dvInfo.appendChild(dvLearn)
     dvCardInfo.appendChild(dvInfo)
 
+
     //---------sdcard Move
     let dvCardMove = document.createElement('DIV')
     dvCardMove.classList.add('sdcard-moveInfo')
@@ -456,7 +512,6 @@ function drawPokemonCards(pokemonData) {
 
 //Funcion para dibujar la informacion de la carta seleccionada
 function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
-
     const screen = document.getElementById('screen')
     const pokemon = searchByDex(pokemonData, dexNumber, expansion)
 
@@ -481,6 +536,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
     let dvCardTypes = document.createElement('DIV')
     dvCardTypes.classList.add('cardInfo-title--types')
+    dvCardTypes.appendChild(createImg('exp', checkExp(pokemon.expansion), 'cardInfo-type cardInfo-type--round', pokemon.expansion))
 
     if (pokemon.hasOwnProperty('type_1')) {
         dvCardTypes.appendChild(createImg('type', pokemon.type_1, 'cardInfo-type', pokemon.expansion))
@@ -507,7 +563,9 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     dvDataBox.classList.add('cardInfo-info--box')
 
     //Poke Image
-    dvDataBox.appendChild(createImg('poke', checkDexNumber(pokemon.pokedex_number), 'cardInfo-info--img', pokemon.expansion))
+    let imgPoke = createImg('poke', checkDexNumber(pokemon.pokedex_number), 'cardInfo-info--img', pokemon.expansion)
+    imgPoke.id = 'pokeImg'
+    dvDataBox.appendChild(imgPoke)
 
     //Poke Description
     let dvCardDesc = document.createElement('DIV')
@@ -567,6 +625,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     if (pokemon.hasOwnProperty('move_4')) {
         div.appendChild(createImg('type', pokemon.move_4, 'cardInfo-type--sm', pokemon.expansion))
     }
+
 
     dvLearn.appendChild(div)
 
@@ -628,6 +687,18 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     cardInfo.appendChild(dvCardData)
     cardInfo.appendChild(dvCardMove)
 
+    const pokeImg = document.getElementById('pokeImg')
+    countClickBayleef = 0;
+    if (pokemon.pokedex_number == 153) {
+
+        pokeImg.addEventListener('click', (e) => {
+            countClickBayleef++
+            if (countClickBayleef >= 5) {
+                e.target.src = 'assets/img/icons/expansions/javcov.png'
+            }
+        })
+    }
+
     //Borrar cardInfo
     const cardClose = document.getElementById('cardClose')
     cardClose.addEventListener('click', (e) => {
@@ -655,12 +726,21 @@ function checkBioClim(modClimate, modBiome, clas) {
 
 function checkDexNumber(modDex) {
     modDex = modDex.toString()
-    modDex = modDex.length == 2 || modDex.length == 4 ? '0' + modDex : modDex
+    dexNumber = modDex.split('-')[0]
+
+    if (dexNumber.length <= 2) {
+        if (dexNumber.length == 1) {
+            modDex = '00' + modDex
+        } else {
+            modDex = '0' + modDex
+        }
+    }
+
     modDex = modDex.includes('g') ? modDex.slice(0, -2) : modDex
     return modDex
 }
 
-function checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4) {
+function checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4, searchExpansions) {
     // console.log('--Nombre: ' + pokemonName)
     // console.log('--Rareza: ' + pokemonRarity)
     // console.log('--Tipo 1: ' + pokemonType1)
@@ -677,22 +757,31 @@ function checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pok
     // console.log('--Tipo Ataque aprendible 2: ' + pokemonTypeLearn2)
     // console.log('--Tipo Ataque aprendible 3: ' + pokemonTypeLearn3)
     // console.log('--Tipo Ataque aprendible 4: ' + pokemonTypeLearn4)
-    if (pokemonType1 != '' ||
-        pokemonType2 != '' ||
-        pokemonName != '' ||
-        pokemonRarity != '' ||
-        pokemonMoveName != '' ||
-        pokemonMoveType != '' ||
-        pokemonMoveStrength > -1 ||
-        pokemonHealth > 0 ||
-        pokemonInitiative > 0 ||
-        pokemonEvoCost > 0 ||
-        pokemonClimate != '' ||
-        pokemonBiome != '' ||
-        pokemonTypeLearn1 != '' ||
-        pokemonTypeLearn2 != '' ||
-        pokemonTypeLearn3 != '' ||
-        pokemonTypeLearn4 != '') {
+    // console.log(searchExpansions)
+    let checkExp = false
+    searchExpansions.forEach(e => {
+        if (e.checked) {
+            checkExp = true
+        }
+    });
+
+
+    if ((pokemonType1 != '' ||
+            pokemonType2 != '' ||
+            pokemonName != '' ||
+            pokemonRarity != '' ||
+            pokemonMoveName != '' ||
+            pokemonMoveType != '' ||
+            pokemonMoveStrength > -1 ||
+            pokemonHealth > 0 ||
+            pokemonInitiative > 0 ||
+            pokemonEvoCost > 0 ||
+            pokemonClimate != '' ||
+            pokemonBiome != '' ||
+            pokemonTypeLearn1 != '' ||
+            pokemonTypeLearn2 != '' ||
+            pokemonTypeLearn3 != '' ||
+            pokemonTypeLearn4 != '') && checkExp) {
         return true
     }
 
@@ -703,7 +792,11 @@ function checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pok
 function checkExp(exp) {
     switch (exp) {
         case 'generations':
-            return 'generations'
+            return 'javcov'
+        case 'xenonia':
+            return 'xenonia'
+        case 'evols':
+            return 'evols'
         default:
             return 'los'
     }
@@ -819,9 +912,19 @@ function createImg(type, name, clas, expansion) {
             break;
         case 'icon':
             image.src = 'assets/img/icons/' + name + '.png'
+            if (name.includes('_')) {
+                name = name.split('_')
+                name = firstUpperCase(name[1]) + ' ' + firstUpperCase(name[0])
+            }
+            image.title = firstUpperCase(name)
             break;
         case 'type':
             image.src = 'assets/img/types/' + name + '.png'
+            image.title = firstUpperCase(name)
+            break;
+        case 'exp':
+            image.src = 'assets/img/icons/expansions/' + name + '.png'
+            image.title = firstUpperCase(expansion)
             break;
     }
 
@@ -829,4 +932,18 @@ function createImg(type, name, clas, expansion) {
 
 
     return image
+}
+
+//Funcion que devuelve el array ordenando por pokedex_number
+function sortByDexNumber(searchList) {
+    searchList.sort(((a, b) =>
+        fixDexNumber(a.pokedex_number) - fixDexNumber(b.pokedex_number)
+    ));
+
+    return searchList
+}
+
+//Funcion que elimina modificadores del pokedex_number
+function fixDexNumber(dexNumber) {
+    return dexNumber.toString().split('-')[0]
 }

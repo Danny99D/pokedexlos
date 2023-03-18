@@ -66,6 +66,7 @@
         }
         &--img {
             width: 50%;
+            object-fit: cover;
         }
         &--health,
         &--initiative {
@@ -163,6 +164,10 @@
         &--sm {
             @include cubo(30px);
         }
+        &--round {
+            border-radius: 5px;
+            margin-right: .3rem;
+        }
     }
     &-name {
         width: 80%;
@@ -177,7 +182,8 @@
         margin-bottom: 1.5rem;
         &--img {
             width: 100%;
-            max-width: 300px;
+            // max-width: 300px;
+            object-fit: cover;
         }
         &--box {
             display: flex;

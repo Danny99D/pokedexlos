@@ -12,6 +12,12 @@
 $cardColor: rgb(147,
 74,
 50);
+$cardColorLight: rgb(179,
+112,
+89);
+$cardColorLightB: rgb(151,
+95,
+76);
 $cardBorder:rgb(133,
 66,
 44);
@@ -49,6 +55,7 @@ body {
 
 @import '_card.scss';
 @import '_form.scss';
+@import '_expansions.scss';
 .pokedex {
     background-image: url('../assets/img/background.png');
     background-size: 100% 100%;

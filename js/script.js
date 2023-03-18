@@ -1,5 +1,5 @@
 const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy', 'typeless']
-const rarityList = ['weak', 'moderate', 'strong', 'legendary', 'noble']
+const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'noble', 'galactic']
 const climateList = ['cold', 'temperate', 'warm', 'space']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
 let scrollVar = 0;
@@ -17,6 +17,8 @@ function load(xhttp) {
     const btnReset = document.getElementById('btnReset')
     const pokemonSearch = document.getElementById('pokemonSearch')
     const formClose = document.getElementById('formClose')
+    const expButton = document.getElementById('expButton')
+    const expBox = document.getElementById('expBox')
 
     const pokemonRarity = document.getElementById('pokemonRarity')
     const pokemonType1 = document.getElementById('pokemonType1')
@@ -127,6 +129,9 @@ function load(xhttp) {
         }
     })
 
+    expButton.addEventListener('click', (e) => {
+        expBox.classList.toggle('expansions-box--shown')
+    })
 }
 
 //Funcion para dibujar las cartas obtenidas de getCards en screen

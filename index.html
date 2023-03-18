@@ -23,6 +23,17 @@
 
                 <div class="field field--double">
                     <div class="">
+                        <label for="pokemonHealth">Health</label>
+                        <input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth">
+                    </div>
+                    <div class="">
+                        <label for="pokemonInitiative">Initiative</label>
+                        <input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative">
+                    </div>
+                </div>
+
+                <div class="field field--double">
+                    <div class="">
                         <label for="pokemonRarity">Rarity</label>
                         <select name="pokemonRarity" id="pokemonRarity">
                         <option value="none">None</option>
@@ -60,15 +71,20 @@
                     </div>
                 </div>
 
-                <div class="field field--double">
-                    <div class="">
-                        <label for="pokemonHealth">Health</label>
-                        <input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth">
-                    </div>
-                    <div class="">
-                        <label for="pokemonInitiative">Initiative</label>
-                        <input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative">
-                    </div>
+                <div class="field field--cuadra">
+                    <label class="tx--center" for="pokemonTypeLearn1">Pokemon Move Types</label>
+                    <select name="pokemonTypeLearn1" id="pokemonTypeLearn1">
+                        <option value="none">Type 1</option>
+                    </select>
+                    <select name="pokemonTypeLearn2" id="pokemonTypeLearn2" disabled>
+                        <option value="none">Type 2</option>
+                    </select>
+                    <select name="pokemonTypeLearn3" id="pokemonTypeLearn3" disabled>
+                        <option value="none">Type 3</option>
+                    </select>
+                    <select name="pokemonTypeLearn4" id="pokemonTypeLearn4" disabled>
+                        <option value="none">Type 4</option>
+                    </select>
                 </div>
 
                 <div class="field field--double">
@@ -86,29 +102,35 @@
                     </div>
                 </div>
 
-                <div class="field field--cuadra">
-                    <label class="tx--center" for="pokemonTypeLearn1">Pokemon Move Types</label>
-                    <select name="pokemonTypeLearn1" id="pokemonTypeLearn1">
-                        <option value="none">Type 1</option>
-                    </select>
-                    <select name="pokemonTypeLearn2" id="pokemonTypeLearn2" disabled>
-                        <option value="none">Type 2</option>
-                    </select>
-                    <select name="pokemonTypeLearn3" id="pokemonTypeLearn3" disabled>
-                        <option value="none">Type 3</option>
-                    </select>
-                    <select name="pokemonTypeLearn4" id="pokemonTypeLearn4" disabled>
-                        <option value="none">Type 4</option>
-                    </select>
+                <div class="expansions-field">
+                    <div class="expansions-button" id="expButton">Expansions</div>
+                    <div class="expansions-box" id="expBox">
+                        <div class="expansions-item">
+                            <img class="expansions--img" src="assets/img/icons/expansions/los.png" alt="los.png">
+                            <input type="checkbox" name="searchExpansions" value="base" id="searchBase" checked>
+                            <label class="expansions--title" for="searchBase">Base</label>
+                            <a class="expansions--link" href="https://steamcommunity.com/workshop/filedetails/?id=2652573878" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                        </div>
+                        <div class="expansions-item">
+                            <img class="expansions--img" src="assets/img/icons/expansions/xenonia.png" alt="xenonia.png">
+                            <input type="checkbox" name="searchExpansions" value="xenonia" id="searchXenonia">
+                            <label class="expansions--title" for="searchXenonia">Xenonia</label>
+                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2941608980" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                        </div>
+                        <div class="expansions-item">
+                            <img class="expansions--img" src="assets/img/icons/expansions/javcov.png" alt="javcov.png">
+                            <input type="checkbox" name="searchExpansions" value="generations" id="searchGenerations">
+                            <label class="expansions--title" for="searchGenerations">Generations</label>
+                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2840694128" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                        </div>
+                        <div class="expansions-item">
+                            <img class="expansions--img" src="assets/img/icons/expansions/evols.png" alt="evols.png">
+                            <input type="checkbox" name="searchExpansions" value="evols" id="searchEvol" disabled>
+                            <label class="expansions--title" for="searchEvol">Mega Evolution</label>
+                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2794220801" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- <div class="field">
-                    <input type="checkbox" name="" value="" id="">base
-                    <input type="checkbox" name="" value="" id="">generation
-                    <input type="checkbox" name="" value="" id="">mega
-                    <input type="checkbox" name="" value="" id="">darek
-                    <input type="checkbox" name="" value="" id="">expanded
-                </div> -->
 
                 <div class="field field--buttons">
                     <input type="button" id="btnSearch" value="Search" />

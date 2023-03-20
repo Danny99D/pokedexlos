@@ -5,6 +5,7 @@
         @extend %flexCenter;
     }
     &-box {
+        user-select: none;
         position: absolute;
         bottom: 100%;
         width: 90%;
@@ -53,6 +54,7 @@
         align-items: center;
         border-radius: 5px;
         height: 45px;
+        position: relative;
         transition: background-color .2s ease;
         &:hover {
             background-color: $cardColorLightB;
@@ -63,16 +65,20 @@
         justify-content: start;
         padding-left: .5rem;
         height: 100%;
-        width: 60%;
+        width: 100%;
         margin-bottom: 0;
+        border-radius: 0 5px 5px 0;
         font-weight: bold;
         user-select: none;
         cursor: pointer;
     }
     &--link {
         @extend %flexCenter;
+        position: absolute;
+        top: 0;
+        right: 0;
         height: 100%;
-        width: 30%;
+        width: 60px;
         background-color: #c7d5e0;
         margin-left: auto;
         border-radius: 0 5px 5px 0;

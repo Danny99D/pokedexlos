@@ -182,7 +182,8 @@
         margin-bottom: 1.5rem;
         &--img {
             width: 100%;
-            // max-width: 300px;
+            max-width: 300px;
+            margin: .5rem 0;
             object-fit: cover;
         }
         &--box {
@@ -261,6 +262,73 @@
                 margin-right: auto;
                 width: 80%;
             }
+        }
+    }
+    &-forms {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    &-form {
+        background-color: $cardColor;
+        border: 4px solid $cardBorder;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        width: 150px;
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        padding-top: .5rem;
+        border-radius: 10px;
+        position: relative;
+        margin-top: 1.5rem;
+        transition: background-color .3s ease;
+        &::after {
+            content: '';
+            @include cubo(100%);
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            border-radius: 10px;
+        }
+        &:hover {
+            background-color: $cardBorder;
+        }
+        &--img {
+            max-width: 100px;
+        }
+        &--title {
+            width: 100%;
+            padding: .4rem;
+            @extend %flexCenter;
+        }
+        &--types {
+            margin-right: .5rem;
+        }
+        &--type {
+            margin-right: .3rem;
+            @include cubo(25px);
+        }
+        &--description {
+            font-weight: bold;
+            border-top: 4px solid $cardBorder;
+            background-color: aliceblue;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: .8rem .5rem;
+            border-radius: 0 0 10px 10px;
+            text-align: center;
+            @extend %flexCenter;
+        }
+        &--expansion {
+            border-radius: 5px;
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            z-index: 100;
+            width: 40px;
         }
     }
 }

@@ -19,6 +19,9 @@ function load(xhttp) {
     const formClose = document.getElementById('formClose')
     const expButton = document.getElementById('expButton')
     const expBox = document.getElementById('expBox')
+    const genButton = document.getElementById('genButton')
+    const genBox = document.getElementById('genBox')
+    const searchByGen = document.getElementById('searchByGen')
 
     const pokemonRarity = document.getElementById('pokemonRarity')
     const pokemonType1 = document.getElementById('pokemonType1')
@@ -71,18 +74,23 @@ function load(xhttp) {
         }
     })
 
+
     //Resetea el formulario
     btnReset.addEventListener('click', (e) => {
         if (e.target.value == 'Reset') {
-            const searchBase = document.getElementById('searchBase')
-            const searchXenonia = document.getElementById('searchXenonia')
-            const searchGenerations = document.getElementById('searchGenerations')
-            const searchEvol = document.getElementById('searchEvol')
+            const searchExpansions = document.getElementsByName('searchExpansions')
+            let searchExpansionsVal = []
+            const searchGenerations = document.getElementsByName('searchGenerations')
+            let searchGenerationsVal = []
+            const searchByGen = document.getElementById('searchByGen')
 
-            let searchBaseVal = searchBase.checked
-            let searchXenoniaVal = searchXenonia.checked
-            let searchGenerationsVal = searchGenerations.checked
-            let searchEvolVal = searchEvol.checked
+            searchExpansions.forEach(exp => {
+                searchExpansionsVal.push(exp.checked)
+            });
+            searchGenerations.forEach(gen => {
+                searchGenerationsVal.push(gen.checked)
+            });
+            let searchByGenVal = searchByGen.checked
 
             pokemonSearch.reset()
             pokemonTypeLearn2.disabled = true
@@ -90,10 +98,13 @@ function load(xhttp) {
             pokemonTypeLearn4.disabled = true
             pokemonType2.disabled = true
 
-            searchBase.checked = searchBaseVal
-            searchXenonia.checked = searchXenoniaVal
-            searchGenerations.checked = searchGenerationsVal
-            searchEvol.checked = searchEvolVal
+            searchExpansions.forEach((exp, i) => {
+                exp.checked = searchExpansionsVal[i]
+            });
+            searchGenerations.forEach((gen, i) => {
+                gen.checked = searchGenerationsVal[i]
+            });
+            searchByGen.checked = searchByGenVal
         }
     })
 
@@ -131,6 +142,22 @@ function load(xhttp) {
         }
     })
 
+    //Deshabilita buscar climate si se busca un pokemon noble
+    searchByGen.addEventListener('change', (e) => {
+        const searchGenerations = document.getElementsByName('searchGenerations')
+        if (e.target.checked) {
+            searchGenerations.forEach(exp => {
+                exp.type = 'radio'
+            });
+            searchGenerations[0].checked = true
+        } else {
+            searchGenerations.forEach(exp => {
+                exp.type = 'checkbox'
+                exp.checked = true
+            });
+        }
+    })
+
     //Añade funcion al hacer clic en las cartas buscadas
     screen.addEventListener('click', (e) => {
         if (e.target.classList.contains('sdcard')) {
@@ -144,8 +171,18 @@ function load(xhttp) {
         }
     })
 
-    expButton.addEventListener('click', (e) => {
+    expButton.addEventListener('click', () => {
+        if (genBox.classList.contains('expansions-box--shown')) {
+            genBox.classList.remove('expansions-box--shown')
+        }
         expBox.classList.toggle('expansions-box--shown')
+    })
+
+    genButton.addEventListener('click', () => {
+        if (expBox.classList.contains('expansions-box--shown')) {
+            expBox.classList.remove('expansions-box--shown')
+        }
+        genBox.classList.toggle('expansions-box--shown')
     })
 }
 

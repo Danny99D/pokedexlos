@@ -1,5 +1,5 @@
 let countClickBayleef = 0;
-let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p', '925-t', '931-b', '931-y', '931-w', '978-d', '978-s', '982-t', '949-ag', '774-r',
+let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p', '925-t', '931-b', '931-y', '931-w', '978-d', '978-s', '982-t', '774-r',
         '774-o',
         '774-y',
         '774-b',
@@ -16,7 +16,7 @@ let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p', '925-
         '412-s',
         '412-t',
         '413-s',
-        '413-t'
+        '413-t', '849-ag'
 
     ] //Needs same attack and image, different stats and not noble form
 const generationDex = [
@@ -88,6 +88,17 @@ function searchByRarity(pokemonData, rarity) {
                     if ((pokeObj.encounter_tier.toLowerCase() == 'ultra_beast') ||
                         (pokeObj.encounter_tier.toLowerCase() == 'ultra_burst')) {
                         pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'legendary':
+                pokemonData.find((pokeObj) => {
+
+                    pokeClimate = pokeObj.hasOwnProperty('climate') ? pokeObj.climate.toLowerCase() : ''
+                    if ((pokeClimate != 'mega') && (pokeClimate != 'noble') && (pokeClimate != 'gigamax')) {
+                        if (pokeObj.encounter_tier.toLowerCase() == rarity) {
+                            pokemonSearch.push(pokeObj)
+                        }
                     }
                 })
                 break;

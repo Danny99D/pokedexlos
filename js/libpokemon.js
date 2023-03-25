@@ -1,5 +1,24 @@
 let countClickBayleef = 0;
-let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p'] //Needs same attack and image, different stats and not noble form
+let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p', '925-t', '931-b', '931-y', '931-w', '978-d', '978-s', '982-t', '949-ag', '774-r',
+        '774-o',
+        '774-y',
+        '774-b',
+        '774-i',
+        '774-v', '550-b',
+        '585-su',
+        '585-au',
+        '585-wi',
+        '586-su',
+        '586-au',
+        '586-wi',
+        '592-f',
+        '593-f', '521-f',
+        '412-s',
+        '412-t',
+        '413-s',
+        '413-t'
+
+    ] //Needs same attack and image, different stats and not noble form
 const generationDex = [
     [0, 151],
     [152, 251],
@@ -54,20 +73,31 @@ function searchByRarity(pokemonData, rarity) {
     let pokemonSearch = []
 
     if (rarity != '') {
-        if (rarity == 'galactic') {
-            pokemonData.find((pokeObj) => {
-                if ((pokeObj.encounter_tier.toLowerCase() == 'grunt') ||
-                    (pokeObj.encounter_tier.toLowerCase() == 'commander') ||
-                    (pokeObj.encounter_tier.toLowerCase() == 'boss')) {
-                    pokemonSearch.push(pokeObj)
-                }
-            })
-        } else {
-            pokemonData.find((pokeObj) => {
-                if (pokeObj.encounter_tier.toLowerCase() == rarity) {
-                    pokemonSearch.push(pokeObj)
-                }
-            })
+        switch (rarity) {
+            case 'galactic':
+                pokemonData.find((pokeObj) => {
+                    if ((pokeObj.encounter_tier.toLowerCase() == 'grunt') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'commander') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'boss')) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'ultra beast':
+                pokemonData.find((pokeObj) => {
+                    if ((pokeObj.encounter_tier.toLowerCase() == 'ultra_beast') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'ultra_burst')) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            default:
+                pokemonData.find((pokeObj) => {
+                    if (pokeObj.encounter_tier.toLowerCase() == rarity) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
         }
     }
 
@@ -310,7 +340,7 @@ function searchByGenerations(pokemonData, generations, rarity) {
                 if (rarity == 'galactic') {
                     genOk = true
                 } else {
-                    if (pokeObj.pokedex_number.toString().indexOf('g') < 0 && pokeObj.pokedex_number.toString().indexOf('x') < 0) {
+                    if (pokeObj.pokedex_number.toString().indexOf('-gl') < 0 && pokeObj.pokedex_number.toString().indexOf('-x') < 0) {
                         genOk = true
                     }
                 }
@@ -368,19 +398,17 @@ function searchPokemon(pokemonData) {
         searchList = pokemonInitiative > 0 ? searchByInitiative(searchList, pokemonInitiative) : searchList
 
         // Busca pokemon por bioma
-        if (pokemonRarity != 'noble') {
-            searchList = pokemonBiome != '' ? searchByBiome(searchList, pokemonBiome) : searchList
-        }
+        searchList = pokemonBiome != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigamax' ? searchByBiome(searchList, pokemonBiome) : searchList
 
         // Busca pokemon por clima
-        if (pokemonRarity == 'noble') {
-            searchList = searchByClimate(searchList, 'noble')
+        if (pokemonRarity == 'noble' || pokemonRarity == 'mega' || pokemonRarity == 'gigamax') {
+            searchList = searchByClimate(searchList, pokemonRarity)
         } else {
             searchList = pokemonClimate != '' ? searchByClimate(searchList, pokemonClimate) : searchList
         }
 
         // Busca pokemon por rareza
-        searchList = pokemonRarity != '' && pokemonRarity != 'noble' ? searchByRarity(searchList, pokemonRarity) : searchList
+        searchList = pokemonRarity != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigamax' ? searchByRarity(searchList, pokemonRarity) : searchList
 
         // Busca pokemon por nombre del ataque
         searchList = pokemonMoveName != '' ? searchByMoveName(searchList, pokemonMoveName) : searchList
@@ -564,6 +592,8 @@ function drawPokemonCards(pokemonData) {
                 screen.appendChild(drawPokemonCard(pokemon))
             }
         });
+
+        checkImagesLoad()
     } else {
         notFound()
     }
@@ -779,11 +809,12 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
         pokeImg.addEventListener('click', (e) => {
             countClickBayleef++
             if (countClickBayleef >= 5) {
-                e.target.src = 'assets/img/icons/expansions/javcov.png'
+                e.target.src = 'assets/img/icons/expansions/javcovB.png'
             }
         })
     }
 
+    checkImagesLoad()
 
     //cardClose
     let dvCardClose = document.createElement('DIV')
@@ -849,14 +880,16 @@ function drawPokemonForm(pokemon) {
 function checkBioClim(modClimate, modBiome, clas) {
     switch (modClimate) {
         case 'noble':
-            return createImg('icon', modClimate, clas, '')
+        case 'mega':
+        case 'gigamax':
+            return createImg('icon', modClimate.toLowerCase(), clas, '')
         case 'space':
             return createImg('icon', 'unknown', clas, '')
         default:
             if (modBiome == 'ruins') {
                 return createImg('icon', 'unknown', clas, '')
             } else {
-                return createImg('icon', modClimate + '_' + modBiome, clas, '')
+                return createImg('icon', modClimate.toLowerCase() + '_' + modBiome.toLowerCase(), clas, '')
             }
     }
 }
@@ -874,8 +907,18 @@ function checkDexNumber(modDex) {
         }
     }
 
-    modDex = modDex.includes('g') ? modDex.slice(0, -2) : modDex
+    modDex = modDex.includes('gl') ? modDex.slice(0, -3) : modDex
     return modDex
+}
+
+//Funcion que si falta alguna imagen la reemplaza con unknown.png
+function checkImagesLoad() {
+    const images = document.querySelectorAll('img')
+    images.forEach(img => {
+        img.addEventListener('error', () => {
+            img.src = 'assets/img/icons/unknown.png'
+        })
+    });
 }
 
 //Funcion que asegura que se busque por algun valor
@@ -945,8 +988,10 @@ function checkExp(exp) {
             return 'javcov'
         case 'xenonia':
             return 'xenonia'
-        case 'evols':
-            return 'evols'
+        case 'darekMega':
+            return 'darekMega'
+        case 'freeze':
+            return 'freeze'
         default:
             return 'los'
     }

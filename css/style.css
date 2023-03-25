@@ -572,6 +572,25 @@ body {
   background-image: url("../assets/img/icons/expansions/javcov.png");
 }
 
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #404040 #ffffff;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 10px 10px 0;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
 .pokedex {
   background-image: url("../assets/img/background.png");
   background-size: 100% 100%;
@@ -583,10 +602,6 @@ body {
   padding-right: 3vw;
   padding-top: 0;
   margin: 0;
-}
-
-img[src*="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png"] {
-  display: none;
 }
 
 .flex {

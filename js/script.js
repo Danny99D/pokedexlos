@@ -1,5 +1,5 @@
 const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy', 'typeless']
-const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'noble', 'galactic']
+const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigamax', 'galactic']
 const climateList = ['cold', 'temperate', 'warm', 'space']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
 let scrollVar = 0;
@@ -129,9 +129,9 @@ function load(xhttp) {
         disableGroupSelect(pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4)
     })
 
-    //Deshabilita buscar climate si se busca un pokemon noble
+    //Deshabilita buscar climate si se busca un pokemon noble, mega o gigamax
     pokemonRarity.addEventListener('change', (e) => {
-        if (pokemonRarity.value == 'noble') {
+        if (pokemonRarity.value == 'noble' || pokemonRarity.value == 'mega' || pokemonRarity.value == 'gigamax' || pokemonRarity.value == 'galactic' || pokemonRarity.value == 'ultra beast') {
             pokemonClimate.disabled = true
             pokemonClimate.value = 'none'
             pokemonBiome.disabled = true
@@ -142,7 +142,7 @@ function load(xhttp) {
         }
     })
 
-    //Deshabilita buscar climate si se busca un pokemon noble
+    //Cambia el tipo de input al buscar las generaciones de radio a checkbox
     searchByGen.addEventListener('change', (e) => {
         const searchGenerations = document.getElementsByName('searchGenerations')
         if (e.target.checked) {

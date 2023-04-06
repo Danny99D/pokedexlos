@@ -20,7 +20,7 @@
 
 $dist: 24px;
 .form {
-    height: 90vh;
+    // height: 90vh;
     overflow-y: auto;
     // overflow-x: hidden;
     position: relative;
@@ -141,6 +141,7 @@ $dist: 24px;
         background-color: aliceblue;
         @include cubo(70px);
         border-radius: 10px;
+        font-size: .8rem;
         border: 2px solid black;
     }
     &--text {

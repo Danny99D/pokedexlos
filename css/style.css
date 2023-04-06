@@ -462,7 +462,6 @@
 }
 
 .form {
-  height: 90vh;
   overflow-y: auto;
   position: relative;
 }
@@ -567,6 +566,7 @@
   width: 70px;
   height: 70px;
   border-radius: 10px;
+  font-size: 0.8rem;
   border: 2px solid black;
 }
 .field--text input[type=text] {
@@ -868,7 +868,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% + 40px);
+  width: calc(100% + 30px);
   height: 100%;
   z-index: -1;
   justify-content: end;

@@ -8,7 +8,6 @@
     position: relative;
     z-index: 150;
     transition: left .3s ease;
-    overflow-y: auto;
 }
 
 #pokemonSearch {
@@ -21,7 +20,7 @@
 
 $dist: 24px;
 .form {
-    // height: 90vh;
+    height: 100vh;
     overflow-y: auto;
     // overflow-x: hidden;
     position: relative;

@@ -8,6 +8,7 @@
     position: relative;
     z-index: 150;
     transition: left .3s ease;
+    overflow-y: auto;
 }
 
 #pokemonSearch {

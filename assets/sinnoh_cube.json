@@ -94668,7 +94668,7 @@
             "move_name": "Oblivion Wing",
             "move_type": "flying",
             "move_attack_strength": 4,
-            "move_effect": "Status symbols deal+1 damage, the user heals for half damage delt rounded up.",
+            "move_effect": "Status symbols deal +1 damage, the user heals for half damage delt rounded up.",
             "is_starter": 0,
             "is_legendary": 1,
             "encounter_tier": "legendary",

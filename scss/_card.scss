@@ -125,7 +125,7 @@
 }
 
 .cardInfo {
-    background-color: $cardColor;
+    background-color: $bg3;
     position: absolute;
     @include cubo(100%);
     top: 0;
@@ -136,25 +136,35 @@
     flex-direction: column;
     padding: 1rem 1.5rem;
     &-close {
-        @include cubo(45px);
         position: absolute;
-        top: 1rem;
-        right: 1rem;
-        z-index: 110;
-        background-image: url('../assets/img/icons/closeButton.png');
-        @extend %bgs;
-        background-size: 125% 125%;
-        background-color: #fff;
+        top: 10px;
+        right: 10px;
+        @include cubo(40px);
         border-radius: 5px;
-        transition: background-image .3s ease-in;
+        background-color: $bg1;
+        z-index: 300;
+        cursor: pointer;
         &:hover {
-            background-image: url('../assets/img/icons/closeButtonB.png');
-            cursor: pointer;
+            background-color: $bg2;
+        }
+        &::after,
+        &::before {
+            content: '';
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            position: absolute;
+            top: 18px;
+            left: 8px;
+            transform: rotate(45deg);
+        }
+        &::before {
+            transform: rotate(-45deg);
         }
     }
     &-title {
         display: flex;
-        border-bottom: 4px solid $cardBorder;
+        border-bottom: 4px solid $bg2;
         &--types {
             @extend %flexAround;
         }
@@ -264,19 +274,90 @@
             }
         }
     }
-    &-forms {
-        display: flex;
-        justify-content: space-around;
-        flex-wrap: wrap;
+}
+
+.poke {
+    &Forms {
+        margin-bottom: 1rem;
+        &-screen {
+            box-sizing: border-box;
+            position: relative;
+            overflow-x: hidden;
+        }
+        &-box {
+            display: none;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            border: 2px solid $bg2;
+            border-top: none;
+            border-bottom: none;
+            position: relative;
+            padding-left: .5rem;
+            &::after,
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 10%;
+                height: 100%;
+                border: 2px solid $bg2;
+                border-left: none;
+                border-right: none;
+            }
+            &::before {
+                left: auto;
+                right: 0;
+            }
+            &--show {
+                display: flex;
+            }
+        }
+        &-options {
+            @extend %flexCenter;
+            justify-content: start;
+            flex-wrap: wrap;
+        }
+        &-option {
+            @extend %flexCenter;
+            justify-content: start;
+            margin-right: .5rem;
+            padding: .2rem .3rem;
+            border-radius: 5px;
+            border: 2px solid $bg2;
+            transition: background-color .3s ease;
+            user-select: none;
+            position: relative;
+            margin-bottom: .3rem;
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: inherit;
+                z-index: 10;
+                @include cubo(100%);
+            }
+            &:hover {
+                background-color: $bg1;
+                cursor: pointer;
+            }
+            &--img {
+                max-width: 30px;
+                border-radius: 5px;
+                margin-right: .2rem;
+            }
+        }
     }
-    &-form {
-        background-color: $cardColor;
-        border: 4px solid $cardBorder;
+    &Form {
+        background-color: $bg3;
+        border: 4px solid $bg2;
         display: flex;
         align-items: center;
         flex-direction: column;
         width: 150px;
-        margin-right: 1rem;
+        margin-right: .5rem;
         margin-bottom: 1rem;
         padding-top: .5rem;
         border-radius: 10px;
@@ -293,7 +374,7 @@
             border-radius: 10px;
         }
         &:hover {
-            background-color: $cardBorder;
+            background-color: $bg1;
         }
         &--img {
             max-width: 100px;
@@ -312,23 +393,23 @@
         }
         &--description {
             font-weight: bold;
-            border-top: 4px solid $cardBorder;
+            border-top: 4px solid $bg2;
             background-color: aliceblue;
             width: 100%;
             height: 100%;
             margin: 0;
             padding: .8rem .5rem;
-            border-radius: 0 0 10px 10px;
+            border-radius: 0 0 7px 7px;
             text-align: center;
             @extend %flexCenter;
         }
         &--expansion {
             border-radius: 5px;
             position: absolute;
-            top: -15px;
-            right: -15px;
+            top: -10px;
+            left: -10px;
             z-index: 100;
-            width: 40px;
+            width: 30px;
         }
     }
 }

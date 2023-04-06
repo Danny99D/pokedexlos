@@ -1,23 +1,7 @@
 let countClickBayleef = 0;
 let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p', '925-t', '931-b', '931-y', '931-w', '978-d', '978-s', '982-t', '774-r',
-        '774-o',
-        '774-y',
-        '774-b',
-        '774-i',
-        '774-v', '550-b',
-        '585-su',
-        '585-au',
-        '585-wi',
-        '586-su',
-        '586-au',
-        '586-wi',
-        '592-f',
-        '593-f', '521-f',
-        '412-s',
-        '412-t',
-        '413-s',
-        '413-t', '849-ag'
-
+        '774-o', '774-y', '774-b', '774-i', '774-v', '550-b', '585-su', '585-au', '585-wi', '586-su', '586-au', '586-wi', '592-f', '593-f', '521-f',
+        '412-s', '412-t', '413-s', '413-t', '849-ag'
     ] //Needs same attack and image, different stats and not noble form
 const generationDex = [
     [0, 151],
@@ -131,26 +115,25 @@ function searchByEvoCost(pokemonData, evoCost) {
     return pokemonSearch
 }
 
-function searchByType(pokemonData, type) {
+function searchByType(pokemonData, types) {
     let pokemonSearch = []
-    let types = type != '' ? type.split(' ') : []
 
-    if (types.length == 2) {
-        if (types[1] == '') {
-            pokemonData.find((pokeObj) => {
-                if (pokeObj.type_1 == types[0] || pokeObj.type_2 == types[0]) {
-                    pokemonSearch.push(pokeObj)
-                }
-            })
-        } else {
+    switch (types.length) {
+        case 2:
             pokemonData.find((pokeObj) => {
                 if ((pokeObj.type_1 == types[0] || pokeObj.type_2 == types[0]) &&
                     (pokeObj.type_1 == types[1] || pokeObj.type_2 == types[1])) {
                     pokemonSearch.push(pokeObj)
                 }
             })
-        }
-
+            break;
+        case 1:
+            pokemonData.find((pokeObj) => {
+                if (pokeObj.type_1 == types[0] || pokeObj.type_2 == types[0]) {
+                    pokemonSearch.push(pokeObj)
+                }
+            })
+            break;
     }
 
     return pokemonSearch
@@ -259,16 +242,8 @@ function searchByClimate(pokemonData, climate) {
     return pokemonSearch
 }
 
-function searchByLearnTypes(pokemonData, moveType) {
+function searchByLearnTypes(pokemonData, types) {
     let pokemonSearch = []
-    let types = []
-    let typesB = moveType != '' ? moveType.split(' ') : []
-
-    typesB.forEach(type => {
-        if (type != '') {
-            types.push(type)
-        }
-    });
 
     switch (types.length) {
         case 4:
@@ -312,15 +287,8 @@ function searchByLearnTypes(pokemonData, moveType) {
 
 function searchByExpansion(pokemonData, expansions) {
     let pokemonSearch = []
-    let auxExpansions = []
 
-    expansions.forEach(exp => {
-        if (exp.checked) {
-            auxExpansions.push(exp.value)
-        }
-    });
-
-    auxExpansions.forEach(expansion => {
+    expansions.forEach(expansion => {
         pokemonData.find((pokeObj) => {
             if ((pokeObj.expansion == expansion)) {
                 pokemonSearch.push(pokeObj)
@@ -333,17 +301,10 @@ function searchByExpansion(pokemonData, expansions) {
 
 function searchByGenerations(pokemonData, generations, rarity) {
     let pokemonSearch = []
-    let auxGenerations = []
-
-    generations.forEach(exp => {
-        if (exp.checked) {
-            auxGenerations.push(exp.value)
-        }
-    });
 
     pokemonData.find((pokeObj) => {
         genOk = false
-        auxGenerations.forEach(generation => {
+        generations.forEach(generation => {
             let minDex = generationDex[generation]
             let maxDex = generationDex[generation]
 
@@ -365,39 +326,137 @@ function searchByGenerations(pokemonData, generations, rarity) {
     return pokemonSearch
 }
 
+function searchByMoveEffect(pokemonData, moveEffect) {
+    let pokemonSearch = []
+
+    if (moveEffect != '') {
+        switch (moveEffect) {
+            case 'burned':
+            case 'frozen':
+            case 'paralysed':
+            case 'drowsy':
+            case 'confused':
+            case 'poisoned':
+                pokemonData.find((pokeObj) => {
+                    let move = pokeObj.move_effect.toLowerCase()
+                    if (move.includes(moveEffect.toLowerCase())) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'add_roll':
+            case 'remove_roll':
+            case 'switch_out':
+            case 'take_damage':
+                moveEffect = moveEffect.split('_')[0]
+                pokemonData.find((pokeObj) => {
+                    let move = pokeObj.move_effect.toLowerCase()
+                    if (move.includes(moveEffect.toLowerCase())) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'next_attacked':
+            case 'next_attacks':
+            case 'second_move':
+            case 'battle_fatigue':
+            case 'double_damage':
+            case 'extra_damage':
+
+                moveEffect = moveEffect.replace('_', ' ')
+                pokemonData.find((pokeObj) => {
+                    let move = pokeObj.move_effect.toLowerCase()
+                    if (move.includes(moveEffect.toLowerCase())) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'heal':
+                pokemonData.find((pokeObj) => {
+                    let move = pokeObj.move_effect.toLowerCase()
+                    if (move.includes(moveEffect.toLowerCase()) && (move.includes('damage') || move.includes('effect'))) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'change_form':
+            case 'change_type':
+            case 'attack_strength':
+                moveEffect = moveEffect.toLowerCase().split('_')
+                pokemonData.find((pokeObj) => {
+                    let move = pokeObj.move_effect.toLowerCase()
+                    if (move.includes(moveEffect[0]) && move.includes(moveEffect[1])) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'increase_damage':
+            case 'minus_damage':
+                moveEffect = moveEffect.toLowerCase().split('_')
+                let modify = '+'
+                modify = moveEffect[0] == 'minus' ? '-' : modify
+                pokemonData.find((pokeObj) => {
+                    let move = pokeObj.move_effect.toLowerCase()
+                    let found = move.indexOf(modify)
+
+                    if (move.includes(modify) && !isNaN(move.charAt(found + 1)) && move.includes(moveEffect[1])) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+        }
+    }
+
+    return pokemonSearch
+}
+
 function searchPokemon(pokemonData) {
     const pokemonName = document.getElementById('pokemonName').value
-    const pokemonRarity = document.getElementById('pokemonRarity').value != 'none' ? document.getElementById('pokemonRarity').value : ''
-    const pokemonType1 = document.getElementById('pokemonType1').value != 'none' ? document.getElementById('pokemonType1').value : ''
-    const pokemonType2 = document.getElementById('pokemonType2').value != 'none' ? document.getElementById('pokemonType2').value : ''
     const pokemonMoveName = document.getElementById('pokemonMoveName').value
-    const pokemonMoveType = document.getElementById('pokemonMoveType').value != 'none' ? document.getElementById('pokemonMoveType').value : ''
     const pokemonMoveStrength = document.getElementById('pokemonMoveStrength').value ? document.getElementById('pokemonMoveStrength').value : -1
     const pokemonHealth = document.getElementById('pokemonHealth').value ? document.getElementById('pokemonHealth').value : 0
     const pokemonInitiative = document.getElementById('pokemonInitiative').value ? document.getElementById('pokemonInitiative').value : 0
     const pokemonEvoCost = document.getElementById('pokemonEvoCost').value ? document.getElementById('pokemonEvoCost').value : 0
-    const pokemonClimate = document.getElementById('pokemonClimate').value != 'none' ? document.getElementById('pokemonClimate').value : ''
-    const pokemonBiome = document.getElementById('pokemonBiome').value != 'none' ? document.getElementById('pokemonBiome').value : ''
-    const pokemonTypeLearn1 = document.getElementById('pokemonTypeLearn1').value != 'none' ? document.getElementById('pokemonTypeLearn1').value : ''
-    const pokemonTypeLearn2 = document.getElementById('pokemonTypeLearn2').value != 'none' ? document.getElementById('pokemonTypeLearn2').value : ''
-    const pokemonTypeLearn3 = document.getElementById('pokemonTypeLearn3').value != 'none' ? document.getElementById('pokemonTypeLearn3').value : ''
-    const pokemonTypeLearn4 = document.getElementById('pokemonTypeLearn4').value != 'none' ? document.getElementById('pokemonTypeLearn4').value : ''
-    const searchExpansions = document.getElementsByName('searchExpansions')
-    const searchGenerations = document.getElementsByName('searchGenerations')
     const searchByGen = document.getElementById('searchByGen').checked
+
+    const searchExpansionsBox = document.getElementsByName('searchExpansions')
+    const searchGenerationsBox = document.getElementsByName('searchGenerations')
+    const pokemonRarityBox = document.getElementsByName('rarity')
+    const pokemonTypesBox = document.getElementsByName('types')
+    const pokemonMoveTypeBox = document.getElementsByName('moveType')
+    const pokemonClimateBox = document.getElementsByName('climate')
+    const pokemonBiomeBox = document.getElementsByName('biome')
+    const pokemonLearnBox = document.getElementsByName('learn')
+    const pokemonMoveEffect = document.getElementsByName('moveEffect')
+
+    const searchExpansions = checkArray(searchExpansionsBox)
+    const searchGenerations = checkArray(searchGenerationsBox)
+    const pokemonTypes = checkArray(pokemonTypesBox)
+    const pokemonLearn = checkArray(pokemonLearnBox)
+    const pokemonMoveTypeA = checkArray(pokemonMoveTypeBox)
+    const pokemonRarityA = checkArray(pokemonRarityBox)
+    const pokemonBiomeA = checkArray(pokemonBiomeBox)
+    const pokemonClimateA = checkArray(pokemonClimateBox)
+    const pokemonMoveEffectA = checkArray(pokemonMoveEffect)
 
     const screen = document.getElementById('screen')
     if (screen.classList.contains('screen--noScroll')) {
         screen.classList.remove('screen--noScroll')
     }
 
-    if (checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4, searchExpansions, searchGenerations, searchByGen)) {
+
+
+    if (checkSearch(pokemonName, pokemonRarityA, pokemonTypes, pokemonMoveName, pokemonMoveTypeA, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimateA, pokemonBiomeA, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffectA)) {
         let searchList = pokemonData
+        const pokemonRarity = pokemonRarityA.length ? pokemonRarityA[0] : ''
+        const pokemonBiome = pokemonBiomeA.length ? pokemonBiomeA[0] : ''
+        const pokemonClimate = pokemonClimateA.length ? pokemonClimateA[0] : ''
+        const pokemonMoveType = pokemonMoveTypeA.length ? pokemonMoveTypeA[0] : ''
+        const pokemonMoveEffect = pokemonMoveEffectA.length ? pokemonMoveEffectA[0] : ''
 
         // Busca por tipo1 y tipo2
-        if (pokemonType1 != '' || pokemonType2 != '') {
-            searchList = searchByType(searchList, pokemonType1 + ' ' + pokemonType2)
-        }
+        searchList = pokemonTypes.length ? searchByType(searchList, pokemonTypes) : searchList
+
 
         // Busca pokemon por nombre
         searchList = pokemonName != '' ? searchByName(searchList, pokemonName) : searchList
@@ -418,6 +477,7 @@ function searchPokemon(pokemonData) {
             searchList = pokemonClimate != '' ? searchByClimate(searchList, pokemonClimate) : searchList
         }
 
+
         // Busca pokemon por rareza
         searchList = pokemonRarity != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigamax' ? searchByRarity(searchList, pokemonRarity) : searchList
 
@@ -434,9 +494,11 @@ function searchPokemon(pokemonData) {
         searchList = pokemonEvoCost > 0 ? searchByEvoCost(searchList, pokemonEvoCost) : searchList
 
         // Busca pokemon por tipos de ataque aprendibles
-        if (pokemonTypeLearn1 != '' || pokemonTypeLearn2 != '' || pokemonTypeLearn3 != '' || pokemonTypeLearn4 != '') {
-            searchList = searchByLearnTypes(searchList, pokemonTypeLearn1 + ' ' + pokemonTypeLearn2 + ' ' + pokemonTypeLearn3 + ' ' + pokemonTypeLearn4)
-        }
+        searchList = pokemonLearn.length ? searchByLearnTypes(searchList, pokemonLearn) : searchList
+
+        // Busca pokemon por efectos del ataque
+        searchList = pokemonMoveEffect.length ? searchByMoveEffect(searchList, pokemonMoveEffect) : searchList
+
 
         // Busca pokemon por expansion
         searchList = searchByExpansion(searchList, searchExpansions)
@@ -446,7 +508,6 @@ function searchPokemon(pokemonData) {
 
         // Ordena la lista por pokedex_number
         searchList = sortByDexNumber(searchList)
-
 
         drawPokemonCards(searchList)
 
@@ -466,12 +527,130 @@ function searchOtherForms(pokemonData, dexNumber, expansion) {
     let otherForms = []
 
     pokemonData.forEach(pokemon => {
-        if ((fixDexNumber(pokemon.pokedex_number) == fixDexNumber(dexNumber))) {
+        if ((fixDexNumber(pokemon.pokedex_number) == fixDexNumber(dexNumber)) && dexNumber != pokemon.pokedex_number) {
             otherForms.push(pokemon)
         }
     });
 
     return otherForms
+}
+
+//Funcion que busca las evoluciones de un pokemon
+function searchEvolution(pokemonData, pokemon) {
+
+    //Array aux
+    let fromEvols = []
+    let toEvols = []
+
+    //Crea arrays buscando evoluciones anteriores y siguientes del pokemon
+    let fromEvol = searchEvoFrom(pokemonData, pokemon)
+    let toEvol = searchEvoTo(pokemonData, pokemon)
+
+    //Si el array tiene evoluciones realiza otra busqueda
+    if (fromEvol.length) {
+
+        //Guarda el array de evoluciones al array aux
+        fromEvols = fromEvol
+
+        //Hace otra busqueda con cada una de las evoluciones posibles
+        fromEvols.forEach(e => {
+            fromEvol = searchEvoFrom(pokemonData, e)
+
+            //Si encuentra evoluciones, las añade al array aux
+            if (fromEvol.length) {
+                fromEvol.forEach(fEvo => {
+                    fromEvols.push(fEvo)
+                });
+            }
+        });
+    }
+
+    //Si el array tiene evoluciones realiza otra busqueda
+    if (toEvol.length) {
+
+        //Guarda el array de evoluciones al array aux
+        toEvols = toEvol
+
+        //Hace otra busqueda con cada una de las evoluciones posibles
+        toEvols.forEach(e => {
+            toEvol = searchEvoTo(pokemonData, e)
+
+            //Si encuentra evoluciones, las añade al array aux
+            if (toEvol.length) {
+                toEvol.forEach(tEvo => {
+                    toEvols.push(tEvo)
+                });
+            }
+        });
+    }
+
+    //Si encuentra alguna evolucion, elimina los duplicados y les añade una nueva propiedad
+    if (fromEvols.length) {
+        fromEvols = onlyUniqueObjects(fromEvols)
+        fromEvols = newProp(fromEvols, 'evolution', 'from')
+    }
+
+    if (toEvols.length) {
+        toEvols = onlyUniqueObjects(toEvols)
+        toEvols = newProp(toEvols, 'evolution', 'to')
+    }
+
+    //Devuelve un array juntando ambos arrays ordenado por pokedex_number
+    return sortByDexNumber(fromEvols.concat(toEvols))
+}
+
+//Funcion que busca la anterior evolucion del pokemon
+function searchEvoFrom(pokemonData, pokemon) {
+    let evolFrom = []
+
+    pokemonData.forEach(p => {
+
+        //Si el pokemon tiene la propiedad evolve_into
+        if (p.hasOwnProperty('evolve_into')) {
+
+            //Guarda sus evoluciones en un array
+            let evolutions = p.evolve_into.split('/')
+
+            if (evolutions.length) {
+                evolutions.forEach(evo => {
+
+                    //Mira si alguna evolucion es el pokemon buscado y añade el pokemon al array de busca
+                    if (evo.toLowerCase() == pokemon.internal_name.toLowerCase()) {
+                        evolFrom.push(p)
+                    }
+                });
+            }
+        }
+    });
+
+    //Devuelve un array con las evoluciones
+    return evolFrom
+}
+
+//Funcion que busca la siguiente evolucion del pokemon
+function searchEvoTo(pokemonData, pokemon) {
+    let array = []
+
+    pokemonData.forEach(p => {
+
+        //Crea un array con las posibles evoluciones del pokemon
+        let evolutions = pokemon.hasOwnProperty('evolve_into') ? pokemon.evolve_into.split('/') : []
+
+        //Si hay alguna evolucion las añade al array de busqueda
+        if (evolutions.length) {
+            evolutions.forEach(evo => {
+
+                //Añade la evolucion al array y se asegura que el pokemon a añadir no sea una forma Noble
+                if (evo.toLowerCase() == p.internal_name.toLowerCase() &&
+                    p.pokedex_number.toString().indexOf('-n') < 0) {
+                    array.push(p)
+                }
+            });
+        }
+    });
+
+    //Devuelve un array con las evoluciones
+    return array
 }
 
 //===================================== Draw =========================================
@@ -647,7 +826,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
     let pName = document.createElement('P')
     pName.classList.add('cardInfo-name')
-    pName.appendChild(document.createTextNode(pokemon.pokedex_name))
+    pName.appendChild(document.createTextNode('#' + checkDexNumber(fixDexNumber(pokemon.pokedex_number)) + ' ' + pokemon.pokedex_name))
 
     dvCardTitle.appendChild(dvCardTypes)
     dvCardTitle.appendChild(pName)
@@ -729,9 +908,6 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     //Poke Location
     let dvLocat = document.createElement('DIV')
     dvLocat.classList.add('cardInfo-info--location')
-    if (pokemon.hasOwnProperty('evolve_cost') && !pokemon.evolve_cost.toString() != '') {
-        dvLocat.classList.add('cardInfo-info--locationB')
-    }
 
     modClimate = pokemon.hasOwnProperty('climate') ? pokemon.climate.toLowerCase() : ''
     modBiome = pokemon.hasOwnProperty('biome') ? pokemon.biome.toLowerCase() : ''
@@ -788,23 +964,27 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     let otherForms = searchOtherForms(pokemonData, pokemon.pokedex_number, pokemon.expansion)
 
     if (otherForms.length) {
-        let cardForms = document.createElement('DIV')
-        cardForms.classList.add('cardInfo-forms')
-        cardForms.id = 'cardForms'
-
-        otherForms.forEach(form => {
-            if (form.pokedex_number != pokemon.pokedex_number) {
-                let dvForm = drawPokemonForm(form)
-
-                cardForms.appendChild(dvForm)
-            }
-        });
-
-        cardInfo.appendChild(cardForms)
+        cardInfo.appendChild(drawVariations(otherForms, 'form'))
 
         const forms = document.getElementById('cardForms')
 
         forms.addEventListener('click', (e) => {
+            if (e.target.hasAttribute('dexnumber')) {
+                borrar(cardInfo)
+                drawPokemonInfo(pokemonData, e.target.getAttribute('dexNumber'), e.target.getAttribute('expansion'), scrollVar)
+            }
+        })
+    }
+
+    //------------cardEvol
+    let evolLine = searchEvolution(pokemonData, pokemon)
+
+    if (evolLine.length) {
+        cardInfo.appendChild(drawVariations(evolLine, 'evol'))
+
+        const evols = document.getElementById('cardEvols')
+
+        evols.addEventListener('click', (e) => {
             if (e.target.hasAttribute('dexnumber')) {
                 borrar(cardInfo)
                 drawPokemonInfo(pokemonData, e.target.getAttribute('dexNumber'), e.target.getAttribute('expansion'), scrollVar)
@@ -825,7 +1005,54 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
         })
     }
 
+    //Cambia todas las imagenes no encontradas con unknown.png
     checkImagesLoad()
+
+    //Variations
+    const boxOptions = document.getElementsByClassName('pokeForms-option')
+    const boxScreens = document.getElementsByClassName('pokeForms-box')
+
+    //Si se encuentran Options y Screens añade listeners de Click a los elementos Option
+    if (boxOptions && boxScreens) {
+        //Recorre el array de Options asignandoles el evento Click
+        Array.from(boxOptions).forEach(option => {
+            option.addEventListener('click', (e) => {
+
+                //const con la referencia a la box que mostrar
+                const refBox = e.target.getAttribute('boxTarget')
+
+                //Const con la referencia al tipo de box (form | evol)
+                const refMod = refBox.split('-')[0]
+
+                //Recorre el array de Screens para cambiar las clases
+                Array.from(boxScreens).forEach(box => {
+
+                    //Si la Screen tiene el mismo Target que la Option cambia las clases de las Screen
+                    if (box.getAttribute('boxTarget') == refBox) {
+
+                        //Añade la clase para mostrar la Screen
+                        box.classList.add('pokeForms-box--show')
+
+                        //Recorre de nuevo el array de Screens para quitar la clase de mostrar del resto de Screen
+                        Array.from(boxScreens).forEach(box => {
+
+                            //Variable que guarda el atributo Target de la Screen
+                            let boxTarget = box.hasAttribute('boxTarget') ? box.getAttribute('boxTarget') : ''
+
+                            //Si la Screen es distinta a la Screen mostrada y son del mismo tipo de box les elimina la clase mostrar
+                            if (box.getAttribute('boxTarget') != refBox &&
+                                boxTarget != '' &&
+                                boxTarget.split('-')[0] == refMod) {
+                                box.classList.remove('pokeForms-box--show')
+                            }
+                        })
+                    }
+
+                })
+
+            })
+        });
+    }
 
     //cardClose
     let dvCardClose = document.createElement('DIV')
@@ -842,30 +1069,31 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     })
 }
 
-function drawPokemonForm(pokemon) {
+//Funcion que dibuja la forma de un pokemon
+function drawPokemonForm(pokemon, mod) {
     let dvForm = document.createElement('DIV')
-    dvForm.classList.add('cardInfo-form')
+    dvForm.classList.add('pokeForm')
     dvForm.setAttribute('dexnumber', pokemon.pokedex_number)
     dvForm.setAttribute('expansion', pokemon.expansion)
 
-    let imgPoke = createImg('poke', checkDexNumber(pokemon.pokedex_number), 'cardInfo-form--img', pokemon.expansion)
-    let imgExp = createImg('exp', checkExp(pokemon.expansion), 'cardInfo-form--expansion', pokemon.expansion)
+    let imgPoke = createImg('poke', checkDexNumber(pokemon.pokedex_number), 'pokeForm--img', pokemon.expansion)
+    let imgExp = createImg('exp', checkExp(pokemon.expansion), 'pokeForm--expansion', pokemon.expansion)
 
     //cardTitle
     let dvCardTitle = document.createElement('DIV')
-    dvCardTitle.classList.add('cardInfo-form--title')
+    dvCardTitle.classList.add('pokeForm--title')
 
     let dvCardTypes = document.createElement('DIV')
-    dvCardTypes.classList.add('cardInfo-form--types')
+    dvCardTypes.classList.add('pokeForm--types')
 
     if (pokemon.hasOwnProperty('type_1')) {
-        dvCardTypes.appendChild(createImg('type', pokemon.type_1, 'cardInfo-type cardInfo-form--type', pokemon.expansion))
+        dvCardTypes.appendChild(createImg('type', pokemon.type_1, 'cardInfo-type pokeForm--type', pokemon.expansion))
     } else {
-        dvCardTypes.appendChild(createImg('type', 'typeless', 'cardInfo-type cardInfo-form--type', pokemon.expansion))
+        dvCardTypes.appendChild(createImg('type', 'typeless', 'cardInfo-type pokeForm--type', pokemon.expansion))
     }
 
     if (pokemon.hasOwnProperty('type_2')) {
-        dvCardTypes.appendChild(createImg('type', pokemon.type_2, 'cardInfo-type cardInfo-form--type', pokemon.expansion))
+        dvCardTypes.appendChild(createImg('type', pokemon.type_2, 'cardInfo-type pokeForm--type', pokemon.expansion))
     }
 
     dvCardTitle.appendChild(dvCardTypes)
@@ -874,20 +1102,126 @@ function drawPokemonForm(pokemon) {
     dvForm.appendChild(imgExp)
     dvForm.appendChild(dvCardTitle)
 
-    if (pokemon.hasOwnProperty('description')) {
-        let pDesc = document.createElement('P')
-        pDesc.classList.add('cardInfo-form--description')
-        pDesc.appendChild(document.createTextNode(pokemon.description))
+    switch (mod) {
+        case 'evol':
+            if (pokemon.hasOwnProperty('evolution')) {
+                let pDesc = document.createElement('P')
+                pDesc.classList.add('pokeForm--description')
+                switch (pokemon.evolution) {
+                    case 'to':
+                        pDesc.appendChild(document.createTextNode('Evolve ' + pokemon.evolution + ' ' + firstUpperCase(pokemon.pokedex_name)))
+                        break;
 
-        dvForm.appendChild(pDesc)
+                    case 'from':
+                        pDesc.appendChild(document.createTextNode('Evolved ' + pokemon.evolution + ' ' + firstUpperCase(pokemon.pokedex_name)))
+                        break;
+                }
+
+                dvForm.appendChild(pDesc)
+            }
+            break;
+
+        default:
+            if (pokemon.hasOwnProperty('description')) {
+                let pDesc = document.createElement('P')
+                pDesc.classList.add('pokeForm--description')
+                pDesc.appendChild(document.createTextNode(pokemon.description))
+
+                dvForm.appendChild(pDesc)
+            }
+            break;
     }
-
 
     return dvForm
 }
 
+//Funcion que dibuja las diferentes variaciones del pokemon
+function drawVariations(otherForms, mod, pokemonName) {
+
+    //Crea un div que contendra los elementos
+    let cardForms = document.createElement('DIV')
+    cardForms.classList.add('pokeForms')
+    cardForms.id = 'card' + firstUpperCase(mod) + 's'
+
+    //Crea un array con las diferentes expansiones encontradas
+    let expansions = []
+    otherForms.forEach(e => { expansions.push(e.expansion) });
+
+    //Elimina duplicados del array
+    expansions = [...new Set(expansions)]
+
+    //Crea las box para las Options y Screens
+    let boxOpts = document.createElement('DIV')
+    boxOpts.classList.add('pokeForms-options')
+
+    let boxScreen = document.createElement('DIV')
+    boxScreen.classList.add('pokeForms-screen')
+
+    //Comprueba si hay mas de una expansion
+    if (expansions.length > 1) {
+
+        //Recorre el array de expansiones creando las diferentes Options
+        expansions.forEach(exp => {
+            let boxOpt = document.createElement('DIV')
+            boxOpt.classList.add('pokeForms-option')
+            boxOpt.id = exp + firstUpperCase(exp)
+
+            //Les añade un atributo para refenciar la Option y la Screen
+            boxOpt.setAttribute('boxTarget', mod + '-' + exp)
+
+            boxOpt.appendChild(createImg('exp', checkExp(exp), 'pokeForms-option--img', ''))
+
+            boxOpt.appendChild(document.createTextNode(firstUpperCase(checkExpB(exp))))
+            boxOpts.appendChild(boxOpt)
+        });
+
+        cardForms.appendChild(boxOpts)
+
+        //Recorre el array de expansiones creando las distintas Screens
+        expansions.forEach((exp, i) => {
+
+            let boxForm = document.createElement('DIV')
+            boxForm.classList.add('pokeForms-box')
+
+            //Si es la primera Screen le añade la clase para mostrar
+            if (i == 0) { boxForm.classList.add('pokeForms-box--show') }
+
+            //Les añade un atributo para refenciar la Option y la Screen
+            boxForm.setAttribute('boxTarget', mod + '-' + exp)
+
+            //Recorre el array con las otras formas y añade los pokemon por su expansion
+            otherForms.forEach(form => {
+                if (form.expansion == exp) {
+                    let dvForm = drawPokemonForm(form, mod, pokemonName)
+
+                    boxForm.appendChild(dvForm)
+                }
+            });
+            boxScreen.appendChild(boxForm)
+
+        });
+    } else {
+
+        //Si solo hay una expansion, ignora las Options y crea una Screen
+        let boxForm = document.createElement('DIV')
+        boxForm.classList.add('pokeForms-box')
+        boxForm.classList.add('pokeForms-box--show')
+
+        otherForms.forEach(form => {
+            boxForm.appendChild(drawPokemonForm(form, mod, pokemonName))
+        });
+
+        boxScreen.appendChild(boxForm)
+    }
+
+    cardForms.appendChild(boxScreen)
+
+    return cardForms
+}
+
 //===================================== Check =========================================
 
+//Funcion que devuelve una imagen dependiendo el bioma y clima
 function checkBioClim(modClimate, modBiome, clas) {
     switch (modClimate) {
         case 'noble':
@@ -933,63 +1267,73 @@ function checkImagesLoad() {
 }
 
 //Funcion que asegura que se busque por algun valor
-function checkSearch(pokemonName, pokemonRarity, pokemonType1, pokemonType2, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4, searchExpansions, searchGenerations, searchByGen) {
+function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffect) {
     // console.log('--Nombre: ' + pokemonName)
-    // console.log('--Rareza: ' + pokemonRarity)
-    // console.log('--Tipo 1: ' + pokemonType1)
-    // console.log('--Tipo 2: ' + pokemonType2)
+    // console.log(pokemonRarity)
+    // console.log(pokemonTypes)
     // console.log('--Nombre Ataque: ' + pokemonMoveName)
-    // console.log('--Tipo Ataque: ' + pokemonMoveType)
+    // console.log(pokemonMoveType)
     // console.log('--Fuerza Ataque: ' + pokemonMoveStrength)
     // console.log('--Vida: ' + pokemonHealth)
     // console.log('--Iniciativa: ' + pokemonInitiative)
     // console.log('--Coste Evolucion: ' + pokemonEvoCost)
-    // console.log('--Clima: ' + pokemonClimate)
-    // console.log('--Bioma: ' + pokemonBiome)
-    // console.log('--Tipo Ataque aprendible 1: ' + pokemonTypeLearn1)
-    // console.log('--Tipo Ataque aprendible 2: ' + pokemonTypeLearn2)
-    // console.log('--Tipo Ataque aprendible 3: ' + pokemonTypeLearn3)
-    // console.log('--Tipo Ataque aprendible 4: ' + pokemonTypeLearn4)
+    // console.log(pokemonClimate)
+    // console.log(pokemonBiome)
+    // console.log(pokemonLearn)
     // console.log('--Busca por Gen: ' + searchByGen)
     // console.log(searchExpansions)
     // console.log(searchGenerations)
-    let checkExp = false
-    let checkGen = false
-    searchExpansions.forEach(e => {
-        if (e.checked) {
-            checkExp = true
-        }
-    });
-    searchGenerations.forEach(e => {
-        if (e.checked) {
-            checkGen = true
-        }
-    });
 
-    if (searchByGen && checkExp) {
+    if (searchByGen && (searchExpansions.length > 0)) {
         return true
     } else {
-        if ((pokemonType1 != '' ||
-                pokemonType2 != '' ||
+        if ((pokemonTypes.length > 0 ||
                 pokemonName != '' ||
                 pokemonRarity != '' ||
                 pokemonMoveName != '' ||
-                pokemonMoveType != '' ||
+                pokemonMoveType.length > 0 ||
+                pokemonMoveEffect.length > 0 ||
                 pokemonMoveStrength > -1 ||
                 pokemonHealth > 0 ||
                 pokemonInitiative > 0 ||
                 pokemonEvoCost > 0 ||
-                pokemonClimate != '' ||
-                pokemonBiome != '' ||
-                pokemonTypeLearn1 != '' ||
-                pokemonTypeLearn2 != '' ||
-                pokemonTypeLearn3 != '' ||
-                pokemonTypeLearn4 != '') && checkExp && checkGen) {
+                pokemonClimate.length > 0 ||
+                pokemonBiome.length > 0 ||
+                pokemonLearn.length > 0) && (searchExpansions.length > 0) && (searchGenerations.length > 0)) {
             return true
         }
     }
 
     return false
+}
+
+//Funcion que devuelve un array con los elementos checked
+function checkArray(array) {
+    let newArray = []
+
+    array.forEach(e => {
+        if (e.checked) {
+            newArray.push(e.value)
+        }
+    });
+
+    return newArray
+}
+
+//Funcion que devuelve el nombre de Expansion
+function checkExpB(exp) {
+    switch (exp) {
+        case 'generations':
+            return 'generations'
+        case 'xenonia':
+            return 'xenonia'
+        case 'darekMega':
+            return 'Mega Evolution'
+        case 'freeze':
+            return 'freeze'
+        default:
+            return 'base'
+    }
 }
 
 //Funcion que devuelve la ruta de Expansion
@@ -1025,6 +1369,172 @@ function checkCardDraw(pokemon) {
         }
     });
     return draw
+}
+
+//Funcion que coloca las imagenes de clima_bioma
+function checkLocationBox() {
+    const climateBoxChecks = document.getElementsByName('climate')
+    const biomeBoxChecks = document.getElementsByName('biome')
+    const selectLocations = document.getElementById('selectLocations')
+    const biomeButton = document.getElementById('biomeButton')
+    borrar(selectLocations)
+
+
+    let climate = ''
+    let biome = ''
+
+
+    climateBoxChecks.forEach(e => {
+        if (e.checked) {
+            climate = e.value
+        }
+    });
+    biomeBoxChecks.forEach(e => {
+        if (e.checked) {
+            biome = e.value
+        }
+    });
+
+
+    if (climate == 'space') {
+        stateButton(biomeButton, 'dis')
+        selectLocations.appendChild(createImg('locat', climate, 'select-locations--item', ''))
+    } else {
+        if (biome != '') { selectLocations.appendChild(createImg('locat', biome, 'select-locations--item', '')) }
+        if (climate != '') {
+            selectLocations.appendChild(createImg('locat', climate, 'select-locations--item', ''))
+        }
+        stateButton(biomeButton, 'en')
+
+    }
+
+}
+
+function checkRarityBox() {
+    const rarityBoxChecks = document.getElementsByName('rarity')
+    const selectLocations = document.getElementById('selectLocations')
+    const selectRarity = document.getElementById('selectRarity')
+    const climateButton = document.getElementById('climateButton')
+    const biomeButton = document.getElementById('biomeButton')
+    borrar(selectRarity)
+
+    let rarity = ''
+    rarityBoxChecks.forEach(e => {
+        if (e.checked) {
+            rarity = e.value
+        }
+    });
+
+
+    if (rarity == 'noble' || rarity == 'mega' || rarity == 'gigamax' || rarity == 'galactic') {
+        borrar(selectLocations)
+        selectLocations.appendChild(createImg('icon', rarity, 'select-locations--item', ''))
+        stateButton(climateButton, 'dis')
+        stateButton(biomeButton, 'dis')
+    } else {
+        if (rarity != '') {
+            selectRarity.appendChild(createImg('icon', rarity, 'select-display--item', ''))
+        }
+
+        if (selectLocations.hasChildNodes) {
+            let node = selectLocations.lastChild ? selectLocations.lastChild.getAttribute('alt') : ''
+            if (node == 'noble.png' || node == 'mega.png' || node == 'gigamax.png' || node == 'galactic.png') {
+                selectLocations.removeChild(selectLocations.lastChild)
+            }
+        }
+
+        stateButton(climateButton, 'en')
+        stateButton(biomeButton, 'en')
+    }
+}
+
+function checkMoveEffectBox() {
+    const moveEffectyBoxChecks = document.getElementsByName('moveEffect')
+    const selectTypes = document.getElementById('selectEffect')
+    borrar(selectTypes)
+
+    let effect = ''
+    moveEffectyBoxChecks.forEach(e => {
+        if (e.checked) {
+            effect = e.value
+        }
+    });
+
+    if (effect != '') {
+        selectTypes.appendChild(createImg('effect', effect, 'select-display--item', ''))
+    }
+
+}
+
+function checkTypesBox() {
+    const typesBoxChecks = document.getElementsByName('types')
+    const selectTypes = document.getElementById('selectTypes')
+    borrar(selectTypes)
+
+    let types = []
+    typesBoxChecks.forEach(e => {
+        if (e.checked) {
+            types.push(e.value)
+        }
+    });
+
+    if (types.length) {
+        types.forEach(type => {
+            selectTypes.appendChild(createImg('type', type, 'select-display--item', ''))
+        });
+    }
+
+}
+
+function checkLearnBox() {
+    const typesBoxChecks = document.getElementsByName('learn')
+    const selectLearn = document.getElementById('selectLearn')
+    borrar(selectLearn)
+
+    let types = []
+    typesBoxChecks.forEach(e => {
+        if (e.checked) {
+            types.push(e.value)
+        }
+    });
+
+    if (types.length) {
+        types.forEach(type => {
+            selectLearn.appendChild(createImg('type', type, 'select-display--item', ''))
+        });
+    }
+
+}
+
+function checkMoveBox() {
+    const typesBoxChecks = document.getElementsByName('moveType')
+    const selectMove = document.getElementById('selectMove')
+    borrar(selectMove)
+
+    let types = []
+    typesBoxChecks.forEach(e => {
+        if (e.checked) {
+            types.push(e.value)
+        }
+    });
+
+    if (types.length) {
+        types.forEach(type => {
+            selectMove.appendChild(createImg('type', type, 'select-display--item', ''))
+        });
+    }
+
+}
+
+function stateButton(button, state) {
+    switch (state) {
+        case 'dis':
+            button.classList.add('select-button--disabled')
+            break;
+        case 'en':
+            button.classList.remove('select-button--disabled')
+            break;
+    }
 }
 
 //===================================== Others =========================================
@@ -1068,6 +1578,34 @@ function addSelect(list, options) {
         opt.appendChild(text)
 
         list.appendChild(opt)
+    });
+}
+
+//Funcion que recibe un select y le añade la lista de tipos Pokemon
+function addSelectBox(box, list, type, name, inputType) {
+    list.forEach(value => {
+
+        let item = document.createElement('DIV')
+        item.classList.add('select-item')
+
+        item.appendChild(createImg(type, value.replace(' ', '_'), 'select--img', ''))
+
+        let inp = document.createElement('INPUT')
+        inp.setAttribute('type', inputType)
+        inp.setAttribute('name', name)
+        inp.value = value.replace(' ', '_')
+        inp.id = 'search' + firstUpperCase(name) + firstUpperCase(value.replace(' ', '_'))
+
+        item.appendChild(inp)
+
+        let label = document.createElement('LABEL')
+        label.setAttribute('for', 'search' + firstUpperCase(name) + firstUpperCase(value.replace(' ', '_')))
+        label.classList.add('select--title')
+        label.appendChild(document.createTextNode(firstUpperCase(value)))
+
+        item.appendChild(label)
+
+        box.appendChild(item)
     });
 }
 
@@ -1140,8 +1678,16 @@ function createImg(type, name, clas, expansion) {
             image.src = 'assets/img/types/' + name + '.png'
             image.title = firstUpperCase(name)
             break;
+        case 'locat':
+            image.src = 'assets/img/icons/location/' + name + '.png'
+            image.title = firstUpperCase(name)
+            break;
         case 'exp':
             image.src = 'assets/img/icons/expansions/' + name + '.png'
+            image.title = firstUpperCase(expansion)
+            break;
+        case 'effect':
+            image.src = 'assets/img/icons/effects/' + name + '.png'
             image.title = firstUpperCase(expansion)
             break;
     }
@@ -1164,4 +1710,167 @@ function sortByDexNumber(searchList) {
 //Funcion que elimina modificadores del pokedex_number
 function fixDexNumber(dexNumber) {
     return dexNumber.toString().split('-')[0]
+}
+
+//Crea el offset y el close button al abrir un selectBox
+function setSelect() {
+    const form = document.getElementById('form')
+    const search = document.getElementById('search')
+    form.classList.add('form--noOverflow')
+    form.scrollTop = 0
+
+    let selectCloseDv = document.createElement('DIV')
+    selectCloseDv.id = 'selectClose'
+    selectCloseDv.classList.add('select-close')
+
+    let selectOffDv = document.createElement('DIV')
+    selectOffDv.id = 'selectOff'
+    selectOffDv.classList.add('select-offSet')
+
+    form.appendChild(selectCloseDv)
+    search.appendChild(selectOffDv)
+
+    const selectOff = document.getElementById('selectOff')
+    const selectClose = document.getElementById('selectClose')
+
+    selectOff.addEventListener('click', (e) => {
+        closeBox('')
+        e.target.parentNode.removeChild(e.target)
+        selectClose.parentNode.removeChild(selectClose)
+        form.classList.remove('form--noOverflow')
+    })
+
+    selectClose.addEventListener('click', (e) => {
+        closeBox('')
+        e.target.parentNode.removeChild(e.target)
+        selectOff.parentNode.removeChild(selectOff)
+        form.classList.remove('form--noOverflow')
+    })
+
+
+}
+
+//Cierra todas las select-box excepto la pasada por valor
+function closeBox(skip) {
+    const allBox = Array.from(document.getElementsByClassName('select-box'))
+
+    allBox.forEach(box => {
+        if (box != skip && box.classList.contains('select-box--shown')) {
+            box.classList.remove('select-box--shown')
+        }
+    });
+}
+
+//Deshabilita el resto de checkbox si hay mas o igual que el maxNumber
+function boxNabled(checks, maxNumber) {
+    let n = 0;
+
+    checks.forEach(c => {
+        n = c.checked ? n + 1 : n
+    });
+
+    if (n >= maxNumber) {
+        checks.forEach(c => {
+            if (!c.checked) {
+                c.disabled = true
+            }
+        });
+    } else {
+        checks.forEach(c => {
+            if (c.disabled) {
+                c.disabled = false
+            }
+        });
+    }
+}
+
+//Deshabilita otras box dependiendo el valor
+function boxDisabled(box, type) {
+    const climateBoxChecks = document.getElementsByName('climate')
+    const biomeBoxChecks = document.getElementsByName('biome')
+
+    switch (type) {
+        case 'rarity':
+            let checkRar = false
+            if (box != '') {
+                box.forEach(b => {
+                    if (b.value == 'noble' || b.value == 'mega' || b.value == 'gigamax' || b.value == 'galactic') {
+                        checkRar = b.checked ? true : checkRar
+                    }
+                });
+            }
+
+            if (checkRar) {
+                disableBox(climateBoxChecks)
+                disableBox(biomeBoxChecks)
+            } else {
+                enableBox(climateBoxChecks, 1)
+                enableBox(biomeBoxChecks, 1)
+            }
+            break;
+        case 'location':
+            let checkLocat = false
+            if (box != '') {
+                box.forEach(b => {
+                    if (b.value == 'space') {
+                        checkLocat = b.checked ? true : checkLocat
+                    }
+                });
+            }
+
+            if (checkLocat) {
+                disableBox(biomeBoxChecks)
+            } else {
+                enableBox(biomeBoxChecks, 1)
+            }
+            break
+    }
+}
+
+//Funcion que activa los checkbox de los selectBox
+function enableBox(box, maxEnabled) {
+    box.forEach(b => {
+        if (b.disabled) {
+            b.disabled = false;
+        }
+    });
+    boxNabled(box, maxEnabled)
+}
+
+//Funcion que desactiva los checkbox de los selectBox
+function disableBox(box) {
+    box.forEach(b => {
+        if (b.checked) {
+            b.checked = false
+        }
+        if (!b.disabled) {
+            b.disabled = true;
+        }
+    });
+}
+
+function onlyUnique(value, index, array) {
+    return self.indexOf(value) === index;
+}
+
+//Funcion que devuelve un array de objetos con sin duplicados
+function onlyUniqueObjects(array) {
+    let set = new Set(array.map(JSON.stringify))
+    return Array.from(set).map(JSON.parse)
+}
+
+function newProp(array, prop, value) {
+    array.forEach(e => {
+        if (typeof e === 'object') {
+
+            Object.defineProperty(e, prop, {
+                value: value,
+                writable: true,
+                enumerable: true,
+                configurable: true
+            });
+
+        }
+    })
+    return array
 }

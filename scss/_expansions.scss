@@ -27,6 +27,9 @@
             visibility: visible;
             opacity: 100%;
         }
+        &--down {
+            top: 50px;
+        }
     }
     &-button {
         cursor: pointer;
@@ -94,14 +97,5 @@
             @include cubo(25px);
             margin-right: .3rem;
         }
-    }
-}
-
-.expansion {
-    &--los {
-        @extend %bgs;
-        background-size: 60% 60%;
-        background-image: url('../assets/img/icons/expansions/base.png');
-        background-image: url('../assets/img/icons/expansions/javcov.png');
     }
 }

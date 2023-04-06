@@ -2,6 +2,7 @@ const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poi
 const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigamax', 'galactic']
 const climateList = ['cold', 'temperate', 'warm', 'space']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
+const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
 let scrollVar = 0;
 let pokemonData = [];
 
@@ -17,22 +18,27 @@ function load(xhttp) {
     const btnReset = document.getElementById('btnReset')
     const pokemonSearch = document.getElementById('pokemonSearch')
     const formClose = document.getElementById('formClose')
+
+    const rarityButton = document.getElementById('rarityButton')
+    const rarityBox = document.getElementById('rarityBox')
+    const typeButton = document.getElementById('typeButton')
+    const typeBox = document.getElementById('typeBox')
+    const biomeButton = document.getElementById('biomeButton')
+    const biomeBox = document.getElementById('biomeBox')
+    const climateButton = document.getElementById('climateButton')
+    const climateBox = document.getElementById('climateBox')
+    const moveTypeButton = document.getElementById('moveTypeButton')
+    const moveTypeBox = document.getElementById('moveTypeBox')
+    const moveEffectButton = document.getElementById('moveEffectButton')
+    const moveEffectBox = document.getElementById('moveEffectBox')
+    const learnButton = document.getElementById('learnButton')
+    const learnBox = document.getElementById('learnBox')
     const expButton = document.getElementById('expButton')
     const expBox = document.getElementById('expBox')
     const genButton = document.getElementById('genButton')
     const genBox = document.getElementById('genBox')
     const searchByGen = document.getElementById('searchByGen')
 
-    const pokemonRarity = document.getElementById('pokemonRarity')
-    const pokemonType1 = document.getElementById('pokemonType1')
-    const pokemonType2 = document.getElementById('pokemonType2')
-    const pokemonMoveType = document.getElementById('pokemonMoveType')
-    const pokemonBiome = document.getElementById('pokemonBiome')
-    const pokemonClimate = document.getElementById('pokemonClimate')
-    const pokemonTypeLearn1 = document.getElementById('pokemonTypeLearn1')
-    const pokemonTypeLearn2 = document.getElementById('pokemonTypeLearn2')
-    const pokemonTypeLearn3 = document.getElementById('pokemonTypeLearn3')
-    const pokemonTypeLearn4 = document.getElementById('pokemonTypeLearn4')
 
     //  Desactiva el boton enter como submit para el formulario y hace que ejecute la funcion para cargar los elementos
     document.querySelectorAll('input[type=text]').forEach(node => node.addEventListener('keypress', e => {
@@ -50,17 +56,32 @@ function load(xhttp) {
     }))
 
     //Actualiza los select
-    addSelect(pokemonType1, typeList)
-    addSelect(pokemonType2, typeList)
-    addSelect(pokemonMoveType, typeList)
-    addSelect(pokemonRarity, rarityList)
-    addSelect(pokemonBiome, biomeList)
-    addSelect(pokemonClimate, climateList)
-    addSelect(pokemonTypeLearn1, typeList)
-    addSelect(pokemonTypeLearn2, typeList)
-    addSelect(pokemonTypeLearn3, typeList)
-    addSelect(pokemonTypeLearn4, typeList)
+    addSelectBox(rarityBox, rarityList, 'icon', 'rarity', 'checkbox')
+    addSelectBox(typeBox, typeList, 'type', 'types', 'checkbox')
+    addSelectBox(biomeBox, biomeList, 'locat', 'biome', 'checkbox')
+    addSelectBox(climateBox, climateList, 'locat', 'climate', 'checkbox')
+    addSelectBox(moveTypeBox, typeList, 'type', 'moveType', 'checkbox')
+    addSelectBox(learnBox, typeList, 'type', 'learn', 'checkbox')
+    addSelectBox(moveEffectBox, moveEffectList, 'effect', 'moveEffect', 'checkbox')
 
+    checkImagesLoad()
+
+    //Borra la pantalla de carga despues de recibir los datos
+    const ball = document.getElementById('ball')
+    if (ball) {
+        ball.parentNode.parentNode.removeChild(ball.parentNode)
+    }
+
+    const typesBoxChecks = document.getElementsByName('types')
+    const rarityBoxChecks = document.getElementsByName('rarity')
+    const climateBoxChecks = document.getElementsByName('climate')
+    const biomeBoxChecks = document.getElementsByName('biome')
+    const moveTypeBoxChecks = document.getElementsByName('moveType')
+    const learnBoxChecks = document.getElementsByName('learn')
+    const moveEffectBoxChecks = document.getElementsByName('moveEffect')
+
+
+    //Desplaza el menu 
     formClose.addEventListener('click', (e) => {
         search.classList.toggle('search--show')
         e.target.classList.toggle('formClose--show')
@@ -73,7 +94,6 @@ function load(xhttp) {
             searchPokemon(pokemonData)
         }
     })
-
 
     //Resetea el formulario
     btnReset.addEventListener('click', (e) => {
@@ -93,10 +113,22 @@ function load(xhttp) {
             let searchByGenVal = searchByGen.checked
 
             pokemonSearch.reset()
-            pokemonTypeLearn2.disabled = true
-            pokemonTypeLearn3.disabled = true
-            pokemonTypeLearn4.disabled = true
-            pokemonType2.disabled = true
+
+            enableBox(rarityBoxChecks)
+            enableBox(typesBoxChecks)
+            enableBox(biomeBoxChecks)
+            enableBox(climateBoxChecks)
+            enableBox(learnBoxChecks)
+            enableBox(moveTypeBoxChecks)
+            enableBox(moveEffectBoxChecks)
+            checkLocationBox()
+            checkRarityBox()
+            checkTypesBox()
+            checkMoveBox()
+            checkLearnBox()
+            checkMoveEffectBox()
+            stateButton(climateButton, 'en')
+            stateButton(biomeButton, 'en')
 
             searchExpansions.forEach((exp, i) => {
                 exp.checked = searchExpansionsVal[i]
@@ -105,40 +137,6 @@ function load(xhttp) {
                 gen.checked = searchGenerationsVal[i]
             });
             searchByGen.checked = searchByGenVal
-        }
-    })
-
-    //Deshabilita el segundo tipo de pokemon
-    pokemonType1.addEventListener('change', (e) => {
-        disableSelect(pokemonType1, pokemonType2)
-    })
-
-    //Deshabilita el segundo tipo de pokemon
-    pokemonTypeLearn1.addEventListener('change', (e) => {
-        disableGroupSelect(pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4)
-    })
-
-    //Deshabilita el segundo tipo de pokemon
-    pokemonTypeLearn2.addEventListener('change', (e) => {
-        disableGroupSelect(pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4)
-
-    })
-
-    //Deshabilita el segundo tipo de pokemon
-    pokemonTypeLearn3.addEventListener('change', (e) => {
-        disableGroupSelect(pokemonTypeLearn1, pokemonTypeLearn2, pokemonTypeLearn3, pokemonTypeLearn4)
-    })
-
-    //Deshabilita buscar climate si se busca un pokemon noble, mega o gigamax
-    pokemonRarity.addEventListener('change', (e) => {
-        if (pokemonRarity.value == 'noble' || pokemonRarity.value == 'mega' || pokemonRarity.value == 'gigamax' || pokemonRarity.value == 'galactic' || pokemonRarity.value == 'ultra beast') {
-            pokemonClimate.disabled = true
-            pokemonClimate.value = 'none'
-            pokemonBiome.disabled = true
-            pokemonBiome.value = 'none'
-        } else {
-            pokemonClimate.disabled = false
-            pokemonBiome.disabled = false
         }
     })
 
@@ -171,19 +169,111 @@ function load(xhttp) {
         }
     })
 
-    expButton.addEventListener('click', () => {
-        if (genBox.classList.contains('expansions-box--shown')) {
-            genBox.classList.remove('expansions-box--shown')
-        }
-        expBox.classList.toggle('expansions-box--shown')
+    genButton.addEventListener('click', () => {
+        setSelect()
+        genBox.classList.add('select-box--shown')
     })
 
-    genButton.addEventListener('click', () => {
-        if (expBox.classList.contains('expansions-box--shown')) {
-            expBox.classList.remove('expansions-box--shown')
-        }
-        genBox.classList.toggle('expansions-box--shown')
+    expButton.addEventListener('click', () => {
+        setSelect()
+        expBox.classList.add('select-box--shown')
     })
+
+    rarityButton.addEventListener('click', () => {
+        setSelect()
+        rarityBox.classList.add('select-box--shown')
+    })
+
+    biomeButton.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('select-button--disabled')) {
+            setSelect()
+            biomeBox.classList.add('select-box--shown')
+        }
+    })
+
+    climateButton.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('select-button--disabled')) {
+            setSelect()
+            climateBox.classList.add('select-box--shown')
+        }
+    })
+
+    moveTypeButton.addEventListener('click', () => {
+        setSelect()
+        moveTypeBox.classList.add('select-box--shown')
+    })
+
+    learnButton.addEventListener('click', () => {
+        setSelect()
+        learnBox.classList.add('select-box--shown')
+    })
+
+    typeButton.addEventListener('click', () => {
+        setSelect()
+        typeBox.classList.add('select-box--shown')
+    })
+
+    moveEffectButton.addEventListener('click', () => {
+        setSelect()
+        moveEffectBox.classList.add('select-box--shown')
+    })
+
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero
+    typesBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(typesBoxChecks, 2)
+            checkTypesBox()
+        })
+    });
+
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero
+    moveTypeBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(moveTypeBoxChecks, 1)
+            checkMoveBox()
+        })
+    });
+
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero
+    learnBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(learnBoxChecks, 4)
+            checkLearnBox()
+        })
+    });
+
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    rarityBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(rarityBoxChecks, 1)
+            boxDisabled(rarityBoxChecks, 'rarity')
+            checkRarityBox()
+        })
+    });
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    moveEffectBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(moveEffectBoxChecks, 1)
+            checkMoveEffectBox()
+        })
+    });
+
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    climateBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(climateBoxChecks, 1)
+            boxDisabled(climateBoxChecks, 'location')
+            checkLocationBox()
+        })
+    });
+
+    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    biomeBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(biomeBoxChecks, 1)
+            checkLocationBox()
+        })
+    });
 }
 
 //Funcion para dibujar las cartas obtenidas de getCards en screen

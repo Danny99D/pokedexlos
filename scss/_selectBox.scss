@@ -1,0 +1,200 @@
+$borderItem: 5px;
+.select {
+    &-field {
+        padding: .5rem 0;
+        position: relative;
+        @extend %flexCenter;
+        &--col {
+            flex-direction: column;
+            align-items: space-around;
+            .select-button {
+                margin-bottom: .5rem;
+            }
+        }
+        &--location {
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1.5rem;
+        }
+    }
+    &-locations {
+        @include cubo(80px);
+        background-color: aliceblue;
+        border-radius: 50%;
+        position: absolute;
+        z-index: 100;
+        box-shadow: 0 0 0 5px $bg2;
+        &--item {
+            @include cubo(100%);
+            position: absolute;
+        }
+    }
+    &-offSet {
+        position: absolute;
+        top: 0;
+        left: 0;
+        @include cubo(100%);
+        z-index: 200;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    &-close {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        @include cubo(40px);
+        border-radius: $borderItem;
+        background-color: $bg3;
+        z-index: 300;
+        cursor: pointer;
+        &:hover {
+            background-color: $bg2;
+        }
+        &::after,
+        &::before {
+            content: '';
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            position: absolute;
+            top: 18px;
+            left: 8px;
+            transform: rotate(45deg);
+        }
+        &::before {
+            transform: rotate(-45deg);
+        }
+    }
+    &-box {
+        user-select: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-height: 100%;
+        background-color: $bg1;
+        border: 5px solid $bg2;
+        padding: 1rem 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: auto;
+        transition: visibility .2s linear;
+        transition: opacity .2s linear;
+        visibility: hidden;
+        opacity: 0%;
+        z-index: 250;
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: $bg3;
+        }
+        &--shown {
+            visibility: visible;
+            opacity: 100%;
+        }
+    }
+    &-button {
+        cursor: pointer;
+        @extend %flexCenter;
+        justify-content: space-around;
+        position: relative;
+        height: 40px;
+        min-width: 115px;
+        background-color: $bg3;
+        border: 3px solid $bg2;
+        margin-left: auto;
+        margin-right: auto;
+        font-weight: bold;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: background-color .4s ease-in-out;
+        user-select: none;
+        &:hover {
+            background-color: $bg4;
+        }
+        &--disabled {
+            background-color: grey;
+            cursor: initial;
+            &:hover {
+                background-color: grey;
+            }
+        }
+    }
+    &-display {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(100% + 40px);
+        height: 100%;
+        z-index: -1;
+        @extend %flexCenter;
+        justify-content: end;
+        box-sizing: border-box;
+        padding: 0 2px;
+        &--types {
+            justify-content: space-around;
+            width: 100%;
+            height: 190%;
+            left: 0;
+            align-items: end;
+        }
+        &--left {
+            left: auto;
+            right: 0;
+            justify-content: start
+        }
+        &--xl {
+            width: calc(100% + 40px);
+            left: -20px
+        }
+        &--item {
+            @include cubo(22px);
+        }
+    }
+    &-item {
+        height: 45px;
+        width: 80%;
+        background-color: $bg3;
+        margin-top: .5rem;
+        padding-left: 2px;
+        @extend %flexCenter;
+        border-radius: $borderItem;
+        position: relative;
+        transition: background-color .2s ease;
+        &:hover {
+            background-color: $bg4;
+        }
+    }
+    &--title {
+        @extend %flexCenter;
+        justify-content: start;
+        padding-left: .5rem;
+        height: 100%;
+        width: 100%;
+        margin-bottom: 0;
+        border-radius: 0 $borderItem $borderItem 0;
+        font-weight: bold;
+        user-select: none;
+        cursor: pointer;
+    }
+    &--link {
+        @extend %flexCenter;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 60px;
+        background-color: $bg4;
+        border-radius: 0 $borderItem $borderItem 0;
+        clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+        & img {
+            @include cubo(30px);
+        }
+    }
+    &--img {
+        @include cubo(35px);
+        border-radius: $borderItem;
+    }
+}

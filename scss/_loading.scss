@@ -1,0 +1,72 @@
+.loading {
+    position: absolute;
+    z-index: 250;
+    top: 0;
+    left: 0;
+    background-color: $bg1;
+    @extend %flexCenter;
+    @include cubo(100%);
+}
+
+.ball {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    z-index: 300;
+    background: white;
+    position: relative;
+    box-shadow: -20px 0 rgba(0, 0, 0, 0.1) inset;
+    @extend %flexCenter;
+    animation: appear .5s ease-out, roll 1s ease-in-out infinite;
+    background: linear-gradient( to bottom, $pkb1 0%, $pkb1 50.5%, white 50.51%, white 100%);
+    &:after {
+        content: "";
+        position: absolute;
+        top: calc(100px - 3px);
+        left: 0;
+        width: 200px;
+        height: 6px;
+        background: #3f3f3f;
+    }
+    &-button {
+        @include cubo((54px));
+        border: solid 6px #3f3f3f;
+        border-radius: 50%;
+        background: white;
+        z-index: 1;
+        box-shadow: 0 0 15px -2px #c62828 inset;
+        animation: button 3s ease infinite;
+    }
+}
+
+@keyframes roll {
+    from {
+        transform: rotate(0);
+    }
+    90%,
+    to {
+        transform: rotate(720deg);
+    }
+}
+
+@keyframes appear {
+    from,
+    50% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes button {
+    from,
+    50%,
+    to {
+        box-shadow: 0 0 15px -2px #c62828 inset;
+    }
+    25%,
+    75% {
+        box-shadow: 0 0 10px -2px #1300ea inset;
+    }
+}

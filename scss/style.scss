@@ -9,27 +9,6 @@
     src: url('../assets/fonts/barlow.ttf');
 }
 
-$cardColor: rgb(147,
-74,
-50);
-$cardColorLight: rgb(179,
-112,
-89);
-$cardColorLightB: rgb(151,
-95,
-76);
-$cardBorder:rgb(133,
-66,
-44);
-body {
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-
 @mixin cubo($t) {
     width: $t;
     height: $t;
@@ -53,9 +32,6 @@ body {
     align-items: center;
 }
 
-@import '_card.scss';
-@import '_form.scss';
-@import '_expansions.scss';
 // Firefox
 * {
     scrollbar-width: auto;
@@ -77,17 +53,21 @@ body {
     border-radius: 5px;
 }
 
+@import '_vars.scss';
+@import '_card.scss';
+@import '_form.scss';
+@import '_expansions.scss';
+@import '_selectBox.scss';
+@import 'loading.scss';
 .pokedex {
-    background-image: url('../assets/img/background.png');
-    background-size: 100% 100%;
+    background-image: url('../assets/img/splash_cold.png');
+    @extend %bgs;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @extend %flexCenter;
     padding-right: 3vw;
-    padding-top: 0;
     margin: 0;
+    overflow: hidden;
 }
 
 .flex {
@@ -100,18 +80,6 @@ body {
     &--col {
         flex-direction: column;
     }
-}
-
-.search {
-    height: 100%;
-    background-color: rgba($cardColor, .9);
-    border-right: 3px solid $cardBorder;
-    margin-right: auto;
-    width: 40vw;
-    max-width: 600px;
-    position: relative;
-    z-index: 150;
-    transition: transform .3s ease;
 }
 
 .screen {
@@ -132,10 +100,6 @@ body {
     &--noScroll {
         overflow-y: hidden;
     }
-}
-
-.hd {
-    display: none
 }
 
 .notFound {
@@ -168,34 +132,11 @@ body {
 
 @media screen and (max-width: 1010px) {
     .pokedex {
-        background-image: url('../assets/img/backgroundM.png');
-        padding-right: 0;
+        background-size: auto 100vh;
+        padding-left: 45px;
+        padding-right: 45px;
     }
     .screen {
-        width: 90%;
-    }
-    .search {
-        position: absolute;
-        background-color: $cardColor;
-        transform: translateX(-110vw);
-        &--show {
-            transform: translateX(-30vw);
-        }
-    }
-}
-
-@media screen and (max-width: 850px) {
-    .search {
-        max-width: none;
         width: 100%;
-        &--show {
-            transform: translateX(0vw);
-        }
     }
 }
-
-// @media screen and (max-width: 600px) {
-//     .pokedex {
-//         background-image: url('../assets/img/backgroundM2.png');
-//     }
-// }

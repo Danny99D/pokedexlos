@@ -12,199 +12,190 @@
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
 </head>
 
-<body>
-    <div class="pokedex">
+<body class="pokedex">
+    <div class="loading">
+        <div class="ball" id="ball">
+            <div class="ball-button"></div>
+        </div>
+    </div>
+
+
+    <div class="search" id="search">
         <div class="formClose" id="formClose"></div>
-        <div class="search" id="search">
-            <form action="" method="post" id="pokemonSearch">
+        <form action="" method="post" id="pokemonSearch">
+            <div class="form" id="form">
                 <div class="field field--text">
                     <input type="text" name="pokemonName" id="pokemonName" placeholder="Pokémon Name">
                 </div>
 
-                <div class="field field--double">
-                    <div class="">
-                        <label for="pokemonHealth">Health</label>
-                        <input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth">
+                <div class="select-box" id="rarityBox"></div>
+                <div class="select-box" id="typeBox"></div>
+                <div class="select-box" id="biomeBox"></div>
+                <div class="select-box" id="climateBox"></div>
+                <div class="select-box" id="moveTypeBox"></div>
+                <div class="select-box" id="learnBox"></div>
+                <div class="select-box" id="moveEffectBox"></div>
+                <div class="select-box" id="expBox">
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/los.png" alt="los.png">
+                        <input type="checkbox" name="searchExpansions" value="base" id="searchBase" checked>
+                        <label class="select--title" for="searchBase">Base</label>
+                        <a class="select--link" href="https://steamcommunity.com/workshop/filedetails/?id=2652573878" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
                     </div>
-                    <div class="">
-                        <label for="pokemonInitiative">Initiative</label>
-                        <input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative">
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/xenonia.png" alt="xenonia.png">
+                        <input type="checkbox" name="searchExpansions" value="xenonia" id="searchXenonia">
+                        <label class="select--title" for="searchXenonia">Xenonia</label>
+                        <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2941608980" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/javcov.png" alt="javcov.png">
+                        <input type="checkbox" name="searchExpansions" value="generations" id="searchGenerations">
+                        <label class="select--title" for="searchGenerations">Generations</label>
+                        <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2840694128" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/darekMega.png" alt="darekMega.png">
+                        <input type="checkbox" name="searchExpansions" value="darekMega" id="searchEvol">
+                        <label class="select--title" for="searchEvol">Mega Evolution</label>
+                        <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2794220801" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/freeze.png" alt="freeze.png">
+                        <input type="checkbox" name="searchExpansions" value="freeze" id="searchFreeze">
+                        <label class="select--title" for="searchFreeze">Freeze</label>
+                        <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2950423996" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                    </div>
+                </div>
+                <div class="select-box" id="genBox">
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen1.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="0" id="searchGen1" checked>
+                        <label class="select--title" for="searchGen1">1st Generation</label>
+                    </div>
+
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen2.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="1" id="searchGen2" checked>
+                        <label class="select--title" for="searchGen2">2nd Generation</label>
+                    </div>
+
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen3.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="2" id="searchGen3" checked>
+                        <label class="select--title" for="searchGen3">3rd Generation</label>
+                    </div>
+
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen4.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="3" id="searchGen4" checked>
+                        <label class="select--title" for="searchGen4">4th Generation</label>
+                    </div>
+
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen5.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="4" id="searchGen5" checked>
+                        <label class="select--title" for="searchGen5">5th Generation</label>
+                    </div>
+
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen6.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="5" id="searchGen6" checked>
+                        <label class="select--title" for="searchGen6">6th Generation</label>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen7.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="6" id="searchGen7" checked>
+                        <label class="select--title" for="searchGen7">7th Generation</label>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen8.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="7" id="searchGen8" checked>
+                        <label class="select--title" for="searchGen8">8th Generation</label>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/games/gen9.png" alt="los.png">
+                        <input type="checkbox" name="searchGenerations" value="8" id="searchGen9" checked>
+                        <label class="select--title" for="searchGen9">9th Generation</label>
+                    </div>
+                    <div class="select-item">
+                        <input type="checkbox" name="searchByGen" value="0" id="searchByGen">
+                        <label class="select--title" for="searchByGen">Search by Generation</label>
                     </div>
                 </div>
 
-                <div class="field field--double">
-                    <div class="">
-                        <label for="pokemonRarity">Rarity</label>
-                        <select name="pokemonRarity" id="pokemonRarity">
-                        <option value="none">None</option>
-                    </select></div>
-                    <div class="">
-                        <label for="pokemonEvoCost">Evolution Cost</label>
-                        <input class="inp--short" maxlength="2" type="number" name="pokemonEvoCost" id="pokemonEvoCost">
+                <div class="field field--info">
+                    <div class="select-field select-field--col">
+                        <div class="select-button" id="rarityButton">
+                            <div class="select-display" id="selectRarity"></div>
+                            Rarity
+                        </div>
+                        <div class="select-button" id="typeButton">
+                            <div class="select-display select-display--types" id="selectTypes"></div>
+                            Types
+                        </div>
+                    </div>
+
+                    <div class="field field--col">
+                        <div class="field--health"><input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth"></div>
+                        <div class="field--init"><input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative"></div>
+                        <div class="field--evo"><input class="inp--short" maxlength="2" type="number" name="pokemonEvoCost" id="pokemonEvoCost"></div>
                     </div>
                 </div>
 
-                <div class="field field--dual">
-                    <label class="tx--center" for="pokemonType1">Pokémon Types</label>
-                    <select name="pokemonType1" id="pokemonType1">
-                        <option value="none">Type 1</option>
-                    </select>
-                    <select name="pokemonType2" id="pokemonType2" disabled>
-                        <option value="none">Type 2</option>
-                    </select>
+                <div class="select-field select-field--location">
+                    <div class="select-button" id="biomeButton">Biome</div>
+                    <div class="select-locations" id="selectLocations"></div>
+                    <div class="select-button" id="climateButton">Climate</div>
                 </div>
 
-                <div class="field field--text">
-                    <input type="text" name="pokemonMoveName" id="pokemonMoveName" placeholder="Pokémon Move Name">
-                </div>
 
-                <div class="field field--double">
-                    <div class="">
-                        <label for="pokemonMoveType">Move Type</label>
-                        <select name="pokemonMoveType" id="pokemonMoveType">
-                            <option value="none">None</option>
-                        </select>
-                    </div>
-                    <div class="">
-                        <label for="pokemonMoveStrength">Move Strength</label>
-                        <input class="inp--short" type="number" name="pokemonMoveStrength" id="pokemonMoveStrength">
-                    </div>
-                </div>
 
-                <div class="field field--cuadra">
-                    <label class="tx--center" for="pokemonTypeLearn1">Pokemon Move Types</label>
-                    <select name="pokemonTypeLearn1" id="pokemonTypeLearn1">
-                        <option value="none">Type 1</option>
-                    </select>
-                    <select name="pokemonTypeLearn2" id="pokemonTypeLearn2" disabled>
-                        <option value="none">Type 2</option>
-                    </select>
-                    <select name="pokemonTypeLearn3" id="pokemonTypeLearn3" disabled>
-                        <option value="none">Type 3</option>
-                    </select>
-                    <select name="pokemonTypeLearn4" id="pokemonTypeLearn4" disabled>
-                        <option value="none">Type 4</option>
-                    </select>
-                </div>
+                <div class="field field--move">
 
-                <div class="field field--double">
-                    <div class="">
-                        <label for="pokemonBiome">Biome</label>
-                        <select name="pokemonBiome" id="pokemonBiome">
-                            <option value="none">None</option>
-                        </select>
-                    </div>
-                    <div class="">
-                        <label for="pokemonClimate">Climate</label>
-                        <select name="pokemonClimate" id="pokemonClimate">
-                            <option value="none">None</option>
-                        </select>
-                    </div>
-                </div>
+                    <div class="field field--col">
+                        <div class="field field--text">
 
-                <div class="expansions-field">
-                    <div class="expansions-button" id="expButton">Expansions</div>
-                    <div class="expansions-box" id="expBox">
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/expansions/los.png" alt="los.png">
-                            <input type="checkbox" name="searchExpansions" value="base" id="searchBase" checked>
-                            <label class="expansions--title" for="searchBase">Base</label>
-                            <a class="expansions--link" href="https://steamcommunity.com/workshop/filedetails/?id=2652573878" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                            <input type="text" name="pokemonMoveName" id="pokemonMoveName" placeholder="Pokémon Move Name">
                         </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/expansions/xenonia.png" alt="xenonia.png">
-                            <input type="checkbox" name="searchExpansions" value="xenonia" id="searchXenonia">
-                            <label class="expansions--title" for="searchXenonia">Xenonia</label>
-                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2941608980" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
-                        </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/expansions/javcov.png" alt="javcov.png">
-                            <input type="checkbox" name="searchExpansions" value="generations" id="searchGenerations">
-                            <label class="expansions--title" for="searchGenerations">Generations</label>
-                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2840694128" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
-                        </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/expansions/darekMega.png" alt="darekMega.png">
-                            <input type="checkbox" name="searchExpansions" value="darekMega" id="searchEvol">
-                            <label class="expansions--title" for="searchEvol">Mega Evolution</label>
-                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2794220801" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
-                        </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/expansions/freeze.png" alt="freeze.png">
-                            <input type="checkbox" name="searchExpansions" value="freeze" id="searchFreeze">
-                            <label class="expansions--title" for="searchFreeze">Freeze</label>
-                            <a class="expansions--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2950423996" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                        <div class="field--dice">
+                            <label for="pokemonMoveStrength">Strength</label>
+                            <input class="inp--short " type="number" name="pokemonMoveStrength" id="pokemonMoveStrength">
                         </div>
                     </div>
-                    <div class="expansions-button" id="genButton">Generations</div>
-                    <div class="expansions-box" id="genBox">
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen1.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="0" id="searchGen1" checked>
-                            <label class="expansions--title" for="searchGen1">1st Generation</label>
-                        </div>
 
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen2.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="1" id="searchGen2" checked>
-                            <label class="expansions--title" for="searchGen2">2nd Generation</label>
+                    <div class="select-field select-field--col">
+                        <div class="select-button" id="moveEffectButton">
+                            <div class="select-display" id="selectEffect"></div>
+                            Move Effect
                         </div>
-
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen3.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="2" id="searchGen3" checked>
-                            <label class="expansions--title" for="searchGen3">3rd Generation</label>
+                        <div class="select-button" id="moveTypeButton">
+                            <div class="select-display select-display--left" id="selectMove"></div>
+                            Move Type
                         </div>
-
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen4.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="3" id="searchGen4" checked>
-                            <label class="expansions--title" for="searchGen4">4th Generation</label>
-                        </div>
-
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen5.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="4" id="searchGen5" checked>
-                            <label class="expansions--title" for="searchGen5">5th Generation</label>
-                        </div>
-
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen6.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="5" id="searchGen6" checked>
-                            <label class="expansions--title" for="searchGen6">6th Generation</label>
-                        </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen7.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="6" id="searchGen7" checked>
-                            <label class="expansions--title" for="searchGen7">7th Generation</label>
-                        </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen8.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="7" id="searchGen8" checked>
-                            <label class="expansions--title" for="searchGen8">8th Generation</label>
-                        </div>
-                        <div class="expansions-item">
-                            <img class="expansions--img" src="assets/img/icons/games/gen9.png" alt="los.png">
-                            <input type="checkbox" name="searchGenerations" value="8" id="searchGen9" checked>
-                            <label class="expansions--title" for="searchGen9">9th Generation</label>
-                        </div>
-                        <div class="expansions-item">
-                            <input type="checkbox" name="searchByGen" value="0" id="searchByGen">
-                            <label class="expansions--title" for="searchByGen">Search by Generation</label>
+                        <div class="select-button" id="learnButton">
+                            <div class="select-display select-display--types select-display--xl" id="selectLearn"></div>
+                            Learn Types
                         </div>
                     </div>
                 </div>
 
-
-                <div class="field field--buttons">
-                    <input type="button" id="btnSearch" value="Search" />
-                    <input type="button" id="btnReset" value="Reset">
+                <div class="field-expansions">
+                    <div class="select-button" id="expButton">Expansions</div>
+                    <div class="select-button" id="genButton">Generations</div>
                 </div>
-            </form>
 
-        </div>
-        <div class="screen" id="screen"></div>
+            </div>
+            <div class="field field--buttons">
+                <input type="button" id="btnSearch" value="Search" />
+                <input type="button" id="btnReset" value="Reset">
+            </div>
+        </form>
+
     </div>
+
+    <div class="screen" id="screen"></div>
+
 </body>
 
 </html>

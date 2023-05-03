@@ -14,7 +14,7 @@
   background-position: center;
 }
 
-.pokedex, .ball, .loading, .select--link, .select--title, .select-item, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeForms-option, .pokeForms-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .sdcard-moveInfo--strength {
+.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select--title, .select-item, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeForms-option, .pokeForms-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--strength {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -174,7 +174,23 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 1rem 1.5rem;
+  padding: 1.8rem 1.5rem;
+}
+.cardInfo-link {
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #1b2838;
+  z-index: 300;
+}
+.cardInfo-link img {
+  width: 80%;
+}
+.cardInfo-link:hover {
+  background-color: #171a21;
 }
 .cardInfo-close {
   position: absolute;
@@ -523,6 +539,10 @@
 .field-expansions {
   padding: 0.5rem 0;
   position: relative;
+  flex-wrap: wrap;
+}
+.field-expansions .select-button {
+  margin-bottom: 5px;
 }
 .field--health, .field--init {
   background-color: aliceblue;
@@ -868,8 +888,8 @@
 .select-display {
   position: absolute;
   top: 0;
-  left: 0;
-  width: calc(100% + 30px);
+  left: 30px;
+  width: 100%;
   height: 100%;
   z-index: -1;
   justify-content: end;
@@ -885,11 +905,11 @@
 }
 .select-display--left {
   left: auto;
-  right: 0;
+  right: 30px;
   justify-content: start;
 }
 .select-display--xl {
-  width: calc(100% + 40px);
+  width: 140%;
   left: -20px;
 }
 .select-display--item {
@@ -1005,6 +1025,60 @@
     box-shadow: 0 0 10px -2px #1300ea inset;
   }
 }
+.log-exp, .log-github {
+  width: 100%;
+  border-radius: 5px;
+  background-color: #2a475e;
+  padding: 0.5rem;
+}
+.log-exp {
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+.log-exp div {
+  margin-bottom: 0.3rem;
+}
+.log-exp span {
+  font-weight: bold;
+}
+.log-github {
+  max-height: 70vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.log-github div {
+  background-color: #c7d5e0;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 0.2rem 0.4rem;
+  border-radius: 5px;
+  margin-bottom: 0.3rem;
+}
+.log-github p {
+  margin: 0;
+  border-bottom: 2px solid #1b2838;
+  width: 100%;
+  font-weight: bold;
+}
+.log-github ul {
+  font-size: 0.9rem;
+}
+.log-link {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.6rem;
+  width: 60px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: aliceblue;
+}
+.log-link img {
+  width: 90%;
+}
+
 .pokedex {
   background-image: url("../assets/img/splash_cold.png");
   width: 100vw;

@@ -37,6 +37,8 @@ function load(xhttp) {
     const expBox = document.getElementById('expBox')
     const genButton = document.getElementById('genButton')
     const genBox = document.getElementById('genBox')
+    const logButton = document.getElementById('logButton')
+    const logBox = document.getElementById('logBox')
     const searchByGen = document.getElementById('searchByGen')
 
 
@@ -172,6 +174,11 @@ function load(xhttp) {
     genButton.addEventListener('click', () => {
         setSelect()
         genBox.classList.add('select-box--shown')
+    })
+
+    logButton.addEventListener('click', () => {
+        setSelect()
+        logBox.classList.add('select-box--shown')
     })
 
     expButton.addEventListener('click', () => {

@@ -125,8 +125,8 @@ $borderItem: 5px;
     &-display {
         position: absolute;
         top: 0;
-        left: 0;
-        width: calc(100% + 30px);
+        left: 30px;
+        width: 100%;
         height: 100%;
         z-index: -1;
         @extend %flexCenter;
@@ -142,11 +142,11 @@ $borderItem: 5px;
         }
         &--left {
             left: auto;
-            right: 0;
+            right: 30px;
             justify-content: start
         }
         &--xl {
-            width: calc(100% + 40px);
+            width: 140%;
             left: -20px
         }
         &--item {

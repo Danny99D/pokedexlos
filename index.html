@@ -34,6 +34,7 @@
                 <div class="select-box" id="climateBox"></div>
                 <div class="select-box" id="moveTypeBox"></div>
                 <div class="select-box" id="learnBox"></div>
+
                 <div class="select-box" id="moveEffectBox"></div>
                 <div class="select-box" id="expBox">
                     <div class="select-item">
@@ -123,6 +124,144 @@
                         <label class="select--title" for="searchByGen">Search by Generation</label>
                     </div>
                 </div>
+                <div class="select-box" id="logBox">
+                    <a href="https://github.com/Danny99D/pokedexlos" target="_blank" class="log-link">
+                        <img src="assets/img/icons/github.png" alt="github.png">
+                    </a>
+
+                    <div class="log-exp">
+                        <div>Base <span>1.4a</span></div>
+                        <div>Xenonia <span>1.4a</span></div>
+                        <div>Freeze <span>1.4a</span></div>
+                        <div>Generations <span>1.7b</span></div>
+                        <div>Mega Evolutions <span>1.3c</span></div>
+                    </div>
+
+                    <div class="log-github">
+                        <div>
+                            <p>2.0.5</p>
+                            <ul>
+                                <li>Added Log</li>
+                                <li>Added Bulbapedia link in pokemon info</li>
+                                <li>Fix Generation's noble images</li>
+                                <li>Fix search move effect by "Health"</li>
+                                <li>Fix pokedex to support my new sinnoh_cube</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>2.0.4</p>
+                            <ul>
+                                <li>Fix card colours</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>2.0.3</p>
+                            <ul>
+                                <li>Fix button to open/close the menu on mobile</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>2.0.2</p>
+                            <ul>
+                                <li>Fix search buttons for mobile</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>2.0.1</p>
+                            <ul>
+                                <li>Fix some visual errors for mobile</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>2.0</p>
+                            <ul>
+                                <li>New UI Style</li>
+                                <li>New Form format using buttons and checklists</li>
+                                <li>Rework other forms box</li>
+                                <li>Added Evolution route box</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.3.1</p>
+                            <ul>
+                                <li>Generations expansion updated</li>
+                                <li>Noble/Mega/Gigamax no longer in Legendary search</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.3</p>
+                            <ul>
+                                <li>Mega evolution expansion added</li>
+                                <li>Freeze's Rework expansion added</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.2.3</p>
+                            <ul>
+                                <li>Herobrine removed</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.2</p>
+                            <ul>
+                                <li>Search by Generation added</li>
+                                <li>Different Forms added to pokemon Info</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.1.5</p>
+                            <ul>
+                                <li>Fix some errors in the pokemon database</li>
+                                <li>Update Xenonia's noble pokemon images</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.1.4</p>
+                            <ul>
+                                <li>Fix pokemon database</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.1.3</p>
+                            <ul>
+                                <li>Fix reset expansion list when clicking reset button</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.1.2</p>
+                            <ul>
+                                <li>Fix expansion image</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.1.1</p>
+                            <ul>
+                                <li>Expansion image fix</li>
+                                <li>Some images missing</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.1</p>
+                            <ul>
+                                <li>Expansions supported</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.0.1</p>
+                            <ul>
+                                <li>Fix for close the search menu at mobile</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p>1.0</p>
+                            <ul>
+                                <li>Base version of the Web</li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </div>
 
                 <div class="field field--info">
                     <div class="select-field select-field--col">
@@ -168,7 +307,7 @@
                             Move Effect
                         </div>
                         <div class="select-button" id="moveTypeButton">
-                            <div class="select-display select-display--left" id="selectMove"></div>
+                            <div class="select-display" id="selectMove"></div>
                             Move Type
                         </div>
                         <div class="select-button" id="learnButton">
@@ -180,6 +319,7 @@
 
                 <div class="field-expansions">
                     <div class="select-button" id="expButton">Expansions</div>
+                    <div class="select-button" id="logButton">Log</div>
                     <div class="select-button" id="genButton">Generations</div>
                 </div>
 

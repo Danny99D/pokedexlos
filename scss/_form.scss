@@ -87,6 +87,10 @@ $dist: 24px;
         padding: .5rem 0;
         position: relative;
         @extend %flexCenter;
+        flex-wrap: wrap;
+        & .select-button {
+            margin-bottom: 5px;
+        }
     }
     &--health,
     &--init {

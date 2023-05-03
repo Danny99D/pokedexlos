@@ -58,7 +58,8 @@
 @import '_form.scss';
 @import '_expansions.scss';
 @import '_selectBox.scss';
-@import 'loading.scss';
+@import '_loading.scss';
+@import '_log.scss';
 .pokedex {
     background-image: url('../assets/img/splash_cold.png');
     @extend %bgs;

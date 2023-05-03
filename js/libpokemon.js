@@ -1,8 +1,26 @@
 let countClickBayleef = 0;
-let skipCardDraws = ['710-s', '710-l', '710-p', '711-s', '711-l', '711-p', '925-t', '931-b', '931-y', '931-w', '978-d', '978-s', '982-t', '774-r',
-        '774-o', '774-y', '774-b', '774-i', '774-v', '550-b', '585-su', '585-au', '585-wi', '586-su', '586-au', '586-wi', '592-f', '593-f', '521-f',
-        '412-s', '412-t', '413-s', '413-t', '849-ag'
-    ] //Needs same attack and image, different stats and not noble form
+
+//Needs same attack and image, different stats and not noble form
+let skipCardDraws = [
+    '412-sc', '412-tc', // Burmy
+    '413-sc', '413-tc', // Wormadam
+    '521-f', // Unfezant
+    '550-bb', '550-bw', // Basculin
+    '585-su', '585-au', '585-wi', // Deerling
+    '586-su', '586-au', '586-wi', //Sawsbuck
+    '592-f', // Frillish
+    '593-f', // Jellicent
+    '710-ps', '710-pl', '710-pp', // Pumpkaboo
+    '711-ps', '711-pl', '711-pp', // Gourgeist
+    '774-mr', '774-mo', '774-my', '774-mb', '774-mi', '774-mv', // Minior
+    '849-tl', '849-tgl', // Toxtricity
+    '902-f', // Basculegion
+    '925-mt', // Maushold
+    '931-sb', '931-sy', '931-sw', // Squawkabilly
+    '978-td', '978-ts', // Tatsugiri
+    '982-dt' // Dudunsparce
+]
+
 const generationDex = [
     [0, 151],
     [152, 251],
@@ -374,7 +392,7 @@ function searchByMoveEffect(pokemonData, moveEffect) {
             case 'heal':
                 pokemonData.find((pokeObj) => {
                     let move = pokeObj.move_effect.toLowerCase()
-                    if (move.includes(moveEffect.toLowerCase()) && (move.includes('damage') || move.includes('effect'))) {
+                    if (move.includes(moveEffect.toLowerCase() + ' ') && (move.includes('damage') || move.includes('effect'))) {
                         pokemonSearch.push(pokeObj)
                     }
                 })
@@ -670,13 +688,13 @@ function drawPokemonCard(pokemon) {
     div.classList.add('flex')
     div.classList.add('flex--sa')
 
-    if (pokemon.hasOwnProperty('type_1')) {
+    if (pokemon.hasOwnProperty('type_1') && pokemon.type_1 != '') {
         div.appendChild(createImg('type', pokemon.type_1, 'sdcard-type', pokemon.expansion))
     } else {
         div.appendChild(createImg('type', 'typeless', 'sdcard-type', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('type_2')) {
+    if (pokemon.hasOwnProperty('type_2') && pokemon.type_2 != '') {
         div.appendChild(createImg('type', pokemon.type_2, 'sdcard-type', pokemon.expansion))
     }
 
@@ -716,29 +734,29 @@ function drawPokemonCard(pokemon) {
 
     dvInfo.appendChild(dvStats)
 
-    modClimate = pokemon.hasOwnProperty('climate') ? pokemon.climate.toLowerCase() : ''
-    modBiome = pokemon.hasOwnProperty('biome') ? pokemon.biome.toLowerCase() : ''
+    modClimate = pokemon.hasOwnProperty('climate') && pokemon.climate != '' ? pokemon.climate.toLowerCase() : ''
+    modBiome = pokemon.hasOwnProperty('biome') && pokemon.biome != '' ? pokemon.biome.toLowerCase() : ''
     dvInfo.appendChild(checkBioClim(modClimate, modBiome, 'sdcard-info--location'))
 
     //Poke Learn Moves
     let dvLearn = document.createElement('DIV')
     dvLearn.classList.add('sdcard-info--learn')
 
-    if (pokemon.hasOwnProperty('move_1')) {
+    if (pokemon.hasOwnProperty('move_1') && pokemon.move_1 != '') {
         dvLearn.appendChild(createImg('type', pokemon.move_1, 'sdcard-type', pokemon.expansion))
     } else {
         dvLearn.appendChild(createImg('type', 'typeless', 'sdcard-type', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('move_2')) {
+    if (pokemon.hasOwnProperty('move_2') && pokemon.move_2 != '') {
         dvLearn.appendChild(createImg('type', pokemon.move_2, 'sdcard-type', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('move_3')) {
+    if (pokemon.hasOwnProperty('move_3') && pokemon.move_3 != '') {
         dvLearn.appendChild(createImg('type', pokemon.move_3, 'sdcard-type', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('move_4')) {
+    if (pokemon.hasOwnProperty('move_4') && pokemon.move_4 != '') {
         dvLearn.appendChild(createImg('type', pokemon.move_4, 'sdcard-type', pokemon.expansion))
     }
 
@@ -814,13 +832,13 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     dvCardTypes.classList.add('cardInfo-title--types')
     dvCardTypes.appendChild(createImg('exp', checkExp(pokemon.expansion), 'cardInfo-type cardInfo-type--round', pokemon.expansion))
 
-    if (pokemon.hasOwnProperty('type_1')) {
+    if (pokemon.hasOwnProperty('type_1') && pokemon.type_1 != '') {
         dvCardTypes.appendChild(createImg('type', pokemon.type_1, 'cardInfo-type', pokemon.expansion))
     } else {
         dvCardTypes.appendChild(createImg('type', 'typeless', 'cardInfo-type', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('type_2')) {
+    if (pokemon.hasOwnProperty('type_2') && pokemon.type_2 != '') {
         dvCardTypes.appendChild(createImg('type', pokemon.type_2, 'cardInfo-type', pokemon.expansion))
     }
 
@@ -850,7 +868,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     modRarity = checkRarity(pokemon.encounter_tier)
     dvCardDesc.appendChild(createImg('icon', modRarity, 'cardInfo-type cardInfo-type--sm', pokemon.expansion))
 
-    if (pokemon.hasOwnProperty('description')) {
+    if (pokemon.hasOwnProperty('description') && pokemon.description != '') {
         let pDesc = document.createElement('P')
         pDesc.appendChild(document.createTextNode(pokemon.description))
 
@@ -884,21 +902,21 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
     let div = document.createElement('DIV')
 
-    if (pokemon.hasOwnProperty('move_1')) {
+    if (pokemon.hasOwnProperty('move_1') && pokemon.move_1 != '') {
         div.appendChild(createImg('type', pokemon.move_1, 'cardInfo-type--sm', pokemon.expansion))
     } else {
         div.appendChild(createImg('type', 'typeless', 'cardInfo-type--sm', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('move_2')) {
+    if (pokemon.hasOwnProperty('move_2') && pokemon.move_2 != '') {
         div.appendChild(createImg('type', pokemon.move_2, 'cardInfo-type--sm', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('move_3')) {
+    if (pokemon.hasOwnProperty('move_3') && pokemon.move_3 != '') {
         div.appendChild(createImg('type', pokemon.move_3, 'cardInfo-type--sm', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('move_4')) {
+    if (pokemon.hasOwnProperty('move_4') && pokemon.move_4 != '') {
         div.appendChild(createImg('type', pokemon.move_4, 'cardInfo-type--sm', pokemon.expansion))
     }
 
@@ -953,9 +971,24 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     pMoveDesc.appendChild(document.createTextNode(pokemon.move_effect))
     dvCardMove.appendChild(pMoveDesc)
 
+    //------------link
+
+    let link = document.createElement('A')
+    link.classList.add('cardInfo-link')
+    link.target = "_blank"
+    link.href = "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.pokedex_name + "_(Pok%C3%A9mon)"
+
+    let linkImg = document.createElement('IMG')
+    linkImg.src = 'assets/img/icons/bulbapedia_logo.png'
+    linkImg.alt = 'bulbapedia_logo.png'
+    linkImg.title = firstUpperCase(pokemon.pokedex_name) + ' - Bulbapedia'
+
+    link.appendChild(linkImg)
+
     //add
     const cardInfo = document.getElementById('cardInfo')
 
+    cardInfo.appendChild(link)
     cardInfo.appendChild(dvCardTitle)
     cardInfo.appendChild(dvCardData)
     cardInfo.appendChild(dvCardMove)
@@ -1086,13 +1119,13 @@ function drawPokemonForm(pokemon, mod) {
     let dvCardTypes = document.createElement('DIV')
     dvCardTypes.classList.add('pokeForm--types')
 
-    if (pokemon.hasOwnProperty('type_1')) {
+    if (pokemon.hasOwnProperty('type_1') && pokemon.type_1 != '') {
         dvCardTypes.appendChild(createImg('type', pokemon.type_1, 'cardInfo-type pokeForm--type', pokemon.expansion))
     } else {
         dvCardTypes.appendChild(createImg('type', 'typeless', 'cardInfo-type pokeForm--type', pokemon.expansion))
     }
 
-    if (pokemon.hasOwnProperty('type_2')) {
+    if (pokemon.hasOwnProperty('type_2') && pokemon.type_2 != '') {
         dvCardTypes.appendChild(createImg('type', pokemon.type_2, 'cardInfo-type pokeForm--type', pokemon.expansion))
     }
 
@@ -1252,7 +1285,7 @@ function checkDexNumber(modDex) {
         }
     }
 
-    modDex = modDex.includes('gl') ? modDex.slice(0, -3) : modDex
+    modDex = modDex.includes('-gl') ? modDex.slice(0, -3) : modDex
     return modDex
 }
 

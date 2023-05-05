@@ -137,7 +137,7 @@ $borderItem: 5px;
             width: 100%;
             top: auto;
             left: 0;
-            bottom: -25px;
+            bottom: -30px;
             align-items: end;
             justify-content: space-around;
         }
@@ -196,8 +196,8 @@ $borderItem: 5px;
 }
 
 @media screen and (max-height: 850px) {
-    .select {
-        &--img {
+    .select-box--big {
+        .select--img {
             @include cubo(1rem);
         }
     }

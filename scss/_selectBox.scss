@@ -124,7 +124,7 @@ $borderItem: 5px;
     }
     &-display {
         position: absolute;
-        left: 100%;
+        right: -35px;
         top: 0;
         width: 30px;
         height: 100%;
@@ -192,5 +192,13 @@ $borderItem: 5px;
     &--img {
         @include cubo(2rem);
         border-radius: $borderItem;
+    }
+}
+
+@media screen and (max-height: 850px) {
+    .select {
+        &--img {
+            @include cubo(1rem);
+        }
     }
 }

@@ -887,7 +887,7 @@
 }
 .select-display {
   position: absolute;
-  left: 100%;
+  right: -35px;
   top: 0;
   width: 30px;
   height: 100%;
@@ -956,6 +956,12 @@
   border-radius: 5px;
 }
 
+@media screen and (max-height: 850px) {
+  .select--img {
+    width: 1rem;
+    height: 1rem;
+  }
+}
 .loading {
   position: absolute;
   z-index: 250;

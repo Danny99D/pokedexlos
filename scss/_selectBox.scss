@@ -71,7 +71,7 @@ $borderItem: 5px;
         top: 0;
         left: 0;
         width: 100%;
-        max-height: 100%;
+        height: 95%;
         background-color: $bg1;
         border: 5px solid $bg2;
         padding: 1rem 20px;
@@ -124,8 +124,8 @@ $borderItem: 5px;
     }
     &-display {
         position: absolute;
-        top: 0;
         left: 30px;
+        top: 0;
         width: 100%;
         height: 100%;
         z-index: -1;
@@ -136,8 +136,10 @@ $borderItem: 5px;
         &--types {
             justify-content: space-around;
             width: 100%;
-            height: 190%;
+            height: 22px;
             left: 0;
+            top: auto;
+            bottom: -25px;
             align-items: end;
         }
         &--left {
@@ -145,12 +147,12 @@ $borderItem: 5px;
             right: 30px;
             justify-content: start
         }
+        &--item {
+            @include cubo(20px);
+        }
         &--xl {
             width: 140%;
-            left: -20px
-        }
-        &--item {
-            @include cubo(22px);
+            left: -20px;
         }
     }
     &-item {

@@ -124,28 +124,22 @@ $borderItem: 5px;
     }
     &-display {
         position: absolute;
-        left: 30px;
+        left: 100%;
         top: 0;
-        width: 100%;
+        width: 30px;
         height: 100%;
         z-index: -1;
         @extend %flexCenter;
         justify-content: end;
-        box-sizing: border-box;
         padding: 0 2px;
         &--types {
-            justify-content: space-around;
-            width: 100%;
             height: 22px;
-            left: 0;
+            width: 100%;
             top: auto;
+            left: 0;
             bottom: -25px;
             align-items: end;
-        }
-        &--left {
-            left: auto;
-            right: 30px;
-            justify-content: start
+            justify-content: space-around;
         }
         &--item {
             @include cubo(20px);
@@ -196,7 +190,7 @@ $borderItem: 5px;
         }
     }
     &--img {
-        @include cubo(35px);
+        @include cubo(2rem);
         border-radius: $borderItem;
     }
 }

@@ -792,6 +792,12 @@ function drawPokemonCard(pokemon) {
 function drawPokemonCards(pokemonData) {
     const screen = document.getElementById('screen')
     borrar(screen)
+
+    let searchResult = document.createElement('DIV')
+    searchResult.classList.add('screen-found')
+    searchResult.appendChild(document.createTextNode(fixCount(pokemonData) + ' Results'))
+    screen.appendChild(searchResult)
+
     screen.scrollTop = 0
 
     if (pokemonData.length) {
@@ -979,7 +985,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     link.href = "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.pokedex_name + "_(Pok%C3%A9mon)"
 
     let linkImg = document.createElement('IMG')
-    linkImg.src = 'assets/img/icons/bulbapedia_logo.png'
+    linkImg.src = 'assets/img/icons/Bulbapedia_logo.png'
     linkImg.alt = 'bulbapedia_logo.png'
     linkImg.title = firstUpperCase(pokemon.pokedex_name) + ' - Bulbapedia'
 
@@ -1056,6 +1062,9 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
                 //Const con la referencia al tipo de box (form | evol)
                 const refMod = refBox.split('-')[0]
+
+                //Le pone la clase selected para mejor visual
+                setOptions(e.target, refMod)
 
                 //Recorre el array de Screens para cambiar las clases
                 Array.from(boxScreens).forEach(box => {
@@ -1194,9 +1203,10 @@ function drawVariations(otherForms, mod, pokemonName) {
     if (expansions.length > 1) {
 
         //Recorre el array de expansiones creando las diferentes Options
-        expansions.forEach(exp => {
+        expansions.forEach((exp, i) => {
             let boxOpt = document.createElement('DIV')
             boxOpt.classList.add('pokeForms-option')
+            if (i == 0) { boxOpt.classList.add('pokeForms-option--selected') }
             boxOpt.id = exp + firstUpperCase(exp)
 
             //Les añade un atributo para refenciar la Option y la Screen
@@ -1906,4 +1916,38 @@ function newProp(array, prop, value) {
         }
     })
     return array
+}
+
+//Funcion que arregla el contardor al buscar eliminando las formas alternas
+function fixCount(pokemonData) {
+    let count = 0
+
+    pokemonData.forEach(p => {
+        let add = true
+
+        skipCardDraws.forEach(skip => {
+            add = p.pokedex_number == skip ? false : add
+        });
+
+        count = add ? count + 1 : count
+    });
+
+    return count
+}
+
+//Funcion que cambia el estado de selected en las opciones de distinta forma
+function setOptions(option, refMod) {
+    const optionsList = document.getElementsByClassName('pokeForms-option')
+
+    Array.from(optionsList).forEach(e => {
+        const refModB = e.getAttribute('boxtarget').split('-')[0]
+        if (e.getAttribute('boxtarget') == option.getAttribute('boxtarget')) {
+            e.classList.add('pokeForms-option--selected')
+        } else {
+            if (refMod == refModB) {
+                e.classList.remove('pokeForms-option--selected')
+            }
+        }
+    })
+
 }

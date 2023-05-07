@@ -364,7 +364,7 @@
   padding: 0.2rem 0.3rem;
   border-radius: 5px;
   border: 2px solid #171a21;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   user-select: none;
   position: relative;
   margin-bottom: 0.3rem;
@@ -387,6 +387,9 @@
   max-width: 30px;
   border-radius: 5px;
   margin-right: 0.2rem;
+}
+.pokeForms-option--selected {
+  border-color: goldenrod;
 }
 .pokeForm {
   background-color: #2a475e;
@@ -1103,13 +1106,14 @@
 }
 
 .screen {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(240, 248, 255, 0.3);
   border-radius: 10px;
-  box-shadow: 0 0 0 0.6em white;
+  box-shadow: 0 0 0 0.6em aliceblue;
   box-sizing: border-box;
   height: 90vh;
   width: 55vw;
   padding: 0.6rem;
+  padding-top: 2.2rem;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
@@ -1120,6 +1124,18 @@
 }
 .screen--noScroll {
   overflow-y: hidden;
+}
+.screen-found {
+  position: absolute;
+  top: -2px;
+  left: 25%;
+  clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 20% 100%);
+  width: 50%;
+  padding: 0.2rem 0 0.3rem;
+  text-align: center;
+  font-weight: bold;
+  background-color: aliceblue;
+  user-select: none;
 }
 
 .notFound {

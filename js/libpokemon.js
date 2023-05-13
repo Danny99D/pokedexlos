@@ -982,7 +982,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     let link = document.createElement('A')
     link.classList.add('cardInfo-link')
     link.target = "_blank"
-    link.href = "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.pokedex_name + "_(Pok%C3%A9mon)"
+    link.href = "https://bulbapedia.bulbagarden.net/wiki/" + pokemon.pokedex_name.replace(" ", "_") + "_(Pok%C3%A9mon)"
 
     let linkImg = document.createElement('IMG')
     linkImg.src = 'assets/img/icons/Bulbapedia_logo.png'

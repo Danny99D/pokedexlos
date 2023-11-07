@@ -1327,10 +1327,11 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
     // console.log(searchExpansions)
     // console.log(searchGenerations)
 
-    if (searchByGen && (searchExpansions.length > 0)) {
-        return true
-    } else {
-        if ((pokemonTypes.length > 0 ||
+    // if (searchByGen && (searchExpansions.length > 0)) {
+    //     return true
+    // } else {
+        if (    
+            (pokemonTypes.length > 0 ||
                 pokemonName != '' ||
                 pokemonRarity != '' ||
                 pokemonMoveName != '' ||
@@ -1342,10 +1343,14 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
                 pokemonEvoCost > 0 ||
                 pokemonClimate.length > 0 ||
                 pokemonBiome.length > 0 ||
-                pokemonLearn.length > 0) && (searchExpansions.length > 0) && (searchGenerations.length > 0)) {
+                pokemonLearn.length > 0
+                ) ||
+                (searchExpansions.length > 0) &&
+                (searchGenerations.length > 0)
+            ) {
             return true
         }
-    }
+    // }
 
     return false
 }

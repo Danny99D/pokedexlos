@@ -3,7 +3,6 @@ const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra
 const climateList = ['cold', 'temperate', 'warm', 'space']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
 const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
-let scrollVar = 0;
 let pokemonData = [];
 
 document.addEventListener('DOMContentLoaded', () => { loadDoc('assets/sinnoh_cube.json', load) })
@@ -40,6 +39,7 @@ function load(xhttp) {
     const logButton = document.getElementById('logButton')
     const logBox = document.getElementById('logBox')
     const searchByGen = document.getElementById('searchByGen')
+
 
 
     //  Desactiva el boton enter como submit para el formulario y hace que ejecute la funcion para cargar los elementos
@@ -164,9 +164,8 @@ function load(xhttp) {
             let dexNumber = e.target.getAttribute('dexnumber')
             let expansion = e.target.getAttribute('expansion')
             if (dexNumber) {
-                scrollVar = screen.scrollTop
                 screen.classList.add('screen--noScroll')
-                drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar)
+                drawPokemonInfo(pokemonData, dexNumber, expansion)
             }
         }
     })

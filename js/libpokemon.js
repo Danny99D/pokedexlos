@@ -689,13 +689,13 @@ function drawPokemonCard(pokemon) {
     div.classList.add('flex--sa')
 
     if (pokemon.hasOwnProperty('type_1') && pokemon.type_1 != '') {
-        div.appendChild(createImg('type', pokemon.type_1, 'sdcard-type', pokemon.expansion))
+        div.appendChild(createImg('type', pokemon.type_1.toLowerCase(), 'sdcard-type', pokemon.expansion))
     } else {
         div.appendChild(createImg('type', 'typeless', 'sdcard-type', pokemon.expansion))
     }
 
     if (pokemon.hasOwnProperty('type_2') && pokemon.type_2 != '') {
-        div.appendChild(createImg('type', pokemon.type_2, 'sdcard-type', pokemon.expansion))
+        div.appendChild(createImg('type', pokemon.type_2.toLowerCase(), 'sdcard-type', pokemon.expansion))
     }
 
     dvCardTitle.appendChild(div)
@@ -743,21 +743,21 @@ function drawPokemonCard(pokemon) {
     dvLearn.classList.add('sdcard-info--learn')
 
     if (pokemon.hasOwnProperty('move_1') && pokemon.move_1 != '') {
-        dvLearn.appendChild(createImg('type', pokemon.move_1, 'sdcard-type', pokemon.expansion))
+        dvLearn.appendChild(createImg('type', pokemon.move_1.toLowerCase(), 'sdcard-type', pokemon.expansion))
     } else {
         dvLearn.appendChild(createImg('type', 'typeless', 'sdcard-type', pokemon.expansion))
     }
 
     if (pokemon.hasOwnProperty('move_2') && pokemon.move_2 != '') {
-        dvLearn.appendChild(createImg('type', pokemon.move_2, 'sdcard-type', pokemon.expansion))
+        dvLearn.appendChild(createImg('type', pokemon.move_2.toLowerCase(), 'sdcard-type', pokemon.expansion))
     }
 
     if (pokemon.hasOwnProperty('move_3') && pokemon.move_3 != '') {
-        dvLearn.appendChild(createImg('type', pokemon.move_3, 'sdcard-type', pokemon.expansion))
+        dvLearn.appendChild(createImg('type', pokemon.move_3.toLowerCase(), 'sdcard-type', pokemon.expansion))
     }
 
     if (pokemon.hasOwnProperty('move_4') && pokemon.move_4 != '') {
-        dvLearn.appendChild(createImg('type', pokemon.move_4, 'sdcard-type', pokemon.expansion))
+        dvLearn.appendChild(createImg('type', pokemon.move_4.toLowerCase(), 'sdcard-type', pokemon.expansion))
     }
 
     dvInfo.appendChild(dvLearn)
@@ -768,7 +768,7 @@ function drawPokemonCard(pokemon) {
     let dvCardMove = document.createElement('DIV')
     dvCardMove.classList.add('sdcard-moveInfo')
 
-    dvCardMove.appendChild(createImg('type', pokemon.move_type, 'sdcard-type', pokemon.expansion))
+    dvCardMove.appendChild(createImg('type', pokemon.move_type.toLowerCase(), 'sdcard-type', pokemon.expansion))
 
     let pMoveName = document.createElement('P')
     pMoveName.classList.add('sdcard-moveInfo--name')
@@ -817,6 +817,8 @@ function drawPokemonCards(pokemonData) {
 function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     const screen = document.getElementById('screen')
     const pokemon = searchByDex(pokemonData, dexNumber, expansion)
+
+    scrollVar = scrollVar ? scrollVar : screen.scrollTop
 
     //cardInfo
     if (!document.getElementById('cardInfo')) {
@@ -1107,6 +1109,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     const cardClose = document.getElementById('cardClose')
     cardClose.addEventListener('click', (e) => {
         screen.removeChild(e.target.parentNode)
+        screen.scrollTop = scrollVar
         screen.classList.remove('screen--noScroll')
     })
 }

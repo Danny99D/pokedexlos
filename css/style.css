@@ -14,7 +14,7 @@
   background-position: center;
 }
 
-.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select--title, .select-item, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeForms-option, .pokeForms-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--strength {
+.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select--title, .select-item, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeLines-option, .pokeLines-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--strength {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -244,6 +244,7 @@
 .cardInfo-info {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 5px;
   margin-bottom: 1.5rem;
 }
@@ -257,6 +258,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+  grid-row: 1/4;
 }
 .cardInfo-info--stats {
   margin-left: auto;
@@ -287,89 +289,99 @@
   color: white;
 }
 .cardInfo-box {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }
 .cardInfo-description {
   font-size: 1.2rem;
+  flex-wrap: wrap;
+}
+.cardInfo-description .sdcard-info--health {
+  margin-right: 1rem;
+}
+.cardInfo-description .sdcard-info--initiative {
+  margin-left: 1rem;
 }
 .cardInfo-description p {
-  margin: 0 0 0 0.5rem;
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  padding: 0 0.5rem;
+  margin-top: 0.5rem;
 }
 .cardInfo-move {
+  grid-row: 1/3;
+}
+.cardInfo-move--title {
+  margin-top: 0.5rem;
   display: flex;
+  justify-content: center;
   align-items: center;
+  width: 100%;
   flex-wrap: wrap;
+}
+.cardInfo-move--title img, .cardInfo-move--title div {
+  margin-left: auto;
+  margin-right: auto;
+}
+.cardInfo-move--title img {
+  margin-right: 0.5rem;
+}
+.cardInfo-move--title .sdcard-moveInfo--name {
+  margin-left: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  min-width: 60%;
 }
 .cardInfo-move--description {
   width: 100%;
   background-color: aliceblue;
   border-radius: 5px;
-  padding: 15px 20px;
+  padding: 0.8rem 1rem;
   box-sizing: border-box;
-  text-align: justify;
-}
-.cardInfo-move .sdcard-moveInfo--name {
-  text-align: center;
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: auto;
-  width: 80%;
+  text-align: left;
 }
 
-.pokeForms {
-  margin-bottom: 1rem;
-}
-.pokeForms-screen {
+.pokeLines {
+  padding: 1rem;
   box-sizing: border-box;
-  position: relative;
-  overflow-x: hidden;
-}
-.pokeForms-box {
-  display: none;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-  border: 2px solid #171a21;
-  border-top: none;
-  border-bottom: none;
   position: relative;
   padding-left: 0.5rem;
 }
-.pokeForms-box::after, .pokeForms-box::before {
+.pokeLines::after, .pokeLines::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 10%;
   height: 100%;
-  border: 2px solid #171a21;
-  border-left: none;
-  border-right: none;
+  border: solid #171a21;
+  border-width: 2px 0 0 2px;
+  z-index: -10;
 }
-.pokeForms-box::before {
+.pokeLines::before {
+  border-width: 0 2px 2px 0;
   left: auto;
   right: 0;
 }
-.pokeForms-box--show {
-  display: flex;
-}
-.pokeForms-options {
+.pokeLines-options {
   justify-content: start;
   flex-wrap: wrap;
+  font-weight: bold;
 }
-.pokeForms-option {
+.pokeLines-option {
   justify-content: start;
   margin-right: 0.5rem;
   padding: 0.2rem 0.3rem;
   border-radius: 5px;
   border: 2px solid #171a21;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   user-select: none;
   position: relative;
   margin-bottom: 0.3rem;
 }
-.pokeForms-option::after {
+.pokeLines-option::after {
   content: "";
   position: absolute;
   top: 0;
@@ -379,32 +391,53 @@
   width: 100%;
   height: 100%;
 }
-.pokeForms-option:hover {
+.pokeLines-option:hover {
   background-color: #1b2838;
+  border-color: #66c0f4;
+  color: aliceblue;
   cursor: pointer;
 }
-.pokeForms-option--img {
+.pokeLines-option--img {
   max-width: 30px;
   border-radius: 5px;
   margin-right: 0.2rem;
 }
-.pokeForms-option--selected {
+.pokeLines-option--selected {
   border-color: goldenrod;
+}
+.pokeLines-screen {
+  position: relative;
+}
+.pokeLines-cage {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.pokeLines-box {
+  display: none;
+  box-sizing: border-box;
+  border: 0 2px 0 2px solid #171a21;
+  padding: 0.5rem;
+}
+.pokeLines-box--show {
+  display: block;
 }
 .pokeForm {
   background-color: #2a475e;
+  user-select: none;
   border: 4px solid #171a21;
   display: flex;
   align-items: center;
   flex-direction: column;
   width: 150px;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
   margin-bottom: 1rem;
   padding-top: 0.5rem;
   border-radius: 10px;
   position: relative;
   margin-top: 1.5rem;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
 }
 .pokeForm::after {
   content: "";
@@ -418,6 +451,7 @@
 }
 .pokeForm:hover {
   background-color: #1b2838;
+  border-color: #66c0f4;
 }
 .pokeForm--img {
   max-width: 100px;
@@ -596,11 +630,21 @@
   font-size: 0.8rem;
   border: 2px solid black;
 }
-.field--text input[type=text] {
+.field--text {
+  display: flex;
   width: 100%;
+}
+.field--text input[type=text] {
+  border-radius: 5px;
+  border: 3px solid #171a21;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
   box-sizing: border-box;
   padding: 0.4rem 0.5rem;
   background-color: rgb(219, 238, 255);
+  outline-color: #66c0f4;
+  transition: outline 0.3s ease-in-out;
 }
 .field--double {
   display: grid;
@@ -640,7 +684,8 @@
 @media screen and (max-width: 1010px) {
   .search {
     position: absolute;
-    left: -40vw;
+    left: -50vw;
+    width: 50vw;
   }
   .search--show {
     left: 0;
@@ -876,11 +921,12 @@
   font-weight: bold;
   border-radius: 5px;
   box-sizing: border-box;
-  transition: background-color 0.4s ease-in-out;
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
   user-select: none;
 }
 .select-button:hover {
   background-color: #c7d5e0;
+  border-color: #66c0f4;
 }
 .select-button--disabled {
   background-color: grey;
@@ -1169,8 +1215,8 @@
 @media screen and (max-width: 1010px) {
   .pokedex {
     background-size: auto 100vh;
-    padding-left: 45px;
-    padding-right: 45px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
   }
   .screen {
     width: 100%;

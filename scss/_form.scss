@@ -149,11 +149,19 @@ $dist: 24px;
         border: 2px solid black;
     }
     &--text {
+        display: flex;
+        width: 100%;
         & input[type=text] {
-            width: 100%;
+            border-radius: 5px;
+            border: 3px solid $bg2;
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
             box-sizing: border-box;
             padding: .4rem .5rem;
             background-color: rgb(219, 238, 255);
+            outline-color: $border1;
+            transition: outline .3s ease-in-out;
         }
     }
     &--double {
@@ -198,7 +206,8 @@ $dist: 24px;
 @media screen and (max-width: 1010px) {
     .search {
         position: absolute;
-        left: -40vw;
+        left: -50vw;
+        width: 50vw;
         &--show {
             left: 0;
         }

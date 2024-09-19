@@ -1,4 +1,5 @@
 let countClickBayleef = 0;
+let lastExpasion = null;
 
 //Needs same attack and image, different stats and not noble form
 let skipCardDraws = [
@@ -75,12 +76,51 @@ function searchByRarity(pokemonData, rarity) {
     let pokemonSearch = []
 
     if (rarity != '') {
+        
         switch (rarity) {
             case 'galactic':
                 pokemonData.find((pokeObj) => {
                     if ((pokeObj.encounter_tier.toLowerCase() == 'grunt') ||
                         (pokeObj.encounter_tier.toLowerCase() == 'commander') ||
                         (pokeObj.encounter_tier.toLowerCase() == 'boss')) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'team_magma':
+                pokemonData.find((pokeObj) => {
+                    if ((pokeObj.encounter_tier.toLowerCase() == 'male_magma') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'female_magma') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'courtney') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'tabitha') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'maxie')) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'team_aqua':
+                pokemonData.find((pokeObj) => {
+                    if ((pokeObj.encounter_tier.toLowerCase() == 'male_aqua') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'female_aqua') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'matt') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'shelly') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'archie')) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                })
+                break;
+            case 'trainer':
+                pokemonData.find((pokeObj) => {
+                    if ((pokeObj.encounter_tier.toLowerCase() == 'flannery') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'tate') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'liza') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'roxanne') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'winona') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'brendan') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'may') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'wally') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'lisia') ||
+                        (pokeObj.encounter_tier.toLowerCase() == 'savior')) {
                         pokemonSearch.push(pokeObj)
                     }
                 })
@@ -327,10 +367,14 @@ function searchByGenerations(pokemonData, generations, rarity) {
             let maxDex = generationDex[generation]
 
             if ((fixDexNumber(pokeObj.pokedex_number) >= minDex[0]) && (fixDexNumber(pokeObj.pokedex_number) <= maxDex[1])) {
-                if (rarity == 'galactic') {
+                if (rarity == 'galactic' || rarity == 'team_magma' || rarity == 'team_aqua' || rarity == 'trainer') {
                     genOk = true
                 } else {
-                    if (pokeObj.pokedex_number.toString().indexOf('-gl') < 0 && pokeObj.pokedex_number.toString().indexOf('-x') < 0) {
+                    if (pokeObj.pokedex_number.toString().indexOf('-gl') < 0 && 
+                        pokeObj.pokedex_number.toString().indexOf('-x') < 0 &&
+                        pokeObj.pokedex_number.toString().indexOf('-trai') < 0 &&
+                        pokeObj.pokedex_number.toString().indexOf('-taqu') < 0 &&
+                        pokeObj.pokedex_number.toString().indexOf('-tmag') < 0) {
                         genOk = true
                     }
                 }
@@ -873,13 +917,25 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     let dvCardDesc = document.createElement('DIV')
     dvCardDesc.classList.add('cardInfo-description')
 
+    let dvHealth = document.createElement('DIV')
+    dvHealth.classList.add('sdcard-info--health')
+    dvHealth.appendChild(document.createTextNode(pokemon.health))
+    dvCardDesc.appendChild(dvHealth)
+
     modRarity = checkRarity(pokemon.encounter_tier)
     dvCardDesc.appendChild(createImg('icon', modRarity, 'cardInfo-type cardInfo-type--sm', pokemon.expansion))
+
+    let dvInit = document.createElement('DIV')
+    dvInit.classList.add('sdcard-info--initiative')
+    dvInit.appendChild(document.createTextNode(pokemon.initiative))
+    dvCardDesc.appendChild(dvInit)
+
 
     if (pokemon.hasOwnProperty('description') && pokemon.description != '') {
         let pDesc = document.createElement('P')
         pDesc.appendChild(document.createTextNode(pokemon.description))
 
+        dvCardDesc.appendChild(document.createElement('BR'))
         dvCardDesc.appendChild(pDesc)
     }
 
@@ -890,19 +946,36 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     let dvInfoBox = document.createElement('DIV')
     dvInfoBox.classList.add('cardInfo-box')
 
-    //Poke Stats
-    let dvStats = document.createElement('DIV')
-    dvStats.classList.add('cardInfo-info--stats')
 
-    let dvHealth = document.createElement('DIV')
-    dvHealth.classList.add('sdcard-info--health')
-    dvHealth.appendChild(document.createTextNode(pokemon.health))
-    dvStats.appendChild(dvHealth)
+    //------------cardMove
+    let dvCardMove = document.createElement('DIV')
+    dvCardMove.classList.add('cardInfo-move')
 
-    let dvInit = document.createElement('DIV')
-    dvInit.classList.add('sdcard-info--initiative')
-    dvInit.appendChild(document.createTextNode(pokemon.initiative))
-    dvStats.appendChild(dvInit)
+    let dvCardMoveTitle = document.createElement('DIV')
+    dvCardMoveTitle.classList.add('cardInfo-move--title')
+
+    dvCardMoveTitle.appendChild(createImg('type', pokemon.move_type, 'cardInfo-type--sm', pokemon.expansion))
+
+    let pStrength = document.createElement('DIV')
+    pStrength.classList.add('sdcard-moveInfo--strength')
+    pStrength.appendChild(document.createTextNode(pokemon.move_attack_strength))
+    dvCardMoveTitle.appendChild(pStrength)
+
+    let pMoveName = document.createElement('P')
+    pMoveName.classList.add('sdcard-moveInfo--name')
+    pMoveName.appendChild(document.createTextNode(pokemon.move_name))
+    dvCardMoveTitle.appendChild(pMoveName)
+
+    dvCardMove.appendChild(dvCardMoveTitle)
+
+
+    let pMoveDesc = document.createElement('P')
+    pMoveDesc.classList.add('cardInfo-move--description')
+    pMoveDesc.appendChild(document.createTextNode(pokemon.move_effect))
+    dvCardMove.appendChild(pMoveDesc)
+
+    dvCardData.appendChild(dvCardMove)
+
 
     //Poke Learn Moves
     let dvLearn = document.createElement('DIV')
@@ -940,7 +1013,6 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
     dvLocat.appendChild(checkBioClim(modClimate, modBiome, ''))
 
-    dvInfoBox.appendChild(dvStats)
     dvInfoBox.appendChild(dvLearn)
     dvInfoBox.appendChild(dvLocat)
 
@@ -957,27 +1029,6 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     }
 
     dvCardData.appendChild(dvInfoBox)
-
-    //------------cardMove
-    let dvCardMove = document.createElement('DIV')
-    dvCardMove.classList.add('cardInfo-move')
-
-    dvCardMove.appendChild(createImg('type', pokemon.move_type, 'cardInfo-type--sm', pokemon.expansion))
-
-    let pMoveName = document.createElement('P')
-    pMoveName.classList.add('sdcard-moveInfo--name')
-    pMoveName.appendChild(document.createTextNode(pokemon.move_name))
-    dvCardMove.appendChild(pMoveName)
-
-    let pStrength = document.createElement('DIV')
-    pStrength.classList.add('sdcard-moveInfo--strength')
-    pStrength.appendChild(document.createTextNode(pokemon.move_attack_strength))
-    dvCardMove.appendChild(pStrength)
-
-    let pMoveDesc = document.createElement('P')
-    pMoveDesc.classList.add('cardInfo-move--description')
-    pMoveDesc.appendChild(document.createTextNode(pokemon.move_effect))
-    dvCardMove.appendChild(pMoveDesc)
 
     //------------link
 
@@ -999,38 +1050,14 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     cardInfo.appendChild(link)
     cardInfo.appendChild(dvCardTitle)
     cardInfo.appendChild(dvCardData)
-    cardInfo.appendChild(dvCardMove)
+    // cardInfo.appendChild(dvCardMove)
 
-    //------------cardForms
+    //Dibuja las evoluciones y formas de los pokemon
     let otherForms = searchOtherForms(pokemonData, pokemon.pokedex_number, pokemon.expansion)
-
-    if (otherForms.length) {
-        cardInfo.appendChild(drawVariations(otherForms, 'form'))
-
-        const forms = document.getElementById('cardForms')
-
-        forms.addEventListener('click', (e) => {
-            if (e.target.hasAttribute('dexnumber')) {
-                borrar(cardInfo)
-                drawPokemonInfo(pokemonData, e.target.getAttribute('dexNumber'), e.target.getAttribute('expansion'), scrollVar)
-            }
-        })
-    }
-
-    //------------cardEvol
     let evolLine = searchEvolution(pokemonData, pokemon)
 
-    if (evolLine.length) {
-        cardInfo.appendChild(drawVariations(evolLine, 'evol'))
-
-        const evols = document.getElementById('cardEvols')
-
-        evols.addEventListener('click', (e) => {
-            if (e.target.hasAttribute('dexnumber')) {
-                borrar(cardInfo)
-                drawPokemonInfo(pokemonData, e.target.getAttribute('dexNumber'), e.target.getAttribute('expansion'), scrollVar)
-            }
-        })
+    if(otherForms.length > 1 || evolLine.length > 1){
+        cardInfo.appendChild(drawPokemonLine(pokemonData, pokemon, otherForms, evolLine))
     }
 
     //Events
@@ -1049,53 +1076,43 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     //Cambia todas las imagenes no encontradas con unknown.png
     checkImagesLoad()
 
-    //Variations
-    const boxOptions = document.getElementsByClassName('pokeForms-option')
-    const boxScreens = document.getElementsByClassName('pokeForms-box')
+    if(otherForms.length > 1 || evolLine.length > 1){
+        const pokeLinesOptions = document.getElementById('pokeLinesOptions')
+        const pokeLinesBoxes = document.getElementsByClassName('pokeLines-box')
+        const pokeLinesCages = document.getElementsByClassName('pokeLines-cage')
+        
 
-    //Si se encuentran Options y Screens añade listeners de Click a los elementos Option
-    if (boxOptions && boxScreens) {
-        //Recorre el array de Options asignandoles el evento Click
-        Array.from(boxOptions).forEach(option => {
-            option.addEventListener('click', (e) => {
+        //Cambia las box de las expansiones y opciones
+        pokeLinesOptions.addEventListener('click', (e)=>{
+            if(e.target.hasAttribute('boxTarget')){
+                let boxIndex = null
+                lastExpasion = e.target.getAttribute('boxTarget')
 
-                //const con la referencia a la box que mostrar
-                const refBox = e.target.getAttribute('boxTarget')
-
-                //Const con la referencia al tipo de box (form | evol)
-                const refMod = refBox.split('-')[0]
-
-                //Le pone la clase selected para mejor visual
-                setOptions(e.target, refMod)
-
-                //Recorre el array de Screens para cambiar las clases
-                Array.from(boxScreens).forEach(box => {
-
-                    //Si la Screen tiene el mismo Target que la Option cambia las clases de las Screen
-                    if (box.getAttribute('boxTarget') == refBox) {
-
-                        //Añade la clase para mostrar la Screen
-                        box.classList.add('pokeForms-box--show')
-
-                        //Recorre de nuevo el array de Screens para quitar la clase de mostrar del resto de Screen
-                        Array.from(boxScreens).forEach(box => {
-
-                            //Variable que guarda el atributo Target de la Screen
-                            let boxTarget = box.hasAttribute('boxTarget') ? box.getAttribute('boxTarget') : ''
-
-                            //Si la Screen es distinta a la Screen mostrada y son del mismo tipo de box les elimina la clase mostrar
-                            if (box.getAttribute('boxTarget') != refBox &&
-                                boxTarget != '' &&
-                                boxTarget.split('-')[0] == refMod) {
-                                box.classList.remove('pokeForms-box--show')
-                            }
-                        })
+                pokeLinesOptions.childNodes.forEach((opt) =>{
+                    opt.classList.remove('pokeLines-option--selected')
+                })
+                Array.from(pokeLinesBoxes).forEach((box, i) =>{
+                    if(e.target.getAttribute('boxTarget') == box.getAttribute('boxTarget')){
+                        boxIndex = i
                     }
-
+                    box.classList.remove('pokeLines-box--show')
                 })
 
+                e.target.classList.add('pokeLines-option--selected')
+                pokeLinesBoxes[boxIndex].classList.add('pokeLines-box--show')
+            }
+        })
+
+        //Añade funcion al clicar las formas y evoluciones
+        Array.from(pokeLinesCages).forEach((cage) => {
+            cage.addEventListener('click', (e)=>{
+                if(e.target.hasAttribute('dexNumber')){
+                    let dexNumber = e.target.getAttribute('dexNumber')
+                    borrar(cardInfo)
+                    drawPokemonInfo(pokemonData, dexNumber, e.target.getAttribute('expansion'), scrollVar)
+                }
             })
-        });
+        })
     }
 
     //cardClose
@@ -1180,90 +1197,107 @@ function drawPokemonForm(pokemon, mod) {
     return dvForm
 }
 
-//Funcion que dibuja las diferentes variaciones del pokemon
-function drawVariations(otherForms, mod, pokemonName) {
-
-    //Crea un div que contendra los elementos
-    let cardForms = document.createElement('DIV')
-    cardForms.classList.add('pokeForms')
-    cardForms.id = 'card' + firstUpperCase(mod) + 's'
+function drawPokemonLine(pokemonData, pokemon, otherForms, evolLine) {
 
     //Crea un array con las diferentes expansiones encontradas
     let expansions = []
     otherForms.forEach(e => { expansions.push(e.expansion) });
+    evolLine.forEach(e => { expansions.push(e.expansion) });
 
     //Elimina duplicados del array
-    expansions = [...new Set(expansions)]
+    expansions = sortExpansions(expansions)
+    
 
-    //Crea las box para las Options y Screens
+    let pokeLines = document.createElement('DIV')
+    pokeLines.classList.add('pokeLines')
+
+    //--------- Options ----------------
     let boxOpts = document.createElement('DIV')
-    boxOpts.classList.add('pokeForms-options')
+    boxOpts.classList.add('pokeLines-options')
+    boxOpts.id = 'pokeLinesOptions'
 
-    let boxScreen = document.createElement('DIV')
-    boxScreen.classList.add('pokeForms-screen')
+    //Recorre el array de expansiones creando las diferentes Options
+    expansions.forEach((exp, i) => {
+        let boxOpt = document.createElement('DIV')
+        boxOpt.classList.add('pokeLines-option')
+        if(lastExpasion && expansions.find((e) => e == lastExpasion)){
+            if (exp == lastExpasion) { 
+                boxOpt.classList.add('pokeLines-option--selected') 
+            }
+        }else{
+            if (i == 0) { boxOpt.classList.add('pokeLines-option--selected') }
+        }
 
-    //Comprueba si hay mas de una expansion
-    if (expansions.length > 1) {
+        //Les añade un atributo para refenciar la Option y la Screen
+        boxOpt.setAttribute('boxTarget', exp)
 
-        //Recorre el array de expansiones creando las diferentes Options
-        expansions.forEach((exp, i) => {
-            let boxOpt = document.createElement('DIV')
-            boxOpt.classList.add('pokeForms-option')
-            if (i == 0) { boxOpt.classList.add('pokeForms-option--selected') }
-            boxOpt.id = exp + firstUpperCase(exp)
+        boxOpt.appendChild(createImg('exp', checkExp(exp), 'pokeLines-option--img', ''))
 
-            //Les añade un atributo para refenciar la Option y la Screen
-            boxOpt.setAttribute('boxTarget', mod + '-' + exp)
+        boxOpt.appendChild(document.createTextNode(firstUpperCase(checkExpB(exp))))
+        boxOpts.appendChild(boxOpt)
+    });
 
-            boxOpt.appendChild(createImg('exp', checkExp(exp), 'pokeForms-option--img', ''))
+    pokeLines.appendChild(boxOpts)
 
-            boxOpt.appendChild(document.createTextNode(firstUpperCase(checkExpB(exp))))
-            boxOpts.appendChild(boxOpt)
-        });
+    //--------- box ----------------
+    let pokeScreen = document.createElement('DIV')
+    pokeScreen.classList.add('pokeLines-screen')
 
-        cardForms.appendChild(boxOpts)
+    expansions.forEach((exp, i) => {
+        let box = document.createElement('DIV')
+        box.classList.add('pokeLines-box')
+        box.setAttribute('boxtarget', exp)
 
-        //Recorre el array de expansiones creando las distintas Screens
-        expansions.forEach((exp, i) => {
+        if(lastExpasion && expansions.find((e) => e == lastExpasion)){
+            if (exp == lastExpasion) { 
+                box.classList.add('pokeLines-box--show')
+            }
+        }else{
+            if (i == 0) { 
+                box.classList.add('pokeLines-box--show')
+            }
+        }
+        
+        if(otherForms.length){
+            
+            let forms = document.createElement('DIV')
+            forms.classList.add('pokeLines-cage')
 
-            let boxForm = document.createElement('DIV')
-            boxForm.classList.add('pokeForms-box')
-
-            //Si es la primera Screen le añade la clase para mostrar
-            if (i == 0) { boxForm.classList.add('pokeForms-box--show') }
-
-            //Les añade un atributo para refenciar la Option y la Screen
-            boxForm.setAttribute('boxTarget', mod + '-' + exp)
-
-            //Recorre el array con las otras formas y añade los pokemon por su expansion
             otherForms.forEach(form => {
-                if (form.expansion == exp) {
-                    let dvForm = drawPokemonForm(form, mod, pokemonName)
+                if(exp == form.expansion){
+                    let dvForm = drawPokemonForm(form, '')
 
-                    boxForm.appendChild(dvForm)
+                    forms.appendChild(dvForm)
                 }
             });
-            boxScreen.appendChild(boxForm)
+            
+            box.appendChild(forms)
+        }
 
-        });
-    } else {
+        if(evolLine.length){
+            let evols = document.createElement('DIV')
+            evols.classList.add('pokeLines-cage')
 
-        //Si solo hay una expansion, ignora las Options y crea una Screen
-        let boxForm = document.createElement('DIV')
-        boxForm.classList.add('pokeForms-box')
-        boxForm.classList.add('pokeForms-box--show')
+            evolLine.forEach(evo => {
+                if(exp == evo.expansion){
+                    let dvForm = drawPokemonForm(evo, 'evol')
 
-        otherForms.forEach(form => {
-            boxForm.appendChild(drawPokemonForm(form, mod, pokemonName))
-        });
+                    evols.appendChild(dvForm)
+                }
+            });
+            
+            box.appendChild(evols)
+        }
+        
+        pokeScreen.appendChild(box)
 
-        boxScreen.appendChild(boxForm)
-    }
+    })
 
-    cardForms.appendChild(boxScreen)
+    pokeLines.appendChild(pokeScreen)
 
-    return cardForms
+    return pokeLines
 }
+
 
 //===================================== Check =========================================
 
@@ -1298,7 +1332,11 @@ function checkDexNumber(modDex) {
         }
     }
 
-    modDex = modDex.includes('-gl') ? modDex.slice(0, -3) : modDex
+    modDex = modDex.includes('-gl') ? modDex.slice(0, -3) : modDex //Galactic
+    modDex = modDex.includes('-trai') ? modDex.slice(0, -5) : modDex //Trainer (Freeze)
+    modDex = modDex.includes('-taqu') ? modDex.slice(0, -5) : modDex //Team Aqua (Freeze)
+    modDex = modDex.includes('-tmag') ? modDex.slice(0, -5) : modDex //Team Magma (Freeze)
+    
     return modDex
 }
 
@@ -1408,6 +1446,16 @@ function checkRarity(rarity) {
     if (rarity == 'grunt' || rarity == 'commander' || rarity == 'boss') {
         rarity = 'galactic'
     }
+    if (rarity == 'magma grunt' || rarity == 'courtney' || rarity == 'tabitha' || rarity == 'maxie'){
+        rarity = 'team magma'
+    }
+    if (rarity == 'aqua grunt' || rarity == 'matt' || rarity == 'shelly' || rarity == 'archie'){
+        rarity = 'team aqua'
+    }
+    if (rarity == 'flannery' || rarity == 'tate' || rarity == 'liza' || rarity == 'roxanne' || rarity == 'winona' ||
+        rarity == 'brendan' || rarity == 'may' || rarity == 'wally' || rarity == 'lisia' || rarity == 'savior'){
+        rarity = 'trainer'
+    }
     return rarity
 }
 
@@ -1477,7 +1525,7 @@ function checkRarityBox() {
     });
 
 
-    if (rarity == 'noble' || rarity == 'mega' || rarity == 'gigamax' || rarity == 'galactic') {
+    if (rarity == 'noble' || rarity == 'mega' || rarity == 'gigamax' || rarity == 'galactic' || rarity == 'team_aqua' || rarity == 'team_magma' || rarity == 'trainer') {
         borrar(selectLocations)
         selectLocations.appendChild(createImg('icon', rarity, 'select-locations--item', ''))
         stateButton(climateButton, 'dis')
@@ -1489,7 +1537,8 @@ function checkRarityBox() {
 
         if (selectLocations.hasChildNodes) {
             let node = selectLocations.lastChild ? selectLocations.lastChild.getAttribute('alt') : ''
-            if (node == 'noble.png' || node == 'mega.png' || node == 'gigamax.png' || node == 'galactic.png') {
+            
+            if (node == 'noble.png' || node == 'mega.png' || node == 'gigamax.png' || node == 'galactic.png' || node == 'Aqua Team.png' || node == 'Magma Team.png' || node == 'trainer.png') {
                 selectLocations.removeChild(selectLocations.lastChild)
             }
         }
@@ -1845,7 +1894,7 @@ function boxDisabled(box, type) {
             let checkRar = false
             if (box != '') {
                 box.forEach(b => {
-                    if (b.value == 'noble' || b.value == 'mega' || b.value == 'gigamax' || b.value == 'galactic') {
+                    if (b.value == 'noble' || b.value == 'mega' || b.value == 'gigamax' || b.value == 'galactic' || b.value == 'team_magma' || b.value == 'team_aqua' || b.value == 'trainer') {
                         checkRar = b.checked ? true : checkRar
                     }
                 });
@@ -1958,4 +2007,27 @@ function setOptions(option, refMod) {
         }
     })
 
+}
+
+//Ordena las expansiones, eliminando duplicados y dejando el base primero
+function sortExpansions(expansions) {
+    sorted = [...new Set(expansions)]
+
+    let deleteIndex = null
+
+    if(sorted.find((e) => e == 'base') && sorted[0] != 'base'){
+        
+        sorted.forEach((e, i) => {
+            if(e == 'base'){
+                deleteIndex = i
+            }
+        })
+        
+        sorted.splice(deleteIndex, 1)
+        sorted = sorted.length > 1 ? sorted.sort() : sorted
+        sorted.unshift('base')
+        
+    }
+
+    return sorted
 }

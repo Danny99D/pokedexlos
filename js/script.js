@@ -1,5 +1,5 @@
 const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy', 'typeless']
-const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigamax', 'galactic']
+const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigamax', 'galactic', 'team magma', 'team aqua', 'trainer']
 const climateList = ['cold', 'temperate', 'warm', 'space']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
 const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
@@ -65,6 +65,11 @@ function load(xhttp) {
     addSelectBox(moveTypeBox, typeList, 'type', 'moveType', 'checkbox')
     addSelectBox(learnBox, typeList, 'type', 'learn', 'checkbox')
     addSelectBox(moveEffectBox, moveEffectList, 'effect', 'moveEffect', 'checkbox')
+
+    //Test draw pokemon
+    // drawPokemonInfo(pokemonData, 59, 'los')
+    // drawPokemonInfo(pokemonData, 6, 'los')
+    // drawPokemonInfo(pokemonData, 133, 'los')
 
     checkImagesLoad()
 
@@ -165,6 +170,7 @@ function load(xhttp) {
             let expansion = e.target.getAttribute('expansion')
             if (dexNumber) {
                 screen.classList.add('screen--noScroll')
+                lastExpasion = lastExpasion == null ? expansion : lastExpasion
                 drawPokemonInfo(pokemonData, dexNumber, expansion)
             }
         }

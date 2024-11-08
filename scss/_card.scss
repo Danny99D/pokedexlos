@@ -9,6 +9,7 @@
     justify-content: space-around;
     margin-bottom: 20px;
     margin-right: 10px;
+    transition: box-shadow .3s ease-in-out;
     &::after {
         content: '';
         @include cubo(100%);
@@ -18,7 +19,7 @@
         left: 0;
     }
     &:hover {
-        box-shadow: 0 0 0 .3em rgb(167, 75, 32);
+        box-shadow: 0 0 0 .3em $border1;
         cursor: pointer;
     }
     &-type {
@@ -285,7 +286,7 @@
         }
     }
     &-move {
-        grid-row: 1/3;
+        grid-row: 2/4;
         &--title{
             margin-top: .5rem;
             display: flex;
@@ -396,6 +397,9 @@
             justify-content: space-around;
             flex-wrap: wrap;
             width: 100%;
+            &--line{
+                border-bottom: 2px solid $bg2;
+            }
         }
         
         &-box {
@@ -403,6 +407,7 @@
             box-sizing: border-box;
             border: 0 2px 0 2px solid $bg2;
             padding: .5rem;
+
 
             &--show {
                 display: block;

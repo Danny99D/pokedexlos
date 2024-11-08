@@ -388,6 +388,33 @@ function searchByGenerations(pokemonData, generations, rarity) {
     return pokemonSearch
 }
 
+function searchByShiny(pokemonData, shiny) {
+    let pokemonSearch = []
+
+    pokemonData.find((pokeObj) => {
+        let lastS = pokeObj.internal_name.lastIndexOf(" S")
+        let pokeInName = pokeObj.internal_name
+        switch (shiny) {
+            case 'none':
+                if(!(lastS && pokeObj.internal_name.includes(" S") && (pokeInName.length - lastS == 2))){
+                    pokemonSearch.push(pokeObj)
+                }
+                break;
+            case 'only':
+                if(lastS && pokeObj.internal_name.includes(" S") && (pokeInName.length - lastS == 2)){
+                    pokemonSearch.push(pokeObj)
+                }
+                break;
+                default:
+                pokemonSearch.push(pokeObj)
+                break;
+        }
+
+    });
+
+    return pokemonSearch
+}
+
 function searchByMoveEffect(pokemonData, moveEffect) {
     let pokemonSearch = []
 
@@ -490,6 +517,7 @@ function searchPokemon(pokemonData) {
     const pokemonBiomeBox = document.getElementsByName('biome')
     const pokemonLearnBox = document.getElementsByName('learn')
     const pokemonMoveEffect = document.getElementsByName('moveEffect')
+    const pokemonShiny = document.getElementsByName('shiny')
 
     const searchExpansions = checkArray(searchExpansionsBox)
     const searchGenerations = checkArray(searchGenerationsBox)
@@ -500,6 +528,7 @@ function searchPokemon(pokemonData) {
     const pokemonBiomeA = checkArray(pokemonBiomeBox)
     const pokemonClimateA = checkArray(pokemonClimateBox)
     const pokemonMoveEffectA = checkArray(pokemonMoveEffect)
+    const pokemonShinyA = checkArray(pokemonShiny)
 
     const screen = document.getElementById('screen')
     if (screen.classList.contains('screen--noScroll')) {
@@ -508,13 +537,14 @@ function searchPokemon(pokemonData) {
 
 
 
-    if (checkSearch(pokemonName, pokemonRarityA, pokemonTypes, pokemonMoveName, pokemonMoveTypeA, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimateA, pokemonBiomeA, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffectA)) {
+    if (checkSearch(pokemonName, pokemonRarityA, pokemonTypes, pokemonMoveName, pokemonMoveTypeA, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimateA, pokemonBiomeA, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffectA, pokemonShiny)) {
         let searchList = pokemonData
         const pokemonRarity = pokemonRarityA.length ? pokemonRarityA[0] : ''
         const pokemonBiome = pokemonBiomeA.length ? pokemonBiomeA[0] : ''
         const pokemonClimate = pokemonClimateA.length ? pokemonClimateA[0] : ''
         const pokemonMoveType = pokemonMoveTypeA.length ? pokemonMoveTypeA[0] : ''
         const pokemonMoveEffect = pokemonMoveEffectA.length ? pokemonMoveEffectA[0] : ''
+        const pokemonShiny = pokemonShinyA[0]
 
         // Busca por tipo1 y tipo2
         searchList = pokemonTypes.length ? searchByType(searchList, pokemonTypes) : searchList
@@ -560,7 +590,9 @@ function searchPokemon(pokemonData) {
 
         // Busca pokemon por efectos del ataque
         searchList = pokemonMoveEffect.length ? searchByMoveEffect(searchList, pokemonMoveEffect) : searchList
-
+        
+        //Busca pokemon por shiny
+        searchList = searchByShiny(searchList, pokemonShiny)
 
         // Busca pokemon por expansion
         searchList = searchByExpansion(searchList, searchExpansions)
@@ -1056,7 +1088,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     let otherForms = searchOtherForms(pokemonData, pokemon.pokedex_number, pokemon.expansion)
     let evolLine = searchEvolution(pokemonData, pokemon)
 
-    if(otherForms.length > 1 || evolLine.length > 1){
+    if(otherForms.length > 0 || evolLine.length > 0){
         cardInfo.appendChild(drawPokemonLine(pokemonData, pokemon, otherForms, evolLine))
     }
 
@@ -1258,16 +1290,19 @@ function drawPokemonLine(pokemonData, pokemon, otherForms, evolLine) {
             }
         }
         
-        if(otherForms.length){
-            
-            let forms = document.createElement('DIV')
-            forms.classList.add('pokeLines-cage')
+        let forms = document.createElement('DIV')
+        let evols = document.createElement('DIV')
+        let lineCount = 0
+        let evoCount = 0
 
+        if(otherForms.length){
+            forms.classList.add('pokeLines-cage')
             otherForms.forEach(form => {
                 if(exp == form.expansion){
                     let dvForm = drawPokemonForm(form, '')
 
                     forms.appendChild(dvForm)
+                    lineCount++
                 }
             });
             
@@ -1275,7 +1310,6 @@ function drawPokemonLine(pokemonData, pokemon, otherForms, evolLine) {
         }
 
         if(evolLine.length){
-            let evols = document.createElement('DIV')
             evols.classList.add('pokeLines-cage')
 
             evolLine.forEach(evo => {
@@ -1283,10 +1317,15 @@ function drawPokemonLine(pokemonData, pokemon, otherForms, evolLine) {
                     let dvForm = drawPokemonForm(evo, 'evol')
 
                     evols.appendChild(dvForm)
+                    evoCount++
                 }
             });
             
             box.appendChild(evols)
+        }
+
+        if(lineCount > 0 && evoCount > 0){
+            forms.classList.add('pokeLines-cage--line')
         }
         
         pokeScreen.appendChild(box)
@@ -1351,7 +1390,7 @@ function checkImagesLoad() {
 }
 
 //Funcion que asegura que se busque por algun valor
-function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffect) {
+function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffect, pokemonShiny) {
     // console.log('--Nombre: ' + pokemonName)
     // console.log(pokemonRarity)
     // console.log(pokemonTypes)
@@ -1367,6 +1406,7 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
     // console.log('--Busca por Gen: ' + searchByGen)
     // console.log(searchExpansions)
     // console.log(searchGenerations)
+    // console.log(pokemonShiny)
 
     // if (searchByGen && (searchExpansions.length > 0)) {
     //     return true
@@ -1384,7 +1424,8 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
                 pokemonEvoCost > 0 ||
                 pokemonClimate.length > 0 ||
                 pokemonBiome.length > 0 ||
-                pokemonLearn.length > 0
+                pokemonLearn.length > 0 ||
+                pokemonShiny.length > 0
                 ) ||
                 (searchExpansions.length > 0) &&
                 (searchGenerations.length > 0)
@@ -1420,6 +1461,8 @@ function checkExpB(exp) {
             return 'Mega Evolution'
         case 'freeze':
             return 'freeze'
+        case 'stadium':
+            return 'stadium'
         default:
             return 'base'
     }
@@ -1436,6 +1479,8 @@ function checkExp(exp) {
             return 'darekMega'
         case 'freeze':
             return 'freeze'
+        case 'stadium':
+            return 'stadium'
         default:
             return 'los'
     }
@@ -1707,6 +1752,41 @@ function addSelectBox(box, list, type, name, inputType) {
 
         box.appendChild(item)
     });
+
+    if(name == 'rarity'){
+        let item = document.createElement('DIV')
+        item.classList.add('select-radio')
+
+        let attr = ['only', 'anything', 'none']
+
+        attr.forEach(a => {
+            let div = document.createElement('DIV')
+            div.classList.add('select-radio--item')
+            div.id = 'searchShiny'+firstUpperCase(a)+"Item"
+
+            let inp = document.createElement('INPUT')
+            inp.setAttribute('type', 'radio')
+            inp.setAttribute('name', 'shiny')
+            inp.value = a
+            inp.id = 'searchShiny'+firstUpperCase(a)
+            if(a == 'anything'){
+                inp.checked = true
+            }
+    
+            div.appendChild(inp)
+    
+            let label = document.createElement('LABEL')
+            label.setAttribute('for', 'searchShiny'+firstUpperCase(a))
+            label.classList.add('select--title')
+            label.appendChild(document.createTextNode(firstUpperCase(a)))
+    
+            div.appendChild(label)
+            item.appendChild(div)
+        
+        });
+
+        box.appendChild(item)
+    }
 }
 
 //Funcion para convertir la primera letra de un string a mayuscula

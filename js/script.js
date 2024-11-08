@@ -66,6 +66,8 @@ function load(xhttp) {
     addSelectBox(learnBox, typeList, 'type', 'learn', 'checkbox')
     addSelectBox(moveEffectBox, moveEffectList, 'effect', 'moveEffect', 'checkbox')
 
+    // rarityBox.classList.add('select-box--shown')
+
     //Test draw pokemon
     // drawPokemonInfo(pokemonData, 59, 'los')
     // drawPokemonInfo(pokemonData, 6, 'los')
@@ -86,6 +88,13 @@ function load(xhttp) {
     const moveTypeBoxChecks = document.getElementsByName('moveType')
     const learnBoxChecks = document.getElementsByName('learn')
     const moveEffectBoxChecks = document.getElementsByName('moveEffect')
+
+    const shinyRadioAny = document.getElementById('searchShinyAnything')
+    const shinyRadioNone = document.getElementById('searchShinyNone')
+    const shinyRadioOnly = document.getElementById('searchShinyOnly')
+    const shinyRadioNoneItem = document.getElementById('searchShinyNoneItem')
+    const shinyRadioOnlyItem = document.getElementById('searchShinyOnlyItem')
+    const selectLocations = document.getElementById('selectLocations')
 
 
     //Desplaza el menu 
@@ -136,6 +145,8 @@ function load(xhttp) {
             checkMoveEffectBox()
             stateButton(climateButton, 'en')
             stateButton(biomeButton, 'en')
+            shinyRadioAny.checked = true
+            
 
             searchExpansions.forEach((exp, i) => {
                 exp.checked = searchExpansionsVal[i]
@@ -286,6 +297,25 @@ function load(xhttp) {
             checkLocationBox()
         })
     });
+
+    shinyRadioAny.addEventListener('click', ()=>{
+        selectLocations.classList.remove('select-locations--only')
+        selectLocations.classList.remove('select-locations--none')
+        shinyRadioOnlyItem.classList.remove('select-radio--item--only')
+        shinyRadioNoneItem.classList.remove('select-radio--item--none')
+    })
+    shinyRadioOnly.addEventListener('click', ()=>{
+        selectLocations.classList.add('select-locations--only')
+        selectLocations.classList.remove('select-locations--none')
+        shinyRadioOnlyItem.classList.add('select-radio--item--only')
+        shinyRadioNoneItem.classList.remove('select-radio--item--none')
+    })
+    shinyRadioNone.addEventListener('click', ()=>{
+        selectLocations.classList.remove('select-locations--only')
+        selectLocations.classList.add('select-locations--none')
+        shinyRadioOnlyItem.classList.remove('select-radio--item--only')
+        shinyRadioNoneItem.classList.add('select-radio--item--none')
+    })
 }
 
 //Funcion para dibujar las cartas obtenidas de getCards en screen

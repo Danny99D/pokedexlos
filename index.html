@@ -72,6 +72,12 @@
                         <label class="select--title" for="searchFreeze">Hyperlight (Freeze)</label>
                         <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3091063272" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
                     </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/sleepy.png" alt="sleepy.png">
+                        <input type="checkbox" name="searchExpansions" value="stadium" id="searchStadium" >
+                        <label class="select--title" for="searchStadium">Stadium</label>
+                        <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3358118491" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                    </div>
                 </div>
                 <div class="select-box" id="genBox">
                     <div class="select-item">
@@ -137,16 +143,25 @@
                     <div class="log-exp">
                         <div>Base <span>1.4a</span></div>
                         <div>Xenonia <span>1.4a</span></div>
-                        <div>Freeze <span>1.4c</span></div>
+                        <div>Freeze & Hyperlight<span>1.4c</span></div>
                         <div>Generations <span>1.9a</span></div>
                         <div>Mega Evolutions <span>1.3c</span></div>
+                        <div>Stadium <span>Beta</span></div>
                     </div>
 
                     <div class="log-github">
                         <div>
+                            <p>2.4</p>
+                            <ul>
+                                <li>Added Stadium expansion</li>
+                                <li>Added Shiny search (for now only Stadium have shiny Pokémon)</li>
+                                <li>Improvement and fix to forms and evolutions info</li>
+                            </ul>
+                        </div>
+                        <div>
                             <p>2.3</p>
                             <ul>
-                                <li>Reworked the pokemon info ui</li>
+                                <li>Reworked the pokémon info ui</li>
                                 <li>Improved the Other forms and evolutions info</li>
                                 <li>Updated Freeze's expansion</li>
                                 <li>Added Hyperlight expansion (use the same cards as Freeze's expansion)</li>
@@ -167,7 +182,7 @@
                         <div>
                             <p>2.2.2</p>
                             <ul>
-                                <li>Fix wrong display for Pokemon Info</li>
+                                <li>Fix wrong display for Pokémon Info</li>
                             </ul>
                         </div>
                         <div>
@@ -194,7 +209,7 @@
                             <p>2.1</p>
                             <ul>
                                 <li>Added number of results</li>
-                                <li>Added a border color to selected expansion in pokemon info</li>
+                                <li>Added a border color to selected expansion in pokémon info</li>
                             </ul>
                         </div>
                         <div>
@@ -226,7 +241,7 @@
                             <p>2.0.5</p>
                             <ul>
                                 <li>Added Log</li>
-                                <li>Added Bulbapedia link in pokemon info</li>
+                                <li>Added Bulbapedia link in pokémon info</li>
                                 <li>Fix Generation's noble images</li>
                                 <li>Fix search move effect by "Health"</li>
                                 <li>Fix pokedex to support my new sinnoh_cube</li>
@@ -289,20 +304,20 @@
                             <p>1.2</p>
                             <ul>
                                 <li>Search by Generation added</li>
-                                <li>Different Forms added to pokemon Info</li>
+                                <li>Different Forms added to pokémon Info</li>
                             </ul>
                         </div>
                         <div>
                             <p>1.1.5</p>
                             <ul>
-                                <li>Fix some errors in the pokemon database</li>
-                                <li>Update Xenonia's noble pokemon images</li>
+                                <li>Fix some errors in the pokémon database</li>
+                                <li>Update Xenonia's noble pokémon images</li>
                             </ul>
                         </div>
                         <div>
                             <p>1.1.4</p>
                             <ul>
-                                <li>Fix pokemon database</li>
+                                <li>Fix pokémon database</li>
                             </ul>
                         </div>
                         <div>
@@ -359,9 +374,11 @@
                         </div>
                     </div>
 
-                    <div class="field field--col">
-                        <div class="field--health"><input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth"></div>
-                        <div class="field--init"><input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative"></div>
+                    <div class="field field--stats">
+                        <div class="field field--col">
+                            <div class="field--health"><input class="inp--short" type="number" name="pokemonHealth" id="pokemonHealth"></div>
+                            <div class="field--init"><input class="inp--short" type="number" name="pokemonInitiative" id="pokemonInitiative"></div>
+                        </div>
                         <div class="field--evo"><input class="inp--short" maxlength="2" type="number" name="pokemonEvoCost" id="pokemonEvoCost"></div>
                     </div>
                 </div>

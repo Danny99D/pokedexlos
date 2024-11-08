@@ -99,6 +99,7 @@ $dist: 24px;
         padding-right: 30px;
         border-radius: 5px;
         position: relative;
+        border-bottom: 1rem;
         &::after {
             content: '';
             position: absolute;
@@ -106,6 +107,17 @@ $dist: 24px;
             right: 5px;
             @include cubo(20px);
             background-image: url('../assets/img/icons/health.png');
+        }
+    }
+    &--stats{
+        @extend %flexCenter;
+        & .field{
+            // flex-direction: row;
+            &--col{
+                margin-right: 2rem;
+                justify-content: center;
+                gap: .5rem;
+            }
         }
     }
     &--init {

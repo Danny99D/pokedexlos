@@ -14,7 +14,7 @@
   background-position: center;
 }
 
-.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select--title, .select-item, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeLines-option, .pokeLines-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--strength {
+.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select-radio::after, .select--title, .select-item, .select-radio, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field--stats, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeLines-option, .pokeLines-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--strength {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,6 +57,7 @@
   justify-content: space-around;
   margin-bottom: 20px;
   margin-right: 10px;
+  transition: box-shadow 0.3s ease-in-out;
 }
 .sdcard::after {
   content: "";
@@ -68,7 +69,7 @@
   left: 0;
 }
 .sdcard:hover {
-  box-shadow: 0 0 0 0.3em rgb(167, 75, 32);
+  box-shadow: 0 0 0 0.3em #66c0f4;
   cursor: pointer;
 }
 .sdcard-type {
@@ -311,7 +312,7 @@
   margin-top: 0.5rem;
 }
 .cardInfo-move {
-  grid-row: 1/3;
+  grid-row: 2/4;
 }
 .cardInfo-move--title {
   margin-top: 0.5rem;
@@ -413,6 +414,9 @@
   justify-content: space-around;
   flex-wrap: wrap;
   width: 100%;
+}
+.pokeLines-cage--line {
+  border-bottom: 2px solid #171a21;
 }
 .pokeLines-box {
   display: none;
@@ -590,6 +594,7 @@
   padding-right: 30px;
   border-radius: 5px;
   position: relative;
+  border-bottom: 1rem;
 }
 .field--health::after, .field--init::after {
   content: "";
@@ -598,6 +603,11 @@
   width: 20px;
   height: 20px;
   background-image: url("../assets/img/icons/health.png");
+}
+.field--stats .field--col {
+  margin-right: 2rem;
+  justify-content: center;
+  gap: 0.5rem;
 }
 .field--init::after {
   background-image: url("../assets/img/icons/initiative.png");
@@ -842,6 +852,12 @@
   height: 100%;
   position: absolute;
 }
+.select-locations--only {
+  box-shadow: 0 0 0 5px goldenrod;
+}
+.select-locations--none {
+  box-shadow: 0 0 0 5px gray;
+}
 .select-offSet {
   position: absolute;
   top: 0;
@@ -962,7 +978,7 @@
   width: 140%;
   left: -20px;
 }
-.select-item {
+.select-item, .select-radio {
   height: 45px;
   width: 80%;
   background-color: #2a475e;
@@ -972,7 +988,7 @@
   position: relative;
   transition: background-color 0.2s ease;
 }
-.select-item:hover {
+.select-item:hover, .select-radio:hover {
   background-color: #c7d5e0;
 }
 .select--title {
@@ -985,6 +1001,72 @@
   font-weight: bold;
   user-select: none;
   cursor: pointer;
+}
+.select-radio {
+  margin-top: 3rem;
+  padding: 0;
+  border-radius: 0 0 5px 5px;
+}
+.select-radio::after {
+  content: "Shiny";
+  position: absolute;
+  height: 2rem;
+  top: -2rem;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 7rem;
+  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+  background-color: #2a475e;
+  font-weight: bold;
+}
+.select-radio--item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease-in-out;
+  position: relative;
+}
+.select-radio--item:first-child {
+  border-radius: 0 0 0 5px;
+}
+.select-radio--item:last-child {
+  border-radius: 0 0 5px 0;
+}
+.select-radio--item:hover {
+  background-color: #c7d5e0;
+}
+.select-radio--item input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+.select-radio--item--only {
+  background: goldenrod;
+}
+.select-radio--item--none {
+  background: gray;
+}
+.select-radio:hover {
+  background-color: #2a475e;
+}
+.select-radio .select--title {
+  padding-top: 1rem;
+  justify-content: center;
+  transition: background-color 0.3s ease-in-out;
+}
+.select-radio .select--title:first-child {
+  border-radius: 0 0 0 5px;
+}
+.select-radio .select--title:last-child {
+  border-radius: 0 0 5px 0;
 }
 .select--link {
   position: absolute;

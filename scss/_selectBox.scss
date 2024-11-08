@@ -29,6 +29,12 @@ $borderItem: 5px;
             @include cubo(100%);
             position: absolute;
         }
+        &--only{
+            box-shadow: 0 0 0 5px $shinyOnly;
+        }
+        &--none{
+            box-shadow: 0 0 0 5px $shinyNone;
+        }
     }
     &-offSet {
         position: absolute;
@@ -150,7 +156,7 @@ $borderItem: 5px;
             left: -20px;
         }
     }
-    &-item {
+    &-item, &-radio {
         height: 45px;
         width: 80%;
         background-color: $bg3;
@@ -164,6 +170,7 @@ $borderItem: 5px;
             background-color: $bg4;
         }
     }
+
     &--title {
         @extend %flexCenter;
         justify-content: start;
@@ -176,6 +183,80 @@ $borderItem: 5px;
         user-select: none;
         cursor: pointer;
     }
+
+    &-radio{
+        margin-top: 3rem;
+        padding: 0;
+        border-radius: 0 0 $borderItem $borderItem;
+
+        &::after{
+            content: 'Shiny';
+            position: absolute;
+            height: 2rem;
+            top: -2rem;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            width: 7rem;
+            @extend %flexCenter;
+            clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+            background-color: $bg3;
+            font-weight: bold;
+        }
+        &--item{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: background-color .3s ease-in-out;
+            position: relative;
+            &:first-child{
+                border-radius: 0 0 0 $borderItem;
+            }
+            &:last-child{
+                border-radius: 0 0 $borderItem 0;
+            }
+            &:hover {
+                background-color: $bg4;
+            }
+            & input{
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            &--only{
+                background: $shinyOnly;
+            }
+            &--none{
+                background: $shinyNone;
+            }
+
+        }
+        &:hover{
+            background-color: $bg3;
+
+        }
+        & .select{
+            &--title{
+                padding-top: 1rem;
+                justify-content: center;
+                transition: background-color .3s ease-in-out;
+                &:first-child{
+                    border-radius: 0 0 0 $borderItem;
+                }
+                &:last-child{
+                    border-radius: 0 0 $borderItem 0;
+                }
+            }
+        }
+    }
+    
     &--link {
         @extend %flexCenter;
         position: absolute;

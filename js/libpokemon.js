@@ -1463,6 +1463,8 @@ function checkExpB(exp) {
             return 'freeze'
         case 'stadium':
             return 'stadium'
+        case 'seasons':
+            return 'seasons'
         default:
             return 'base'
     }
@@ -1481,6 +1483,8 @@ function checkExp(exp) {
             return 'freeze'
         case 'stadium':
             return 'stadium'
+        case 'seasons':
+            return 'seasons'
         default:
             return 'los'
     }

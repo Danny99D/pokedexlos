@@ -313,9 +313,10 @@
 }
 .cardInfo-move {
   grid-row: 2/4;
+  display: grid;
 }
 .cardInfo-move--title {
-  margin-top: 0.5rem;
+  margin-top: auto;
   display: flex;
   justify-content: center;
   align-items: center;

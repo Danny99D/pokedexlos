@@ -287,8 +287,9 @@
     }
     &-move {
         grid-row: 2/4;
+        display: grid;
         &--title{
-            margin-top: .5rem;
+            margin-top: auto;
             display: flex;
             justify-content: center;
             align-items: center;

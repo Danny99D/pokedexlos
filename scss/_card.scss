@@ -44,6 +44,9 @@
             margin-top: 0;
         }
     }
+    &-title{
+        padding-left: .5rem;
+    }
     &-info {
         @extend %flexAround;
         height: 65%;

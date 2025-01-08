@@ -93,6 +93,9 @@
   margin-bottom: 0;
   margin-top: 0;
 }
+.sdcard-title {
+  padding-left: 0.5rem;
+}
 .sdcard-info {
   height: 65%;
 }

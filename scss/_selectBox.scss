@@ -176,7 +176,8 @@ $borderItem: 5px;
         }
     }
     &-item, &-radio {
-        height: 45px;
+        padding-top: .3rem;
+        padding-bottom: .3rem;
         width: 80%;
         background-color: $bg3;
         margin-top: .5rem;

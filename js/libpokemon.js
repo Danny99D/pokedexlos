@@ -2263,7 +2263,11 @@ function addSelect(list, options) {
 
 //Funcion que recibe un select y le añade la lista de tipos Pokemon
 function addSelectBox(box, list, type, name, inputType) {
+    let boxT = document.createElement('DIV')
+    boxT.classList.add('select-boxT')
+
     list.forEach(value => {
+
         let sub = false
         if(value.includes('---')){
             value = value.replace('---', '')
@@ -2305,7 +2309,7 @@ function addSelectBox(box, list, type, name, inputType) {
 
         item.appendChild(label)
 
-        box.appendChild(item)
+        boxT.appendChild(item)
     });
 
     if(name == 'rarity'){
@@ -2340,8 +2344,11 @@ function addSelectBox(box, list, type, name, inputType) {
         
         });
 
-        box.appendChild(item)
+        boxT.appendChild(item)
+        
     }
+    box.appendChild(boxT)
+    
 }
 
 //Funcion para convertir la primera letra de un string a mayuscula

@@ -562,6 +562,7 @@
 .form {
   height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
 }
 .form--noOverflow {
@@ -1026,8 +1027,8 @@
 .select-display--arch {
   border: 2px solid aliceblue;
   padding: 0;
-  width: 40px;
-  right: -45px;
+  width: 30px;
+  right: -35px;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -1036,8 +1037,8 @@
   height: 100%;
 }
 .select-item, .select-radio {
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
   width: 80%;
   background-color: #2a475e;
   margin-top: 0.5rem;
@@ -1151,6 +1152,12 @@
   border-radius: 5px;
 }
 
+@media screen and (max-height: 900px) {
+  .select-item {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
 @media screen and (max-height: 850px) {
   .select-box--big .select--img {
     width: 1rem;

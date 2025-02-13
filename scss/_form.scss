@@ -22,6 +22,7 @@ $dist: 24px;
 .form {
     height: 100vh;
     overflow-y: auto;
+    overflow-x: hidden;
     // overflow-x: hidden;
     position: relative;
     &--noOverflow {

@@ -1036,7 +1036,8 @@
   height: 100%;
 }
 .select-item, .select-radio {
-  height: 3rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
   width: 80%;
   background-color: #2a475e;
   margin-top: 0.5rem;

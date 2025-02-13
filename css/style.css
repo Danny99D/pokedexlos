@@ -14,7 +14,7 @@
   background-position: center;
 }
 
-.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select-radio::after, .select--title, .select-item, .select-radio, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field--stats, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeLines-option, .pokeLines-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--strength {
+.pokedex, .log-link, .log-exp, .ball, .loading, .select--link, .select-radio::after, .select--title, .select-item, .select-radio, .select-display, .select-button, .select-field, .expansions--link, .expansions--title, .expansions-field, .field--col, .field--dice, .field--evo, .field--stats, .field-expansions, .field--buttons, .pokeForm--description, .pokeForm--title, .pokeLines-option, .pokeLines-options, .cardInfo-description, .cardInfo-info--evolution div, .cardInfo-info--evolution, .cardInfo-info--location, .cardInfo-info--learn, .cardInfo-link, .sdcard-moveInfo--archetype, .sdcard-moveInfo--strength {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -165,6 +165,26 @@
   width: 70%;
   padding: 0.3rem 0.5rem;
   border-radius: 5px;
+  position: relative;
+}
+.sdcard-moveInfo--name:has(.sdcard-moveInfo--archetypes) {
+  border-radius: 0 0 5px 5px;
+}
+.sdcard-moveInfo--archetypes {
+  position: absolute;
+  top: -10px;
+  left: 0;
+  display: flex;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px 5px 0 0;
+  overflow: hidden;
+}
+.sdcard-moveInfo--archetype {
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .cardInfo {
@@ -346,6 +366,16 @@
   padding: 0.8rem 1rem;
   box-sizing: border-box;
   text-align: left;
+  position: relative;
+}
+.cardInfo-move--description .sdcard-moveInfo--archetypes {
+  top: auto;
+  bottom: -20px;
+  height: 20px;
+  border-radius: 0 0 5px 5px;
+}
+.cardInfo-move--description:has(.sdcard-moveInfo--archetypes) {
+  border-radius: 5px 5px 0 0;
 }
 
 .pokeLines {
@@ -494,6 +524,10 @@
   left: -10px;
   z-index: 100;
   width: 30px;
+}
+
+.shinyCard {
+  filter: drop-shadow(2px 2px 0 goldenrod) drop-shadow(-2px 2px 0 goldenrod) drop-shadow(2px -2px 0 goldenrod) drop-shadow(-2px -2px 0 goldenrod);
 }
 
 @media screen and (max-width: 500px) {
@@ -982,6 +1016,18 @@
   width: 140%;
   left: -20px;
 }
+.select-display--arch {
+  border: 2px solid aliceblue;
+  padding: 0;
+  width: 40px;
+  right: -45px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.select-display--arch .select-display--item {
+  width: 100%;
+  height: 100%;
+}
 .select-item, .select-radio {
   height: 45px;
   width: 80%;
@@ -994,6 +1040,11 @@
 }
 .select-item:hover, .select-radio:hover {
   background-color: #c7d5e0;
+}
+.select-item--sub, .select-radio--sub {
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .select--title {
   justify-content: start;
@@ -1292,6 +1343,47 @@
   align-items: center;
   top: 0;
   left: 0;
+}
+
+.archetypes--multi {
+  background-color: #0579cc;
+}
+.archetypes--multi_all {
+  background-color: #6d86a8;
+}
+.archetypes--modify {
+  background-color: #1e6b29;
+}
+.archetypes--persisting {
+  background-color: #355da2;
+}
+.archetypes--switch {
+  background-color: #05a4a4;
+}
+.archetypes--protect {
+  background-color: #ffffff;
+}
+.archetypes--form {
+  background-color: #a4b4ca;
+}
+.archetypes--priority {
+  background-color: #ff6386;
+}
+.archetypes--delay {
+  background-color: #052569;
+}
+.archetypes--recharge {
+  background-color: #eeee05;
+}
+.archetypes--song {
+  background-color: #6fffff;
+}
+.archetypes--dance {
+  background-color: #ffa405;
+}
+.archetypes--bomb {
+  background-color: #090909;
+  color: white;
 }
 
 .tx--center {

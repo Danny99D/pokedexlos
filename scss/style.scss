@@ -138,6 +138,49 @@
     }
 }
 
+.archetypes {
+    &--multi{
+        background-color: #0579cc;
+    }
+    &--multi_all{
+        background-color: #6d86a8;
+    }
+    &--modify{
+        background-color: #1e6b29;
+    }
+    &--persisting{
+        background-color: #355da2;
+    }
+    &--switch{
+        background-color: #05a4a4;
+    }
+    &--protect{
+        background-color: #ffffff;
+    }
+    &--form{
+        background-color: #a4b4ca;
+    }
+    &--priority{
+        background-color: #ff6386;
+    }
+    &--delay{
+        background-color: #052569;
+    }
+    &--recharge{
+        background-color: #eeee05;
+    }
+    &--song{
+        background-color: #6fffff;
+    }
+    &--dance{
+        background-color: #ffa405;
+    }
+    &--bomb{
+        background-color: #090909;
+        color: white;
+    }
+}
+
 .tx {
     &--center {
         text-align: center;

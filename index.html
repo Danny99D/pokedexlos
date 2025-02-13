@@ -30,10 +30,12 @@
 
                 <div class="select-box" id="rarityBox"></div>
                 <div class="select-box select-box--big" id="typeBox"></div>
+                <div class="select-box" id="trainersBox"></div>
                 <div class="select-box" id="biomeBox"></div>
                 <div class="select-box" id="climateBox"></div>
                 <div class="select-box select-box--big" id="moveTypeBox"></div>
                 <div class="select-box select-box--big" id="learnBox"></div>
+                <div class="select-box select-box--big" id="archetypesBox"></div>
 
                 <div class="select-box select-box--big" id="moveEffectBox"></div>
                 <div class="select-box" id="expBox">
@@ -83,6 +85,12 @@
                         <input type="checkbox" name="searchExpansions" value="seasons" id="searchSeasons" >
                         <label class="select--title" for="searchSeasons">Seasons</label>
                         <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3372161351" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
+                    </div>
+                    <div class="select-item">
+                        <img class="select--img" src="assets/img/icons/expansions/johtoWar.png" alt="johtoWar.png">
+                        <input type="checkbox" name="searchExpansions" value="johtoWar" id="searchJohtoWar" >
+                        <label class="select--title" for="searchJohtoWar">Johto War</label>
+                        <a class="select--link" href="https://steamcommunity.com/sharedfiles/filedetails/?id=3418601202" target="_blank"><img src="assets/img/icons/expansions/steam.png" alt="steam.png"></a>
                     </div>
                 </div>
                 <div class="select-box" id="genBox">
@@ -154,9 +162,18 @@
                         <div>Mega Evolutions <span>1.3c</span></div>
                         <div>Stadium <span>Beta</span></div>
                         <div>Seasons <span>1.0</span></div>
+                        <div>Johto War <span>0.99</span></div>
                     </div>
 
                     <div class="log-github">
+                        <div>
+                            <p>2.7</p>
+                            <ul>
+                                <li>Added Johto War expansion</li>
+                                <li>Added search by Trainers</li>
+                                <li>Added search by Archetypes</li>
+                            </ul>
+                        </div>
                         <div>
                             <p>2.6</p>
                             <ul>
@@ -392,6 +409,10 @@
                             <div class="select-display select-display--types" id="selectTypes"></div>
                             Types
                         </div>
+                        <div class="select-button" id="trainersButton">
+                            <div class="select-display select-display--types" id="selectTrainers"></div>
+                            Trainers
+                        </div>
                     </div>
 
                     <div class="field field--stats">
@@ -423,13 +444,17 @@
                     </div>
 
                     <div class="select-field select-field--col">
+                        <div class="select-button" id="moveTypeButton">
+                            <div class="select-display" id="selectMove"></div>
+                            Move Type
+                        </div>
                         <div class="select-button" id="moveEffectButton">
                             <div class="select-display" id="selectEffect"></div>
                             Move Effect
                         </div>
-                        <div class="select-button" id="moveTypeButton">
-                            <div class="select-display" id="selectMove"></div>
-                            Move Type
+                        <div class="select-button" id="archetypesButton">
+                            <div class="select-display" id="selectArchetypes"></div>
+                            Archetypes
                         </div>
                         <div class="select-button" id="learnButton">
                             <div class="select-display select-display--types select-display--xl" id="selectLearn"></div>

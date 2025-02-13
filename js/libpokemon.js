@@ -2,27 +2,44 @@ let countClickBayleef = 0;
 let lastExpasion = null;
 let imageExceptions = [];
 
-//Needs same attack and image, different stats and not noble form
+//Needs same move and stats to be here
 let skipCardDraws = [
-    '412-sc', '412-tc', // Burmy
-    '413-sc', '413-tc', // Wormadam
-    '521-f', // Unfezant
-    '550-bb', '550-bw', // Basculin
-    '585-su', '585-au', '585-wi', // Deerling
-    '586-su', '586-au', '586-wi', //Sawsbuck
-    '592-f', // Frillish
-    '593-f', // Jellicent
+    '201-ua', '201-ub','201-uc','201-ud','201-ue','201-ug','201-uh','201-ui','201-uj','201-uk','201-ul',
+    '201-um','201-un','201-uo','201-up','201-uq','201-ur','201-us','201-ut','201-uu','201-uv','201-uw',
+    '201-ux','201-uy','201-uz','201-u!','201-u2',//Unown
+    '412-wsacl', '412-wtrcl', // Burmy
+    '413-wsacl', '413-wtrcl', // Wormadam
+    '521-female', // Unfezant
+    '550-bblst', '550-bwhst', // Basculin
+    '585-summer', '585-autumn', '585-winter', // Deerling
+    '586-summer', '586-autumn', '586-winter', //Sawsbuck
+    '592-female', // Frillish
+    '593-female', // Jellicent
+    '666-vco','666-vicsn','666-vju','666-voc','666-vpo','666-vsa','666-vsu','666-vtu','666-vga','666-vma',
+    '666-vmo','666-vfa','666-vpoba','666-vel','666-vri','666-vsan','666-var','666-vhipl','666-vmod',//Vivillon
+    '676-fdi','676-fda','676-fde','676-fhe','676-fka','676-fre','676-fph','676-fma','676-fst', //Furfrou
     '710-ps', '710-pl', '710-pp', // Pumpkaboo
     '711-ps', '711-pl', '711-pp', // Gourgeist
-    '774-mr', '774-mo', '774-my', '774-mb', '774-mi', '774-mv', // Minior
-    '849-tl', '849-tgl', // Toxtricity
-    '902-f', // Basculegion
-    '925-mt', // Maushold
-    '931-sb', '931-sy', '931-sw', // Squawkabilly
-    '978-td', '978-ts', // Tatsugiri
-    '982-dt' // Dudunsparce
+    '774-mreco', '774-morco', '774-myeco', '774-mblco', '774-minco', '774-mvico', // Minior
+    '849-tlo', '849-tgmlo', // Toxtricity
+    '869-abemi','869-aclma','869-aflca','869-aloru','869-arira','869-astle',//Alcremie
+    '902-female', // Basculegion
+    '925-mth', // Maushold
+    '931-sbl', '931-sye', '931-swh', // Squawkabilly
+    '978-tdr', '978-tst', // Tatsugiri
+    '982-dth' // Dudunsparce
 ]
 
+let notTrainers = [
+    'galactic_team', 'galactic_grunt', 'mars', 'jupiter', 'saturn', 'sird', 'cyrus', //Galactic Team
+    'magma_team', 'magma_grunt', 'tabitha', 'courtney', 'maxie', //Magma Team
+    'aqua_team', 'aqua_grunt', 'matt', 'shelly', 'archie', //Aqua Team
+    'plasma_team', 'plasma_grunt', 'plasma_ace', 'colress', //Plasma Team
+    'rocket_team', 'rocket_grunt', 'rocket_ace', 'proton', 'ariana', 'archer', 'giovanni', //Rocket Team
+    'trainer'
+]
+
+//Defines the generations of the first and last dex number
 const generationDex = [
     [0, 151],
     [152, 251],
@@ -32,9 +49,10 @@ const generationDex = [
     [650, 721],
     [722, 809],
     [810, 905],
-    [906, 1100] //Max provisional
+    [906, 1025]
 ]
 
+//load the exception images as the DOM is loaded
 document.addEventListener('DOMContentLoaded', ()=>{loadDoc('assets/exceptions.json', loadException)})
 
 function loadException(xhttp) {
@@ -43,29 +61,49 @@ function loadException(xhttp) {
 }
 
 //===================================== Search =========================================
-function searchByDex(pokemonData, dexNumber, expansion) {
+
+//Searchs a pokemon by dex, expansion and trainer
+function searchByDex(pokemonData, dexNumber, expansion, trainer) {
+
+    //Aux variables
     let pokeSearch = []
     let back = '';
-
+    
+    //Search all pokemon with the same dex number and put them in the array aux
     pokemonData.find((pokeObj) => {
         if (pokeObj.pokedex_number == dexNumber) {
             pokeSearch.push(pokeObj)
         }
     })
 
+    //If no pokemon is found returns a 404 or use the first one as founded
     back = pokeSearch.length ? pokeSearch[0] : 404
 
+    //If found more than 1 result
     if (pokeSearch.length > 1) {
+
         pokeSearch.find((pokeObj) => {
+
+            //Check if the pokemon is the same as the expansion searched
             if (pokeObj.expansion == expansion) {
-                back = pokeObj
+
+                //Check if the pokemon is the same as the trainer
+                if(trainer != '' && trainer != null){
+                    if(pokeObj.trainer.toLowerCase() == trainer.toLowerCase()){
+                        back = pokeObj
+                    }
+                }else{
+                    back = pokeObj
+                }
             }
         })
     }
 
+    //returns the pokemon founded or 404
     return back
 }
 
+//Searchs a pokemon by pokedex_name
 function searchByName(pokemonData, name) {
     let pokemonSearch = []
 
@@ -80,59 +118,13 @@ function searchByName(pokemonData, name) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by encounter_tier
 function searchByRarity(pokemonData, rarity) {
     let pokemonSearch = []
 
     if (rarity != '') {
         
         switch (rarity) {
-            case 'galactic':
-                pokemonData.find((pokeObj) => {
-                    if ((pokeObj.encounter_tier.toLowerCase() == 'grunt') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'commander') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'boss')) {
-                        pokemonSearch.push(pokeObj)
-                    }
-                })
-                break;
-            case 'team_magma':
-                pokemonData.find((pokeObj) => {
-                    if ((pokeObj.encounter_tier.toLowerCase() == 'male_magma') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'female_magma') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'courtney') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'tabitha') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'maxie')) {
-                        pokemonSearch.push(pokeObj)
-                    }
-                })
-                break;
-            case 'team_aqua':
-                pokemonData.find((pokeObj) => {
-                    if ((pokeObj.encounter_tier.toLowerCase() == 'male_aqua') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'female_aqua') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'matt') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'shelly') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'archie')) {
-                        pokemonSearch.push(pokeObj)
-                    }
-                })
-                break;
-            case 'trainer':
-                pokemonData.find((pokeObj) => {
-                    if ((pokeObj.encounter_tier.toLowerCase() == 'flannery') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'tate') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'liza') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'roxanne') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'winona') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'brendan') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'may') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'wally') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'lisia') ||
-                        (pokeObj.encounter_tier.toLowerCase() == 'savior')) {
-                        pokemonSearch.push(pokeObj)
-                    }
-                })
-                break;
             case 'ultra beast':
                 pokemonData.find((pokeObj) => {
                     if ((pokeObj.encounter_tier.toLowerCase() == 'ultra_beast') ||
@@ -145,7 +137,7 @@ function searchByRarity(pokemonData, rarity) {
                 pokemonData.find((pokeObj) => {
 
                     pokeClimate = pokeObj.hasOwnProperty('climate') ? pokeObj.climate.toLowerCase() : ''
-                    if ((pokeClimate != 'mega') && (pokeClimate != 'noble') && (pokeClimate != 'gigamax')) {
+                    if ((pokeClimate != 'mega') && (pokeClimate != 'noble') && (pokeClimate != 'gigantamax')) {
                         if (pokeObj.encounter_tier.toLowerCase() == rarity) {
                             pokemonSearch.push(pokeObj)
                         }
@@ -165,6 +157,7 @@ function searchByRarity(pokemonData, rarity) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by evolution_cost
 function searchByEvoCost(pokemonData, evoCost) {
     let pokemonSearch = []
 
@@ -181,6 +174,7 @@ function searchByEvoCost(pokemonData, evoCost) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by type_1 and type_2
 function searchByType(pokemonData, types) {
     let pokemonSearch = []
 
@@ -205,6 +199,7 @@ function searchByType(pokemonData, types) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by move_name
 function searchByMoveName(pokemonData, moveName) {
     let pokemonSearch = []
 
@@ -219,6 +214,7 @@ function searchByMoveName(pokemonData, moveName) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by move_type
 function searchByMoveType(pokemonData, moveType) {
     let pokemonSearch = []
 
@@ -233,14 +229,22 @@ function searchByMoveType(pokemonData, moveType) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by move_strength
 function searchByMoveStrength(pokemonData, moveStrength) {
     let pokemonSearch = []
 
     if (moveStrength > -1) {
-        let modStrength = moveStrength == 0 ? '?' : moveStrength
         pokemonData.find((pokeObj) => {
-            if (pokeObj.move_attack_strength == modStrength) {
-                pokemonSearch.push(pokeObj)
+            let mStrength = pokeObj.move_attack_strength
+
+            if(moveStrength == 0){
+                if (mStrength == '?' || mStrength == '-' || mStrength == 'blank') {
+                    pokemonSearch.push(pokeObj)
+                }
+            }else{
+                if (mStrength == moveStrength) {
+                    pokemonSearch.push(pokeObj)
+                }
             }
         })
     }
@@ -248,6 +252,7 @@ function searchByMoveStrength(pokemonData, moveStrength) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by health
 function searchByHealth(pokemonData, health) {
     let pokemonSearch = []
 
@@ -262,6 +267,7 @@ function searchByHealth(pokemonData, health) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by initiative
 function searchByInitiative(pokemonData, initiative) {
     let pokemonSearch = []
 
@@ -276,6 +282,7 @@ function searchByInitiative(pokemonData, initiative) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by biome
 function searchByBiome(pokemonData, biome) {
     let pokemonSearch = []
 
@@ -292,14 +299,23 @@ function searchByBiome(pokemonData, biome) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by climate
 function searchByClimate(pokemonData, climate) {
     let pokemonSearch = []
 
     if (climate != '') {
         pokemonData.find((pokeObj) => {
             if (pokeObj.hasOwnProperty('climate')) {
-                if (pokeObj.climate.toLowerCase() == climate) {
-                    pokemonSearch.push(pokeObj)
+                if(climate == 'fossil'){
+                    let pBiome = pokeObj.hasOwnProperty('biome') ? pokeObj.biome.toLowerCase() : ''
+                    if ((pokeObj.climate.toLowerCase() == climate || (pokeObj.climate.toLowerCase() == 'ancient' && pBiome != 'ruins')) &&
+                        (pBiome == 'blank' || pBiome == '')) {
+                        pokemonSearch.push(pokeObj)
+                    }
+                }else{
+                    if (pokeObj.climate.toLowerCase() == climate) {
+                        pokemonSearch.push(pokeObj)
+                    }
                 }
             }
         })
@@ -308,6 +324,7 @@ function searchByClimate(pokemonData, climate) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by move_1, move_2, move_3 and move_4
 function searchByLearnTypes(pokemonData, types) {
     let pokemonSearch = []
 
@@ -351,6 +368,7 @@ function searchByLearnTypes(pokemonData, types) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by expansion
 function searchByExpansion(pokemonData, expansions) {
     let pokemonSearch = []
 
@@ -365,27 +383,21 @@ function searchByExpansion(pokemonData, expansions) {
     return pokemonSearch
 }
 
+//Searchs a pokemon by generation
 function searchByGenerations(pokemonData, generations, rarity) {
     let pokemonSearch = []
 
     pokemonData.find((pokeObj) => {
         genOk = false
         generations.forEach(generation => {
+
+            //Set the value of the pokedex_number min and max
             let minDex = generationDex[generation]
             let maxDex = generationDex[generation]
 
+            //If the pokemon's pokedex_number is between min and max adds it to the array
             if ((fixDexNumber(pokeObj.pokedex_number) >= minDex[0]) && (fixDexNumber(pokeObj.pokedex_number) <= maxDex[1])) {
-                if (rarity == 'galactic' || rarity == 'team_magma' || rarity == 'team_aqua' || rarity == 'trainer') {
-                    genOk = true
-                } else {
-                    if (pokeObj.pokedex_number.toString().indexOf('-gl') < 0 && 
-                        pokeObj.pokedex_number.toString().indexOf('-x') < 0 &&
-                        pokeObj.pokedex_number.toString().indexOf('-trai') < 0 &&
-                        pokeObj.pokedex_number.toString().indexOf('-taqu') < 0 &&
-                        pokeObj.pokedex_number.toString().indexOf('-tmag') < 0) {
-                        genOk = true
-                    }
-                }
+                genOk = true
             }
         })
         if (genOk) {
@@ -396,6 +408,116 @@ function searchByGenerations(pokemonData, generations, rarity) {
     return pokemonSearch
 }
 
+//Search a pokemon by trainer/s
+function searchByTrainer(pokemonData, trainers){
+    let pokemonSearch = []
+
+    //If there any trainer in the options
+    if(trainers.length){
+
+        pokemonData.forEach(pokeObj => {            
+            trainers.forEach(t => {
+                let pTrainer = pokeObj.hasOwnProperty('trainer') ? pokeObj.trainer.toLowerCase() : ''
+
+                let trainer = t.toLowerCase()
+
+                //If search by a team or trainers
+                if(trainer == 'trainer' || trainer.includes('team')){
+                    if(pokeObj.pokedex_number.includes(checkTrainerMod(pokeObj, trainer))){
+                        pokemonSearch.push(pokeObj)
+                    }
+                }else{
+                    if(pTrainer == trainer){
+                        pokemonSearch.push(pokeObj)
+                    }
+                }
+            });
+        });
+    }else{
+        pokemonData.forEach(pokeObj => {            
+            if(pokeObj.hasOwnProperty('trainer') && pokeObj.trainer == ''){
+                pokemonSearch.push(pokeObj)
+            }
+        });
+    }
+    return pokemonSearch
+}   
+
+//Returns the mod for the trainer of the pokemon
+function checkTrainerMod(pokemon, trainer) {
+    if(pokemon.pokedex_number.includes('-x')){ return '-gl'}
+    
+    switch (trainer) {
+        case 'galactic_team':
+            switch (pokemon.trainer.toLowerCase()) {
+                case 'galactic grunt':
+                case 'mars':
+                case 'jupiter':
+                case 'saturn':
+                case 'sird':
+                case 'cyrus':
+                        return '-gl'
+                    break;
+                default:
+                    break;
+            }
+        break;
+        case 'magma_team':
+            switch (pokemon.trainer.toLowerCase()) {
+                case 'magma grunt':
+                case 'tabitha':
+                case 'courtney':
+                case 'maxie':
+                        return '-tmag'
+                    break;
+                default:
+                    break;
+            }
+        break;
+        case 'aqua_team':
+            switch (pokemon.trainer.toLowerCase()) {
+                case 'aqua grunt':
+                case 'matt':
+                case 'shelly':
+                case 'archie':
+                        return '-taqu'
+                    break;
+                default:
+                    break;
+            }
+        break;
+        case 'plasma_team':
+            switch (pokemon.trainer.toLowerCase()) {
+                case 'plasma grunt':
+                case 'plasma ace':
+                case 'colress':
+                        return '-tpls'
+                    break;
+                default:
+                    break;
+            }
+        break;
+        case 'rocket_team':
+            switch (pokemon.trainer.toLowerCase()) {
+                case 'rocket grunt':
+                case 'rocket ace':
+                case 'proton':
+                case 'ariana':
+                case 'archer':
+                case 'giovanni':
+                        return '-trck'
+                    break;
+                default:
+                    break;
+            }
+        break;
+        default:
+            return '-trai'
+            break;
+    }
+}
+
+//Searchs pokemon by internal_name to determine if its shiny
 function searchByShiny(pokemonData, shiny) {
     let pokemonSearch = []
 
@@ -403,17 +525,26 @@ function searchByShiny(pokemonData, shiny) {
         let lastS = pokeObj.internal_name.lastIndexOf(" S")
         let pokeInName = pokeObj.internal_name
         switch (shiny) {
+
+            //Search only no shinies
             case 'none':
-                if(!(lastS && pokeObj.internal_name.includes(" S") && (pokeInName.length - lastS == 2))){
+                if(!((lastS && pokeObj.internal_name.includes(" S") && (pokeInName.length - lastS == 2)) ||
+                pokeInName.includes('Shiny'))){
                     pokemonSearch.push(pokeObj)
                 }
                 break;
+
+            //Search only shinies
             case 'only':
-                if(lastS && pokeObj.internal_name.includes(" S") && (pokeInName.length - lastS == 2)){
+                if((lastS && pokeObj.internal_name.includes(" S") && (pokeInName.length - lastS == 2)) ||
+                    pokeInName.includes('Shiny')
+                ){
                     pokemonSearch.push(pokeObj)
                 }
                 break;
-                default:
+            
+            //anything
+            default:
                 pokemonSearch.push(pokeObj)
                 break;
         }
@@ -423,6 +554,7 @@ function searchByShiny(pokemonData, shiny) {
     return pokemonSearch
 }
 
+//Searchs pokemon by move_effect EXPERIMENTAL
 function searchByMoveEffect(pokemonData, moveEffect) {
     let pokemonSearch = []
 
@@ -507,7 +639,59 @@ function searchByMoveEffect(pokemonData, moveEffect) {
     return pokemonSearch
 }
 
-function searchPokemon(pokemonData) {
+//Searchs pokemon by move archetypes
+function searchByMoveArchetypes(pokemonData, moveData, archetypes){
+    let pokemonSearch = []
+    let moveSearch = []
+
+    moveData.forEach(move => {
+        let arch1 = move.hasOwnProperty('archetype_1') ? move.archetype_1.toLowerCase() : ''
+        let arch2 = move.hasOwnProperty('archetype_2') ? move.archetype_2.toLowerCase() : ''
+        let arch3 = move.hasOwnProperty('archetype_3') ? move.archetype_3.toLowerCase() : ''
+        let moveOk = false
+
+        if(arch1 != '' || arch2 != '' || arch3 != ''){
+            // console.log(arch1 + '|'+arch2+'|'+arch3)
+            let countArch = 0
+            archetypes.forEach(a => {
+                let fixA = a.replace('_', ' ').toLowerCase()
+                if(arch1.includes(fixA) || arch2.includes(fixA) || arch3.includes(fixA)){
+                    countArch++
+                }
+            });
+
+            // console.log(archetypes.length+' || '+countArch)
+
+            if(archetypes.length == countArch){
+                moveOk = true
+            }
+
+
+            if(moveOk){
+                moveSearch.push(move)
+            }
+
+        }
+    });
+
+    moveSearch.forEach(move => {
+        pokemonData.forEach(pokeObj => {
+            let pokeMoveName = pokeObj.hasOwnProperty('move_name') ? pokeObj.move_name.toLowerCase() : ''
+            let searchMoveName = move.hasOwnProperty('move_name') ? move.move_name.toLowerCase() : ''
+
+            if(pokeMoveName == searchMoveName && pokeObj.expansion == move.expansion){
+                pokemonSearch.push(pokeObj)
+            }
+        });
+    });
+
+    return pokemonSearch
+}
+
+//Searchs pokemon by the values
+function searchPokemon(pokemonData, moveData) {
+
+    //Gets the normal values
     const pokemonName = document.getElementById('pokemonName').value
     const pokemonMoveName = document.getElementById('pokemonMoveName').value
     const pokemonMoveStrength = document.getElementById('pokemonMoveStrength').value ? document.getElementById('pokemonMoveStrength').value : -1
@@ -516,6 +700,7 @@ function searchPokemon(pokemonData) {
     const pokemonEvoCost = document.getElementById('pokemonEvoCost').value ? document.getElementById('pokemonEvoCost').value : 0
     const searchByGen = document.getElementById('searchByGen').checked
 
+    //Gets the array values
     const searchExpansionsBox = document.getElementsByName('searchExpansions')
     const searchGenerationsBox = document.getElementsByName('searchGenerations')
     const pokemonRarityBox = document.getElementsByName('rarity')
@@ -526,7 +711,10 @@ function searchPokemon(pokemonData) {
     const pokemonLearnBox = document.getElementsByName('learn')
     const pokemonMoveEffect = document.getElementsByName('moveEffect')
     const pokemonShiny = document.getElementsByName('shiny')
+    const pokemonTrainersBox = document.getElementsByName('trainer')
+    const pokemonArchetypesBox = document.getElementsByName('archetype')
 
+    //Convert the arrays to an array of the checkeds values
     const searchExpansions = checkArray(searchExpansionsBox)
     const searchGenerations = checkArray(searchGenerationsBox)
     const pokemonTypes = checkArray(pokemonTypesBox)
@@ -537,78 +725,94 @@ function searchPokemon(pokemonData) {
     const pokemonClimateA = checkArray(pokemonClimateBox)
     const pokemonMoveEffectA = checkArray(pokemonMoveEffect)
     const pokemonShinyA = checkArray(pokemonShiny)
+    const pokemonTrainers = checkArray(pokemonTrainersBox)
+    const pokemonArchetypes = checkArray(pokemonArchetypesBox)
 
+    //makes the screen scrollable again
     const screen = document.getElementById('screen')
     if (screen.classList.contains('screen--noScroll')) {
         screen.classList.remove('screen--noScroll')
     }
 
 
-
-    if (checkSearch(pokemonName, pokemonRarityA, pokemonTypes, pokemonMoveName, pokemonMoveTypeA, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimateA, pokemonBiomeA, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffectA, pokemonShiny)) {
+    if (checkSearch(pokemonName, pokemonRarityA, pokemonTypes, pokemonMoveName, pokemonMoveTypeA, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimateA, pokemonBiomeA, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffectA, pokemonShiny, pokemonTrainers, pokemonArchetypes)) {
         let searchList = pokemonData
+        
+        //convert the array with checked value to a normal var
         const pokemonRarity = pokemonRarityA.length ? pokemonRarityA[0] : ''
-        const pokemonBiome = pokemonBiomeA.length ? pokemonBiomeA[0] : ''
-        const pokemonClimate = pokemonClimateA.length ? pokemonClimateA[0] : ''
+        const pokemonBiomeB = pokemonBiomeA.length ? pokemonBiomeA[0] : ''
+        const pokemonClimateB = pokemonClimateA.length ? pokemonClimateA[0] : ''
         const pokemonMoveType = pokemonMoveTypeA.length ? pokemonMoveTypeA[0] : ''
         const pokemonMoveEffect = pokemonMoveEffectA.length ? pokemonMoveEffectA[0] : ''
         const pokemonShiny = pokemonShinyA[0]
+        
+        let pokemonBiome = pokemonBiomeB
+        let pokemonClimate = pokemonClimateA
+        if(pokemonClimateB.includes('_')){
+            pokemonBiome = pokemonClimateB.split('_')[1]
+            pokemonClimate = pokemonClimateB.split('_')[0]
+        }
 
-        // Busca por tipo1 y tipo2
+
+        //Search the pokemon by type_1 and type_2
         searchList = pokemonTypes.length ? searchByType(searchList, pokemonTypes) : searchList
 
-
-        // Busca pokemon por nombre
+        //Search the pokemon by pokedex_name
         searchList = pokemonName != '' ? searchByName(searchList, pokemonName) : searchList
 
-        // Busca pokemon por vida
+        //Search the pokemon by health
         searchList = pokemonHealth > 0 ? searchByHealth(searchList, pokemonHealth) : searchList
 
-        // Busca pokemon por inicitiva
+        //Search the pokemon by initiative
         searchList = pokemonInitiative > 0 ? searchByInitiative(searchList, pokemonInitiative) : searchList
 
-        // Busca pokemon por bioma
-        searchList = pokemonBiome != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigamax' ? searchByBiome(searchList, pokemonBiome) : searchList
+        //Search the pokemon by biome
+        searchList = pokemonBiome != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigantamax' && pokemonRarity != 'fossil' ? searchByBiome(searchList, pokemonBiome) : searchList
 
-        // Busca pokemon por clima
-        if (pokemonRarity == 'noble' || pokemonRarity == 'mega' || pokemonRarity == 'gigamax') {
+        //Search the pokemon by climate except if is a Mega, Gigantamax, Noble or Fossil pokemon
+        if (pokemonRarity == 'noble' || pokemonRarity == 'mega' || pokemonRarity == 'gigantamax' || pokemonRarity == 'fossil') {
             searchList = searchByClimate(searchList, pokemonRarity)
         } else {
             searchList = pokemonClimate != '' ? searchByClimate(searchList, pokemonClimate) : searchList
         }
 
+        //Search by encounter_tier except if is if is a Mega, Gigantamax, Noble or Fossil pokemon
+        searchList = pokemonRarity != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigantamax' && pokemonRarity != 'fossil' ? searchByRarity(searchList, pokemonRarity) : searchList
 
-        // Busca pokemon por rareza
-        searchList = pokemonRarity != '' && pokemonRarity != 'noble' && pokemonRarity != 'mega' && pokemonRarity != 'gigamax' ? searchByRarity(searchList, pokemonRarity) : searchList
-
-        // Busca pokemon por nombre del ataque
+        //Search a pokemon by move_name
         searchList = pokemonMoveName != '' ? searchByMoveName(searchList, pokemonMoveName) : searchList
 
-        // Busca pokemon por tipo del ataque
+        //Search a pokemon by move_type
         searchList = pokemonMoveType != '' ? searchByMoveType(searchList, pokemonMoveType) : searchList
 
-        // Busca pokemon por fuerza del ataque
+        //Search a pokemon by move_strength
         searchList = pokemonMoveStrength > -1 ? searchByMoveStrength(searchList, pokemonMoveStrength) : searchList
 
-        // Busca pokemon por coste de evolucion
+        //Search a pokemon by evolution_cost
         searchList = pokemonEvoCost > 0 ? searchByEvoCost(searchList, pokemonEvoCost) : searchList
 
-        // Busca pokemon por tipos de ataque aprendibles
+        //Search a pokemon by move_1, move_2, move_3 and move_4
         searchList = pokemonLearn.length ? searchByLearnTypes(searchList, pokemonLearn) : searchList
 
-        // Busca pokemon por efectos del ataque
+        //Search a pokemon by move_effect EXPERIMENTAL
         searchList = pokemonMoveEffect.length ? searchByMoveEffect(searchList, pokemonMoveEffect) : searchList
+
+        //Search a pokemon by move archetypes
+        searchList = pokemonArchetypes.length ? searchByMoveArchetypes(searchList, moveData, pokemonArchetypes) : searchList
         
-        //Busca pokemon por shiny
+        //Search a pokemon if its shiny or not
         searchList = searchByShiny(searchList, pokemonShiny)
 
-        // Busca pokemon por expansion
+        //Search a pokemon by expansion
         searchList = searchByExpansion(searchList, searchExpansions)
 
-        // Busca pokemon por generacion
+        //Search a pokemon by generation
         searchList = searchByGenerations(searchList, searchGenerations, pokemonRarity)
 
-        // Ordena la lista por pokedex_number
+        //Search a pokemon by trainer
+        searchList = searchByTrainer(searchList, pokemonTrainers)
+
+        //Sort the array by pokedex_number
         searchList = sortByDexNumber(searchList)
 
         drawPokemonCards(searchList)
@@ -625,6 +829,7 @@ function searchPokemon(pokemonData) {
     }
 }
 
+//Formas cambiar
 function searchOtherForms(pokemonData, dexNumber, expansion) {
     let otherForms = []
 
@@ -637,7 +842,7 @@ function searchOtherForms(pokemonData, dexNumber, expansion) {
     return otherForms
 }
 
-//Funcion que busca las evoluciones de un pokemon
+//Evoluciones cambiar
 function searchEvolution(pokemonData, pokemon) {
 
     //Array aux
@@ -755,24 +960,56 @@ function searchEvoTo(pokemonData, pokemon) {
     return array
 }
 
-//Funcion para comprobar si un pokemon esta en la lista de excepciones
+//Check if a pokemon is in the exceptions list for custom images
 function searchDexExceptions(dexNumber, expansion){
     let r = false;
-    if(imageExceptions[checkExp(expansion)].includes(dexNumber)){
-        r = true
+    if(checkExp(expansion) in imageExceptions){
+        if(imageExceptions[checkExp(expansion)].includes(dexNumber)){
+            r = true
+        }
     }
 
     return r;
 }
 
+function searchMoveArchetypes(pokemon){
+    let listArch = []
+
+    moveData.forEach(move => {
+        let arch1 = move.hasOwnProperty('archetype_1') ? move.archetype_1.toLowerCase() : ''
+        let arch2 = move.hasOwnProperty('archetype_2') ? move.archetype_2.toLowerCase() : ''
+        let arch3 = move.hasOwnProperty('archetype_3') ? move.archetype_3.toLowerCase() : ''
+
+        if(move.move_name == pokemon.move_name && move.expansion == pokemon.expansion){
+            if(arch1 != ''){
+                listArch.push(arch1)
+            }
+            if(arch2 != ''){
+                listArch.push(arch2)
+            }
+            if(arch3 != ''){
+                listArch.push(arch3)
+            }
+        }
+    });
+
+    return listArch
+}
+
 //===================================== Draw =========================================
 
-//Funcion para dibujar una carta
+//Function to draw a sd card of a pokemon
 function drawPokemonCard(pokemon) {
+
+    //Create the card container
     let sdcard = document.createElement('DIV')
+
     sdcard.classList.add('sdcard')
+
+    //Defines the values to search a pokemon
     sdcard.setAttribute('dexnumber', pokemon.pokedex_number)
     sdcard.setAttribute('expansion', pokemon.expansion)
+    sdcard.setAttribute('trainer', pokemon.trainer)
 
     //---------sdcard Title
     let dvCardTitle = document.createElement('DIV')
@@ -799,7 +1036,7 @@ function drawPokemonCard(pokemon) {
     pName.appendChild(document.createTextNode(pokemon.pokedex_name))
 
     dvCardTitle.appendChild(pName)
-    dvCardTitle.appendChild(createImg('icon', checkRarity(pokemon.encounter_tier), 'sdcard-type sdcard-type--last', pokemon.expansion, pokemon.pokedex_number))
+    dvCardTitle.appendChild(createImg('icon', pokemon.encounter_tier, 'sdcard-type sdcard-type--last', pokemon.expansion, pokemon.pokedex_number))
 
     dvCardTitle.appendChild(createImg('exp', checkExp(pokemon.expansion), 'expansions--img expansions--img--sm', pokemon.expansion, pokemon.pokedex_number))
 
@@ -830,7 +1067,7 @@ function drawPokemonCard(pokemon) {
 
     modClimate = pokemon.hasOwnProperty('climate') && pokemon.climate != '' ? pokemon.climate.toLowerCase() : ''
     modBiome = pokemon.hasOwnProperty('biome') && pokemon.biome != '' ? pokemon.biome.toLowerCase() : ''
-    dvInfo.appendChild(checkBioClim(modClimate, modBiome, 'sdcard-info--location'))
+    dvInfo.appendChild(checkBioClim(pokemon, 'sdcard-info--location'))
 
     //Poke Learn Moves
     let dvLearn = document.createElement('DIV')
@@ -869,9 +1106,30 @@ function drawPokemonCard(pokemon) {
     pMoveName.appendChild(document.createTextNode(pokemon.move_name))
     dvCardMove.appendChild(pMoveName)
 
+    let pokeArchetypes = searchMoveArchetypes(pokemon)
+
+    if(pokeArchetypes.length > 0){
+        let pArchetypes = document.createElement('DIV')
+        pArchetypes.classList.add('sdcard-moveInfo--archetypes')
+
+        pokeArchetypes.forEach(arch => {
+            let pArch = document.createElement('DIV')
+            let fixArch = fixArchetype(arch)
+
+            pArch.classList.add('archetypes--' + fixArch)
+            pArch.classList.add('sdcard-moveInfo--archetype')
+
+            pArchetypes.appendChild(pArch)
+        });
+
+        pMoveName.appendChild(pArchetypes)
+    }
+
     let pStrength = document.createElement('DIV')
     pStrength.classList.add('sdcard-moveInfo--strength')
-    pStrength.appendChild(document.createTextNode(pokemon.move_attack_strength))
+
+    let pokeMoveStrength = pokemon.move_attack_strength == 'blank' ? '' : pokemon.move_attack_strength
+    pStrength.appendChild(document.createTextNode(pokeMoveStrength))
     dvCardMove.appendChild(pStrength)
 
 
@@ -908,9 +1166,9 @@ function drawPokemonCards(pokemonData) {
 }
 
 //Funcion para dibujar la informacion de la carta seleccionada
-function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
+function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar, trainer) {
     const screen = document.getElementById('screen')
-    const pokemon = searchByDex(pokemonData, dexNumber, expansion)
+    const pokemon = searchByDex(pokemonData, dexNumber, expansion, trainer)
 
     scrollVar = scrollVar ? scrollVar : screen.scrollTop
 
@@ -972,7 +1230,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     dvHealth.appendChild(document.createTextNode(pokemon.health))
     dvCardDesc.appendChild(dvHealth)
 
-    modRarity = checkRarity(pokemon.encounter_tier)
+    modRarity = pokemon.encounter_tier
     dvCardDesc.appendChild(createImg('icon', modRarity, 'cardInfo-type cardInfo-type--sm', pokemon.expansion, pokemon.pokedex_number))
 
     let dvInit = document.createElement('DIV')
@@ -1008,7 +1266,9 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
 
     let pStrength = document.createElement('DIV')
     pStrength.classList.add('sdcard-moveInfo--strength')
-    pStrength.appendChild(document.createTextNode(pokemon.move_attack_strength))
+
+    let pokeMoveStrength = pokemon.move_attack_strength == 'blank' ? '' : pokemon.move_attack_strength
+    pStrength.appendChild(document.createTextNode(pokeMoveStrength))
     dvCardMoveTitle.appendChild(pStrength)
 
     let pMoveName = document.createElement('P')
@@ -1022,6 +1282,28 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     let pMoveDesc = document.createElement('P')
     pMoveDesc.classList.add('cardInfo-move--description')
     pMoveDesc.appendChild(document.createTextNode(pokemon.move_effect))
+
+    let pokeArchetypes = searchMoveArchetypes(pokemon)
+
+    if(pokeArchetypes.length > 0){
+        let pArchetypes = document.createElement('DIV')
+        pArchetypes.classList.add('sdcard-moveInfo--archetypes')
+
+        pokeArchetypes.forEach(arch => {
+            let pArch = document.createElement('DIV')
+            let fixArch = fixArchetype(arch)
+
+            pArch.classList.add('archetypes--' + fixArch)
+            pArch.classList.add('sdcard-moveInfo--archetype')
+
+            pArch.appendChild(document.createTextNode(firstUpperCase(arch)))
+
+            pArchetypes.appendChild(pArch)
+        });
+
+        pMoveDesc.appendChild(pArchetypes)
+    }
+
     dvCardMove.appendChild(pMoveDesc)
 
     dvCardData.appendChild(dvCardMove)
@@ -1061,13 +1343,13 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
     modClimate = pokemon.hasOwnProperty('climate') ? pokemon.climate.toLowerCase() : ''
     modBiome = pokemon.hasOwnProperty('biome') ? pokemon.biome.toLowerCase() : ''
 
-    dvLocat.appendChild(checkBioClim(modClimate, modBiome, ''))
+    dvLocat.appendChild(checkBioClim(pokemon, ''))
 
     dvInfoBox.appendChild(dvLearn)
     dvInfoBox.appendChild(dvLocat)
 
     //Poke Evo Cost
-    if (pokemon.hasOwnProperty('evolve_cost') && pokemon.evolve_cost.toString() != '') {
+    if (pokemon.hasOwnProperty('evolve_cost') && pokemon.evolve_cost.toString() != '' && pokemon.evolve_cost.toString().toLowerCase() != 'hidden') {
         let dvEvol = document.createElement('DIV')
         dvEvol.classList.add('cardInfo-info--evolution')
 
@@ -1153,13 +1435,23 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar) {
             }
         })
 
-        //Añade funcion al clicar las formas y evoluciones
+        //Adds the click function for the elements
         Array.from(pokeLinesCages).forEach((cage) => {
             cage.addEventListener('click', (e)=>{
+
+                //If the clicked element has dexNumber attribute
                 if(e.target.hasAttribute('dexNumber')){
+
+                    //Get the attributes
                     let dexNumber = e.target.getAttribute('dexNumber')
+                    let expansion = e.target.getAttribute('expansion')
+                    let trainer = e.target.getAttribute('trainer')
+
+                    //Deletes the actual pokemon info
                     borrar(cardInfo)
-                    drawPokemonInfo(pokemonData, dexNumber, e.target.getAttribute('expansion'), scrollVar)
+
+                    //Search the clicked pokemon
+                    drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar, trainer)
                 }
             })
         })
@@ -1187,6 +1479,7 @@ function drawPokemonForm(pokemon, mod) {
     dvForm.classList.add('pokeForm')
     dvForm.setAttribute('dexnumber', pokemon.pokedex_number)
     dvForm.setAttribute('expansion', pokemon.expansion)
+    dvForm.setAttribute('trainer', pokemon.trainer)
 
     let imgPoke = createImg('poke', checkDexNumber(pokemon.pokedex_number), 'pokeForm--img', pokemon.expansion, pokemon.pokedex_number)
     let imgExp = createImg('exp', checkExp(pokemon.expansion), 'pokeForm--expansion', pokemon.expansion, pokemon.pokedex_number)
@@ -1359,36 +1652,85 @@ function drawPokemonLine(pokemonData, pokemon, otherForms, evolLine) {
 //===================================== Check =========================================
 
 //Funcion que devuelve una imagen dependiendo el bioma y clima
-function checkBioClim(modClimate, modBiome, clas) {
-    switch (modClimate) {
-        case 'noble':
-        case 'mega':
-        case 'gigamax':
-            return createImg('icon', modClimate.toLowerCase(), clas, '', 0)
-        case 'space':
-            return createImg('icon', 'unknown', clas, '', 0)
-        default:
-            if (modBiome == 'ruins') {
-                return createImg('icon', 'unknown', clas, '', 0)
-            } else {
-                return createImg('icon', modClimate.toLowerCase() + '_' + modBiome.toLowerCase(), clas, '', 0)
+function checkBioClim(pokemon, clas) {
+    let climate = pokemon.hasOwnProperty('climate') ? pokemon.climate.toLowerCase() : ''
+    let biome = pokemon.hasOwnProperty('biome') ? pokemon.biome.toLowerCase() : ''
+    let trainer = pokemon.hasOwnProperty('trainer') ? pokemon.trainer.toLowerCase() : ''
+    trainer = trainer.replace(' ', '_')
+
+
+    switch (pokemon.expansion) {
+        case 'johtoWar':
+            if(trainer != ''){
+                return createImg('trainer', trainer + '_trainer', clas, '', 0)
             }
+            switch (climate) {
+                case 'noble':
+                case 'mega':
+                case 'gigantamax':
+                    return createImg('icon', climate, clas, '', 0)
+                case 'space':
+                    return createImg('icon', 'unknown', clas, '', 0)
+                case 'fossil':
+                    return createImg('icon', 'fossil', clas, '', 0)
+                case 'ancient':
+                    if(biome == 'ruins'){ return createImg('icon', 'ancient_ruins', clas, '', 0) }
+                    return createImg('icon', 'fossil', clas, '', 0)
+                default:
+                    if (climate == 'rage') {
+                        return createImg('icon', 'unknown', clas, '', 0)
+                    } else {
+                        return createImg('icon', climate + '_' + biome, clas, '', 0)
+                    }
+            }
+            break;
+    
+        default:
+            if(trainer != ''){
+                return createImg('trainer', trainer + '_trainer', clas, '', 0)
+            }
+            switch (climate) {
+                case 'noble':
+                case 'mega':
+                case 'gigantamax':
+                    return createImg('icon', climate, clas, '', 0)
+                case 'space':
+                    return createImg('icon', 'unknown', clas, '', 0)
+                default:
+                    if (biome == 'ruins') {
+                        return createImg('icon', 'unknown', clas, '', 0)
+                    } else {
+                        return createImg('icon', climate + '_' + biome, clas, '', 0)
+                    }
+            }
+            break;
     }
+    
 }
 
-//Funcion que elimina el mod de entrenador
+//Removes the -mod of trainers and some pokemon
 function checkDexNumber(modDex) {
     modDex = modDex.toString()
 
     modDex = modDex.includes('-gl') ? modDex.slice(0, -3) : modDex //Galactic
+    modDex = modDex.includes('-tpls') ? modDex.slice(0, -5) : modDex //Plasma
+    modDex = modDex.includes('-trck') ? modDex.slice(0, -5) : modDex //Rocket
     modDex = modDex.includes('-trai') ? modDex.slice(0, -5) : modDex //Trainer (Freeze)
     modDex = modDex.includes('-taqu') ? modDex.slice(0, -5) : modDex //Team Aqua (Freeze)
     modDex = modDex.includes('-tmag') ? modDex.slice(0, -5) : modDex //Team Magma (Freeze)
+
+    //Pumpkaboo & gourgheist
+    modDex = modDex.substr(-3, 3) == '-ps' && modDex.includes('-ps') ? modDex.slice(0, -3) : modDex //small
+    modDex = modDex.substr(-3, 3) == '-pl' && modDex.includes('-pl') ? modDex.slice(0, -3) : modDex //large
+    modDex = modDex.substr(-3, 3) == '-pp' && modDex.includes('-pp') ? modDex.slice(0, -3) : modDex //super
+    modDex = modDex.substr(-9, 9) == '-ps-shiny' && modDex.includes('-ps-shiny') ? modDex.slice(0, -9) + '-shiny' : modDex //small shiny
+    modDex = modDex.substr(-9, 9) == '-pl-shiny' && modDex.includes('-pl-shiny') ? modDex.slice(0, -9) + '-shiny' : modDex //large shiny
+    modDex = modDex.substr(-9, 9) == '-pp-shiny' && modDex.includes('-pp-shiny') ? modDex.slice(0, -9) + '-shiny' : modDex //super shiny
     
     return modDex
 }
 
-//Funcion que si falta alguna imagen la reemplaza con unknown.png
+//Replaces all not found images with unknown.png
 function checkImagesLoad() {
     const images = document.querySelectorAll('img')
     images.forEach(img => {
@@ -1399,7 +1741,7 @@ function checkImagesLoad() {
 }
 
 //Funcion que asegura que se busque por algun valor
-function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffect, pokemonShiny) {
+function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, pokemonMoveType, pokemonMoveStrength, pokemonHealth, pokemonInitiative, pokemonEvoCost, pokemonClimate, pokemonBiome, pokemonLearn, searchExpansions, searchGenerations, searchByGen, pokemonMoveEffect, pokemonShiny, pokemonTrainers, pokemonArchetypes) {
     // console.log('--Nombre: ' + pokemonName)
     // console.log(pokemonRarity)
     // console.log(pokemonTypes)
@@ -1416,6 +1758,7 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
     // console.log(searchExpansions)
     // console.log(searchGenerations)
     // console.log(pokemonShiny)
+    // console.log(pokemonTrainers)
 
     // if (searchByGen && (searchExpansions.length > 0)) {
     //     return true
@@ -1434,7 +1777,9 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
                 pokemonClimate.length > 0 ||
                 pokemonBiome.length > 0 ||
                 pokemonLearn.length > 0 ||
-                pokemonShiny.length > 0
+                pokemonShiny.length > 0 ||
+                pokemonTrainers.length > 0 ||
+                pokemonArchetypes.length > 0
                 ) ||
                 (searchExpansions.length > 0) &&
                 (searchGenerations.length > 0)
@@ -1446,7 +1791,7 @@ function checkSearch(pokemonName, pokemonRarity, pokemonTypes, pokemonMoveName, 
     return false
 }
 
-//Funcion que devuelve un array con los elementos checked
+//Returns an array with all the checked values
 function checkArray(array) {
     let newArray = []
 
@@ -1474,6 +1819,8 @@ function checkExpB(exp) {
             return 'stadium'
         case 'seasons':
             return 'seasons'
+        case 'johtoWar':
+            return 'Johto War'
         default:
             return 'base'
     }
@@ -1494,41 +1841,25 @@ function checkExp(exp) {
             return 'stadium'
         case 'seasons':
             return 'seasons'
+        case 'johtoWar':
+            return 'johtoWar'
         default:
             return 'los'
     }
 }
 
-//Funcion que devuelve la rareza arreglada para el team galactic
-function checkRarity(rarity) {
-    if (rarity == 'grunt' || rarity == 'commander' || rarity == 'boss') {
-        rarity = 'galactic'
-    }
-    if (rarity == 'magma grunt' || rarity == 'courtney' || rarity == 'tabitha' || rarity == 'maxie'){
-        rarity = 'team magma'
-    }
-    if (rarity == 'aqua grunt' || rarity == 'matt' || rarity == 'shelly' || rarity == 'archie'){
-        rarity = 'team aqua'
-    }
-    if (rarity == 'flannery' || rarity == 'tate' || rarity == 'liza' || rarity == 'roxanne' || rarity == 'winona' ||
-        rarity == 'brendan' || rarity == 'may' || rarity == 'wally' || rarity == 'lisia' || rarity == 'savior'){
-        rarity = 'trainer'
-    }
-    return rarity
-}
-
-//Funcion que devuelve si la carta no esta en la black list para dibujarse
+//Check if the card can be drawed checking skipCardDraws list
 function checkCardDraw(pokemon) {
     draw = true
     skipCardDraws.forEach(dex => {
-        if (pokemon.pokedex_number == dex) {
+        if (pokemon.pokedex_number == dex || pokemon.pokedex_number == dex + '-shiny') {
             draw = false
         }
     });
     return draw
 }
 
-//Funcion que coloca las imagenes de clima_bioma
+//Check the biome and climate box and change the preview of the selected values
 function checkLocationBox() {
     const climateBoxChecks = document.getElementsByName('climate')
     const biomeBoxChecks = document.getElementsByName('biome')
@@ -1553,9 +1884,9 @@ function checkLocationBox() {
     });
 
 
-    if (climate == 'space') {
-        stateButton(biomeButton, 'dis')
+    if (climate == 'space' || climate == 'warm_ruins' || climate == 'cold_ruins' || climate == 'temperate_ruins' || climate == 'ancient_ruins' || climate == 'future_ruins') {
         selectLocations.appendChild(createImg('locat', climate, 'select-locations--item', '', 0))
+        stateButton(biomeButton, 'dis')
     } else {
         if (biome != '') { selectLocations.appendChild(createImg('locat', biome, 'select-locations--item', '', 0)) }
         if (climate != '') {
@@ -1567,6 +1898,7 @@ function checkLocationBox() {
 
 }
 
+//Check the rarity box and change the climate and biome buttons
 function checkRarityBox() {
     const rarityBoxChecks = document.getElementsByName('rarity')
     const selectLocations = document.getElementById('selectLocations')
@@ -1583,7 +1915,7 @@ function checkRarityBox() {
     });
 
 
-    if (rarity == 'noble' || rarity == 'mega' || rarity == 'gigamax' || rarity == 'galactic' || rarity == 'team_aqua' || rarity == 'team_magma' || rarity == 'trainer') {
+    if (rarity == 'noble' || rarity == 'mega' || rarity == 'gigantamax' || rarity == 'fossil') {
         borrar(selectLocations)
         selectLocations.appendChild(createImg('icon', rarity, 'select-locations--item', '', 0))
         stateButton(climateButton, 'dis')
@@ -1596,7 +1928,7 @@ function checkRarityBox() {
         if (selectLocations.hasChildNodes) {
             let node = selectLocations.lastChild ? selectLocations.lastChild.getAttribute('alt') : ''
             
-            if (node == 'noble.png' || node == 'mega.png' || node == 'gigamax.png' || node == 'galactic.png' || node == 'Aqua Team.png' || node == 'Magma Team.png' || node == 'trainer.png') {
+            if (node == 'noble.png' || node == 'mega.png' || node == 'gigantamax.png' || node == 'fossil.png') {
                 selectLocations.removeChild(selectLocations.lastChild)
             }
         }
@@ -1606,6 +1938,165 @@ function checkRarityBox() {
     }
 }
 
+//Check the trainer box to check all trainers from a group and change the climate and biome buttons
+function checkTrainersBox() {
+    const trainersBoxChecks = document.getElementsByName('trainer')
+    const selectLocations = document.getElementById('selectLocations')
+    const climateButton = document.getElementById('climateButton')
+    const biomeButton = document.getElementById('biomeButton')
+    
+    borrar(selectLocations)
+    let checkedValues = checkArray(trainersBoxChecks)
+
+    if (trainersBoxChecks.length) {
+
+        if(checkedValues.length > 0){
+            selectLocations.appendChild(createImg('trainer', 'trainer', 'select-locations--item', '', 0))
+            stateButton(climateButton, 'dis')
+            stateButton(biomeButton, 'dis')
+        } else {
+
+            if (selectLocations.hasChildNodes) {
+                let node = selectLocations.lastChild ? selectLocations.lastChild.getAttribute('alt') : ''
+    
+                if (node == 'galactic_team.png' || node == 'plasma_team.png' || 
+                    node == 'aqua_team.png' || node == 'magma_team.png' || node == 'rocket_team.png' ||
+                    node == 'trainer.png') {
+                    selectLocations.removeChild(selectLocations.lastChild)
+                }
+            }
+    
+            stateButton(climateButton, 'en')
+            stateButton(biomeButton, 'en')
+        }
+
+        trainersBoxChecks.forEach(option => {
+            switch (option.value) {
+                case 'galactic_team':
+                    trainersBoxChecks.forEach(t => {
+                        switch (t.value) {
+                            case 'galactic_grunt':
+                            case 'mars':
+                            case 'jupiter':
+                            case 'saturn':
+                            case 'sird':
+                            case 'cyrus':
+                                if(option.checked){
+                                    t.disabled = true
+                                    t.checked = false
+                                }else{
+                                    t.disabled = false
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 'magma_team':
+                    trainersBoxChecks.forEach(t => {
+                        switch (t.value) {
+                            case 'magma_grunt':
+                            case 'tabitha':
+                            case 'courtney':
+                            case 'maxie':
+                                if(option.checked){
+                                    t.disabled = true
+                                    t.checked = false
+                                }else{
+                                    t.disabled = false
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 'aqua_team':
+                    trainersBoxChecks.forEach(t => {
+                        switch (t.value) {
+                            case 'aqua_grunt':
+                            case 'matt':
+                            case 'shelly':
+                            case 'archie':
+                                if(option.checked){
+                                    t.disabled = true
+                                    t.checked = false
+                                }else{
+                                    t.disabled = false
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 'plasma_team':
+                    trainersBoxChecks.forEach(t => {
+                        switch (t.value) {
+                            case 'plasma_grunt':
+                            case 'plasma_ace':
+                            case 'colress':
+                                if(option.checked){
+                                    t.disabled = true
+                                    t.checked = false
+                                }else{
+                                    t.disabled = false
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 'rocket_team':
+                    trainersBoxChecks.forEach(t => {
+                        switch (t.value) {
+                            case 'rocket_grunt':
+                            case 'rocket_ace':
+                            case 'proton':
+                            case 'ariana':
+                            case 'archer':
+                            case 'giovanni':
+                                if(option.checked){
+                                    t.disabled = true
+                                    t.checked = false
+                                }else{
+                                    t.disabled = false
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 'trainer':
+                    trainersBoxChecks.forEach(t => {
+                        let rCheck = false
+
+                        //Search if t is in the list of no trainers
+                        notTrainers.forEach(t2 => {
+                            rCheck = t.value == t2 ? true : rCheck                         
+                        });
+
+                        if(!rCheck){
+                            if(option.checked){
+                                t.disabled = true
+                                t.checked = false
+                            }else{
+                                t.disabled = false
+                            }
+                        }
+                    });
+                break
+                default:
+                    break;
+            }
+        });
+    }
+}
+
+//Check the move effect box and adds the preview of the selected values
 function checkMoveEffectBox() {
     const moveEffectyBoxChecks = document.getElementsByName('moveEffect')
     const selectTypes = document.getElementById('selectEffect')
@@ -1624,6 +2115,7 @@ function checkMoveEffectBox() {
 
 }
 
+//Check the types box and adds the preview of the selected values
 function checkTypesBox() {
     const typesBoxChecks = document.getElementsByName('types')
     const selectTypes = document.getElementById('selectTypes')
@@ -1644,6 +2136,34 @@ function checkTypesBox() {
 
 }
 
+//Check the archetypes box and adds the preview of the selected values
+function checkArchetypesBox() {
+    const archetypesBoxChecks = document.getElementsByName('archetype')
+    const selectArchetypes = document.getElementById('selectArchetypes')
+    selectArchetypes.classList.remove('select-display--arch')
+    borrar(selectArchetypes)
+
+    let archetypes = []
+    archetypesBoxChecks.forEach(e => {
+        if (e.checked) {
+            archetypes.push(e.value)
+        }
+    });
+
+    if (archetypes.length) {
+        selectArchetypes.classList.add('select-display--arch')
+        archetypes.forEach(archetype => {
+            let imgDV = document.createElement('DIV')
+            imgDV.classList.add('select-display--item')
+            imgDV.classList.add('archetypes--' + archetype.replace(' ', '_'))
+
+            selectArchetypes.appendChild(imgDV)
+        });
+    }
+
+}
+
+//Check the learn types box and adds the preview of the selected values
 function checkLearnBox() {
     const typesBoxChecks = document.getElementsByName('learn')
     const selectLearn = document.getElementById('selectLearn')
@@ -1664,6 +2184,7 @@ function checkLearnBox() {
 
 }
 
+//Check the move type box and adds the preview of the selected values
 function checkMoveBox() {
     const typesBoxChecks = document.getElementsByName('moveType')
     const selectMove = document.getElementById('selectMove')
@@ -1684,6 +2205,7 @@ function checkMoveBox() {
 
 }
 
+//Change the classes of a button to enable/disabled it
 function stateButton(button, state) {
     switch (state) {
         case 'dis':
@@ -1742,11 +2264,31 @@ function addSelect(list, options) {
 //Funcion que recibe un select y le añade la lista de tipos Pokemon
 function addSelectBox(box, list, type, name, inputType) {
     list.forEach(value => {
+        let sub = false
+        if(value.includes('---')){
+            value = value.replace('---', '')
+            sub = true
+        }
+
 
         let item = document.createElement('DIV')
         item.classList.add('select-item')
+        if(sub){item.classList.add('select-item--sub')}
 
-        item.appendChild(createImg(type, value.replace(' ', '_'), 'select--img', '', 0))
+        if((!value.includes('team') && value != 'trainer') && type == 'trainer'){
+            item.appendChild(createImg(type, value.replace(' ', '_')  + '_trainer', 'select--img', '', 0))
+        }else{
+            if(type == 'arch'){
+                let imgDV = document.createElement('DIV')
+                imgDV.classList.add('select--img')
+                imgDV.classList.add('archetypes--' + value.replace(' ', '_'))
+
+                item.appendChild(imgDV)
+            }else{
+                item.appendChild(createImg(type, value.replace(' ', '_'), 'select--img', '', 0))
+            }
+        }
+
 
         let inp = document.createElement('INPUT')
         inp.setAttribute('type', inputType)
@@ -1859,6 +2401,7 @@ function createImg(type, name, clas, expansion, dexNumber) {
         case 'poke':
             let imgSrc = 'assets/img/pokemon/' + checkExp(expansion) + '/' + name + '.png'
             let imgSrcGeneral = 'assets/img/pokemon/' + name + '.png'
+            if(dexNumber.includes('-shiny')){image.classList.add('shinyCard')}
 
             image.src = searchDexExceptions(dexNumber, expansion) ? imgSrc : imgSrcGeneral
 
@@ -1868,6 +2411,20 @@ function createImg(type, name, clas, expansion, dexNumber) {
             if (name.includes('_')) {
                 name = name.split('_')
                 name = firstUpperCase(name[1]) + ' ' + firstUpperCase(name[0])
+            }
+            image.title = firstUpperCase(name)
+            break;
+        case 'trainer':
+            image.src = 'assets/img/icons/trainers/' + name + '.png'
+            if (name.includes('_')) {
+                name = name.split('_')
+                let tName = ''
+
+                name.forEach(n => {
+                    tName += firstUpperCase(n) + " "
+                });
+
+                name = tName.trimEnd()
             }
             image.title = firstUpperCase(name)
             break;
@@ -1907,6 +2464,27 @@ function sortByDexNumber(searchList) {
 //Funcion que elimina modificadores del pokedex_number
 function fixDexNumber(dexNumber) {
     return dexNumber.toString().split('-')[0]
+}
+
+//Fixes the archetype name
+function fixArchetype(archetype){
+    let fixArch = archetype.split(' ')
+
+    switch (fixArch.length) {
+        case 2:
+            if(fixArch[1] == 'all'){
+                fixArch = fixArch[0]+'_'+fixArch[1]
+            }else{
+                fixArch = fixArch[0]
+            }
+            break;
+    
+        default:
+            fixArch = fixArch[0]
+            break;
+    }
+
+    return fixArch
 }
 
 //Crea el offset y el close button al abrir un selectBox
@@ -1991,7 +2569,7 @@ function boxDisabled(box, type) {
             let checkRar = false
             if (box != '') {
                 box.forEach(b => {
-                    if (b.value == 'noble' || b.value == 'mega' || b.value == 'gigamax' || b.value == 'galactic' || b.value == 'team_magma' || b.value == 'team_aqua' || b.value == 'trainer') {
+                    if (b.value == 'noble' || b.value == 'mega' || b.value == 'gigantamax' || b.value == 'fossil') {
                         checkRar = b.checked ? true : checkRar
                     }
                 });
@@ -2009,7 +2587,7 @@ function boxDisabled(box, type) {
             let checkLocat = false
             if (box != '') {
                 box.forEach(b => {
-                    if (b.value == 'space') {
+                    if (b.value == 'space' || b.value == 'warm_ruins' || b.value == 'cold_ruins' || b.value == 'temperate_ruins' || b.value == 'ancient_ruins' || b.value == 'future_ruins') {
                         checkLocat = b.checked ? true : checkLocat
                     }
                 });
@@ -2080,7 +2658,7 @@ function fixCount(pokemonData) {
         let add = true
 
         skipCardDraws.forEach(skip => {
-            add = p.pokedex_number == skip ? false : add
+            add = p.pokedex_number == skip || p.pokedex_number == skip + '-shiny' ? false : add
         });
 
         count = add ? count + 1 : count

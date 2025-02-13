@@ -1,14 +1,33 @@
 const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy', 'typeless']
-const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigamax', 'galactic', 'team magma', 'team aqua', 'trainer']
-const climateList = ['cold', 'temperate', 'warm', 'space']
+const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigantamax', 'fossil']
+const climateList = ['cold', 'temperate', 'warm', 'space', 'cold ruins', 'temperate ruins', 'warm ruins', 'ancient ruins', 'future ruins']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
 const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
-let pokemonData = [];
+const trainersList = [
+    'galactic team', '---galactic grunt', '---mars', '---jupiter', '---saturn', '---sird', '---cyrus',
+    'magma team', '---magma grunt', '---tabitha', '---courtney', '---maxie',
+    'aqua team', '---aqua grunt', '---matt', '---shelly', '---archie',
+    'plasma team', '---plasma grunt', '---plasma ace', '---colress',
+    'rocket team', '---rocket grunt', '---rocket ace', '---proton', '---ariana', '---archer', '---giovanni',
+    'trainer', '---brendan', '---may', '---wally', '---lisia',
+    '---roxanne', '---wattson', '---flannery', '---norman', '---winona', '---tate', '---liza', '---juan',
+    '---falkner', '---bugsy', '---whitney', '---morty', '---chuck', '---jasmine', '---pryce', '---clair',
+    '---palmer', '---thorton', '---dahlia', '---darach', '---argenta', '---caitlin',
+    '---sidney', '---will', '---karen', '---koga', '---lance', '---steven', '---queen'
+]
+const archetypesList = ['bomb', 'dance', 'delay', 'form', 'modify', 'multi', 'multi all', 'persisting', 
+    'priority', 'protect', 'recharge', 'song', 'switch']
+
+var globalData = [];
+var pokemonData = [];
+var moveData = []
 
 document.addEventListener('DOMContentLoaded', () => { loadDoc('assets/sinnoh_cube.json', load) })
 
 function load(xhttp) {
-    pokemonData = JSON.parse(xhttp.responseText)['pokemon']
+    globalData = JSON.parse(xhttp.responseText)
+    pokemonData = globalData['pokemon']
+    moveData = globalData['moves']
 
     const screen = document.getElementById('screen')
     const search = document.getElementById('search')
@@ -39,25 +58,30 @@ function load(xhttp) {
     const logButton = document.getElementById('logButton')
     const logBox = document.getElementById('logBox')
     const searchByGen = document.getElementById('searchByGen')
+    const trainersButton = document.getElementById('trainersButton')
+    const trainersBox = document.getElementById('trainersBox')
+    const archetypesButton = document.getElementById('archetypesButton')
+    const archetypesBox = document.getElementById('archetypesBox')
 
 
 
-    //  Desactiva el boton enter como submit para el formulario y hace que ejecute la funcion para cargar los elementos
+    //Disables the reload page from Enter in the form for input texts
     document.querySelectorAll('input[type=text]').forEach(node => node.addEventListener('keypress', e => {
         if (e.keyCode == 13) {
             e.preventDefault();
-            searchPokemon(pokemonData);
+            searchPokemon(pokemonData, moveData);
         }
     }))
 
+    //Disables the reload page from Enter in the form from input numbers
     document.querySelectorAll('input[type=number]').forEach(node => node.addEventListener('keypress', e => {
         if (e.keyCode == 13) {
             e.preventDefault();
-            searchPokemon(pokemonData);
+            searchPokemon(pokemonData, moveData);
         }
     }))
 
-    //Actualiza los select
+    //Creates the selects
     addSelectBox(rarityBox, rarityList, 'icon', 'rarity', 'checkbox')
     addSelectBox(typeBox, typeList, 'type', 'types', 'checkbox')
     addSelectBox(biomeBox, biomeList, 'locat', 'biome', 'checkbox')
@@ -65,17 +89,23 @@ function load(xhttp) {
     addSelectBox(moveTypeBox, typeList, 'type', 'moveType', 'checkbox')
     addSelectBox(learnBox, typeList, 'type', 'learn', 'checkbox')
     addSelectBox(moveEffectBox, moveEffectList, 'effect', 'moveEffect', 'checkbox')
+    addSelectBox(trainersBox, trainersList, 'trainer', 'trainer', 'checkbox')
+    addSelectBox(archetypesBox, archetypesList, 'arch', 'archetype', 'checkbox')
 
     // rarityBox.classList.add('select-box--shown')
 
     //Test draw pokemon
-    // drawPokemonInfo(pokemonData, 59, 'los')
-    // drawPokemonInfo(pokemonData, 6, 'los')
-    // drawPokemonInfo(pokemonData, 133, 'los')
+    // let testExp = 'johtoWar'
+    // lastExpasion = testExp
+    // drawPokemonInfo(pokemonData, 59, 'los', '')
+    // drawPokemonInfo(pokemonData, 6, 'los', '')
+    // drawPokemonInfo(pokemonData, 133, 'los', '')
+    // drawPokemonInfo(pokemonData, '648-mar', testExp, 0, '')
 
+    //If a image is missing replaces it
     checkImagesLoad()
 
-    //Borra la pantalla de carga despues de recibir los datos
+    //Deletes the loading screen when the data is loaded
     const ball = document.getElementById('ball')
     if (ball) {
         ball.parentNode.parentNode.removeChild(ball.parentNode)
@@ -88,6 +118,8 @@ function load(xhttp) {
     const moveTypeBoxChecks = document.getElementsByName('moveType')
     const learnBoxChecks = document.getElementsByName('learn')
     const moveEffectBoxChecks = document.getElementsByName('moveEffect')
+    const trainersBoxChecks = document.getElementsByName('trainer')
+    const archetypesBoxChecks = document.getElementsByName('archetype')
 
     const shinyRadioAny = document.getElementById('searchShinyAnything')
     const shinyRadioNone = document.getElementById('searchShinyNone')
@@ -97,21 +129,21 @@ function load(xhttp) {
     const selectLocations = document.getElementById('selectLocations')
 
 
-    //Desplaza el menu 
+    //show or hide the menu
     formClose.addEventListener('click', (e) => {
         search.classList.toggle('search--show')
         e.target.classList.toggle('formClose--show')
         e.target.classList.toggle('formClose--left')
     })
 
-    //Clic al boton buscar
+    //Adds the click function to search
     btnSearch.addEventListener('click', (e) => {
         if (e.target.value == 'Search') {
-            searchPokemon(pokemonData)
+            searchPokemon(pokemonData, moveData)
         }
     })
 
-    //Resetea el formulario
+    //Resets the form
     btnReset.addEventListener('click', (e) => {
         if (e.target.value == 'Reset') {
             const searchExpansions = document.getElementsByName('searchExpansions')
@@ -137,12 +169,14 @@ function load(xhttp) {
             enableBox(learnBoxChecks)
             enableBox(moveTypeBoxChecks)
             enableBox(moveEffectBoxChecks)
+            enableBox(trainersBoxChecks)
             checkLocationBox()
             checkRarityBox()
             checkTypesBox()
             checkMoveBox()
             checkLearnBox()
             checkMoveEffectBox()
+            checkArchetypesBox()
             stateButton(climateButton, 'en')
             stateButton(biomeButton, 'en')
             shinyRadioAny.checked = true
@@ -158,7 +192,7 @@ function load(xhttp) {
         }
     })
 
-    //Cambia el tipo de input al buscar las generaciones de radio a checkbox
+    //Change the input type searching by Generations from radio to checkbox and viceversa
     searchByGen.addEventListener('change', (e) => {
         const searchGenerations = document.getElementsByName('searchGenerations')
         if (e.target.checked) {
@@ -174,39 +208,58 @@ function load(xhttp) {
         }
     })
 
-    //Añade funcion al hacer clic en las cartas buscadas
+    //Adds the click function to draw the info
     screen.addEventListener('click', (e) => {
-        if (e.target.classList.contains('sdcard')) {
+
+        //Check if the element clicked is a card
+        if(e.target.classList.contains('sdcard')){
+
+            //Get the attributes to draw the pokemon
             let dexNumber = e.target.getAttribute('dexnumber')
             let expansion = e.target.getAttribute('expansion')
-            if (dexNumber) {
+            let trainer = e.target.getAttribute('trainer')
+            let scrollBar = screen.scrollTop
+
+            //If have a dex number draw the info
+            if(dexNumber){
+
+                //makes the screen to not scroll
                 screen.classList.add('screen--noScroll')
+
+                //set the expansion clicked as last expansion
                 lastExpasion = lastExpasion == null ? expansion : lastExpasion
-                drawPokemonInfo(pokemonData, dexNumber, expansion)
+
+                //Draws the pokemon info
+                drawPokemonInfo(pokemonData, dexNumber, expansion, scrollBar, trainer)
             }
         }
     })
 
+    //Adds the click function to select generations
     genButton.addEventListener('click', () => {
         setSelect()
         genBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to log
     logButton.addEventListener('click', () => {
         setSelect()
         logBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to select expansions
     expButton.addEventListener('click', () => {
         setSelect()
         expBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to select rarities
     rarityButton.addEventListener('click', () => {
         setSelect()
         rarityBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to select biomes
     biomeButton.addEventListener('click', (e) => {
         if (!e.target.classList.contains('select-button--disabled')) {
             setSelect()
@@ -214,6 +267,7 @@ function load(xhttp) {
         }
     })
 
+    //Adds the click function to select climates
     climateButton.addEventListener('click', (e) => {
         if (!e.target.classList.contains('select-button--disabled')) {
             setSelect()
@@ -221,27 +275,43 @@ function load(xhttp) {
         }
     })
 
+    //Adds the click function to select move types
     moveTypeButton.addEventListener('click', () => {
         setSelect()
         moveTypeBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to select learn move types
     learnButton.addEventListener('click', () => {
         setSelect()
         learnBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to select types
     typeButton.addEventListener('click', () => {
         setSelect()
         typeBox.classList.add('select-box--shown')
     })
 
+    //Adds the click function to select move effects
     moveEffectButton.addEventListener('click', () => {
         setSelect()
         moveEffectBox.classList.add('select-box--shown')
     })
 
-    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero
+    //Adds the click function to select trainers
+    trainersButton.addEventListener('click', () => {
+        setSelect()
+        trainersBox.classList.add('select-box--shown')
+    })
+
+    //Adds the click function to select trainers
+    archetypesButton.addEventListener('click', () => {
+        setSelect()
+        archetypesBox.classList.add('select-box--shown')
+    })
+
+    //Limit the max number of options of types (2)
     typesBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
             boxNabled(typesBoxChecks, 2)
@@ -249,7 +319,7 @@ function load(xhttp) {
         })
     });
 
-    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero
+    //Limit the max number of options of move types (1)
     moveTypeBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
             boxNabled(moveTypeBoxChecks, 1)
@@ -257,7 +327,7 @@ function load(xhttp) {
         })
     });
 
-    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero
+    //Limit the max number of options of learn move types (4)
     learnBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
             boxNabled(learnBoxChecks, 4)
@@ -265,7 +335,7 @@ function load(xhttp) {
         })
     });
 
-    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    //Limit the max number of options of rarities (1) and disables if noble, mega, gigantamax, fossil or trainer
     rarityBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
             boxNabled(rarityBoxChecks, 1)
@@ -273,6 +343,15 @@ function load(xhttp) {
             checkRarityBox()
         })
     });
+
+    //disables biome and climate if has a trainer
+    trainersBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxDisabled(trainersBoxChecks, 'trainer')
+            checkTrainersBox()
+        })
+    });
+
     //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
     moveEffectBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
@@ -281,7 +360,7 @@ function load(xhttp) {
         })
     });
 
-    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    //Limit the max number of options of climate (1) and disables if space selected
     climateBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
             boxNabled(climateBoxChecks, 1)
@@ -290,7 +369,7 @@ function load(xhttp) {
         })
     });
 
-    //Comprueba cuantos estan seleccionados y deshabilita si hay mas de cierto numero, deshabilita si hay mega, noble o dinamax seleccionados
+    //Limit the max number of options of biome (1)
     biomeBoxChecks.forEach(check => {
         check.addEventListener('change', () => {
             boxNabled(biomeBoxChecks, 1)
@@ -298,18 +377,31 @@ function load(xhttp) {
         })
     });
 
+    //Limit the max number of options of archetypes (1)
+    archetypesBoxChecks.forEach(check => {
+        check.addEventListener('change', () => {
+            boxNabled(archetypesBoxChecks, 3)
+            checkArchetypesBox()
+        })
+    });
+
+    //Change the color for the shinies selector (anything)
     shinyRadioAny.addEventListener('click', ()=>{
         selectLocations.classList.remove('select-locations--only')
         selectLocations.classList.remove('select-locations--none')
         shinyRadioOnlyItem.classList.remove('select-radio--item--only')
         shinyRadioNoneItem.classList.remove('select-radio--item--none')
     })
+
+    //Change the color for the shinies selector (only)
     shinyRadioOnly.addEventListener('click', ()=>{
         selectLocations.classList.add('select-locations--only')
         selectLocations.classList.remove('select-locations--none')
         shinyRadioOnlyItem.classList.add('select-radio--item--only')
         shinyRadioNoneItem.classList.remove('select-radio--item--none')
     })
+
+    //Change the color for the shinies selector (none)
     shinyRadioNone.addEventListener('click', ()=>{
         selectLocations.classList.remove('select-locations--only')
         selectLocations.classList.add('select-locations--none')
@@ -318,7 +410,7 @@ function load(xhttp) {
     })
 }
 
-//Funcion para dibujar las cartas obtenidas de getCards en screen
+//Draws the cards from getCards in the screen
 function drawCards(xhttp) {
     const screen = document.getElementById('screen')
     borrar(screen)

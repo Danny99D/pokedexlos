@@ -155,6 +155,18 @@ $borderItem: 5px;
             width: 140%;
             left: -20px;
         }
+        &--arch{
+            border: 2px solid aliceblue;
+            padding: 0;
+            width: 40px;
+            right: -45px;
+            border-radius: 5px;
+            overflow: hidden;
+            & .select-display--item{
+                @include cubo(100%);
+            }
+
+        }
     }
     &-item, &-radio {
         height: 45px;
@@ -169,7 +181,13 @@ $borderItem: 5px;
         &:hover {
             background-color: $bg4;
         }
+        &--sub {
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
+
 
     &--title {
         @extend %flexCenter;
@@ -182,6 +200,7 @@ $borderItem: 5px;
         font-weight: bold;
         user-select: none;
         cursor: pointer;
+
     }
 
     &-radio{

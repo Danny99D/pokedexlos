@@ -1068,6 +1068,8 @@
 }
 .select-radio {
   margin-top: 3rem;
+  padding: 0;
+  height: 50px;
   border-radius: 0 0 5px 5px;
 }
 .select-radio::after {
@@ -1152,7 +1154,7 @@
 }
 
 @media screen and (max-height: 900px) {
-  .select-item, .select-radio {
+  .select-item {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }

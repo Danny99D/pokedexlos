@@ -1436,7 +1436,10 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar, trainer) 
         })
 
         //Adds the click function for the elements
+        // console.log(pokeLinesCages)
+        // console.log((Array.from(pokeLinesCages)))
         Array.from(pokeLinesCages).forEach((cage) => {
+            
             cage.addEventListener('click', (e)=>{
 
                 //If the clicked element has dexNumber attribute
@@ -1449,7 +1452,7 @@ function drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar, trainer) 
 
                     //Deletes the actual pokemon info
                     borrar(cardInfo)
-
+                    // console.log(dexNumber+'|'+expansion+'|'+scrollVar+'|'+trainer)
                     //Search the clicked pokemon
                     drawPokemonInfo(pokemonData, dexNumber, expansion, scrollVar, trainer)
                 }

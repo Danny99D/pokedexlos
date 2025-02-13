@@ -213,7 +213,8 @@ $borderItem: 5px;
 
     &-radio{
         margin-top: 3rem;
-        // padding: 0;
+        padding: 0;
+        height: 50px;
         border-radius: 0 0 $borderItem $borderItem;
 
         &::after{
@@ -305,7 +306,7 @@ $borderItem: 5px;
 }
 
 @media screen and (max-height: 900px) {
-    .select-item, .select-radio {
+    .select-item {
         padding-top: 1rem;
         padding-bottom: 1rem;
     }

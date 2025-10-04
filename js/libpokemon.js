@@ -1824,6 +1824,8 @@ function checkExpB(exp) {
             return 'seasons'
         case 'johtoWar':
             return 'Johto War'
+        case 'wildlands':
+            return 'Wildlands'
         default:
             return 'base'
     }
@@ -1846,6 +1848,8 @@ function checkExp(exp) {
             return 'seasons'
         case 'johtoWar':
             return 'johtoWar'
+        case 'wildlands':
+            return 'wildlands'
         default:
             return 'los'
     }

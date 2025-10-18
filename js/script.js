@@ -2,7 +2,7 @@ const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poi
 const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigantamax', 'fossil']
 const climateList = ['cold', 'temperate', 'warm', 'space', 'cold ruins', 'temperate ruins', 'warm ruins', 'ancient ruins', 'future ruins']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
-const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
+const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'sleep', 'hexed', 'intimidated', 'grappled', 'drenched', 'rooted','switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
 const trainersList = [
     'galactic team', '---galactic grunt', '---mars', '---jupiter', '---saturn', '---sird', '---cyrus',
     'magma team', '---magma grunt', '---tabitha', '---courtney', '---maxie',
@@ -18,9 +18,12 @@ const trainersList = [
 const archetypesList = ['bomb', 'dance', 'delay', 'form', 'modify', 'multi', 'multi all', 'persisting', 
     'priority', 'protect', 'recharge', 'song', 'switch']
 
-var globalData = [];
-var pokemonData = [];
+var globalData = []
+var pokemonData = []
 var moveData = []
+
+const urlParams = new URLSearchParams(window.location.search)
+const urlExpansions = urlParams.get('exp')
 
 document.addEventListener('DOMContentLoaded', () => { loadDoc('assets/sinnoh_cube.json', load) })
 
@@ -63,6 +66,7 @@ function load(xhttp) {
     const archetypesButton = document.getElementById('archetypesButton')
     const archetypesBox = document.getElementById('archetypesBox')
 
+    checkExpansions()
 
 
     //Disables the reload page from Enter in the form for input texts

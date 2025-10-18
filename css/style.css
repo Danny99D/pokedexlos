@@ -951,6 +951,7 @@
   visibility: hidden;
   opacity: 0%;
   z-index: 250;
+  overflow-y: auto;
 }
 .select-box::-webkit-scrollbar {
   width: 5px;
@@ -1142,10 +1143,17 @@
   background-color: #c7d5e0;
   border-radius: 0 5px 5px 0;
   clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+  text-decoration: none;
 }
 .select--link img {
   width: 30px;
   height: 30px;
+}
+.select--link2 {
+  right: 50px;
+  clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  border-radius: 0;
+  background-color: cadetblue;
 }
 .select--img {
   width: 2rem;

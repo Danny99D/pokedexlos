@@ -89,6 +89,7 @@ $borderItem: 5px;
         visibility: hidden;
         opacity: 0%;
         z-index: 250;
+        overflow-y: auto;
         &::-webkit-scrollbar {
             width: 5px;
         }
@@ -295,8 +296,15 @@ $borderItem: 5px;
         background-color: $bg4;
         border-radius: 0 $borderItem $borderItem 0;
         clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+        text-decoration: none;
         & img {
             @include cubo(30px);
+        }
+        &2{
+            right: 50px;
+            clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+            border-radius: 0;
+            background-color: cadetblue;
         }
     }
     &--img {

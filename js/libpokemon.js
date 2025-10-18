@@ -566,6 +566,12 @@ function searchByMoveEffect(pokemonData, moveEffect) {
             case 'drowsy':
             case 'confused':
             case 'poisoned':
+            case 'sleep':
+            case 'hexed':
+            case 'intimidated':
+            case 'grappled':
+            case 'drenched':
+            case 'rooted':
                 pokemonData.find((pokeObj) => {
                     let move = pokeObj.move_effect.toLowerCase()
                     if (move.includes(moveEffect.toLowerCase())) {
@@ -2221,6 +2227,31 @@ function stateButton(button, state) {
         case 'en':
             button.classList.remove('select-button--disabled')
             break;
+    }
+}
+
+//Change the expansions selected by GET
+function checkExpansions(){
+    const expansions = document.getElementsByName('searchExpansions')
+    const searchBase = document.getElementById('searchBase')
+    
+    if(urlExpansions){
+        let exps = urlExpansions.split(' ')
+        exps = exps.map(e => e.toLowerCase())
+
+        let match = false
+        expansions.forEach(expansion => {
+            let vExpansion = expansion.value.toLowerCase()
+            if(exps.includes(vExpansion)){
+                match = true                
+                expansion.checked = true
+            }else{
+                expansion.checked = false
+            }
+        });
+        if(match == false){
+            searchBase.checked = true
+        }
     }
 }
 

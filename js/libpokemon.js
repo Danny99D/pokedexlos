@@ -36,6 +36,7 @@ let notTrainers = [
     'aqua_team', 'aqua_grunt', 'matt', 'shelly', 'archie', //Aqua Team
     'plasma_team', 'plasma_grunt', 'plasma_ace', 'colress', //Plasma Team
     'rocket_team', 'rocket_grunt', 'rocket_ace', 'proton', 'ariana', 'archer', 'giovanni', //Rocket Team
+    'shuckle_T1', 'shuckle_T2', 'shuckle_T3', 'rusty', //Shuckle campaign
     'trainer'
 ]
 
@@ -374,6 +375,7 @@ function searchByExpansion(pokemonData, expansions) {
 
     expansions.forEach(expansion => {
         pokemonData.find((pokeObj) => {
+            // console.log(pokeObj.expansion)
             if ((pokeObj.expansion == expansion)) {
                 pokemonSearch.push(pokeObj)
             }
@@ -417,27 +419,31 @@ function searchByTrainer(pokemonData, trainers){
 
         pokemonData.forEach(pokeObj => {            
             trainers.forEach(t => {
-                let pTrainer = pokeObj.hasOwnProperty('trainer') ? pokeObj.trainer.toLowerCase() : ''
+                let pTrainer = pokeObj.hasOwnProperty('trainer') ? pokeObj.trainer.toLowerCase().replaceAll(" ", "_") : ''
 
                 let trainer = t.toLowerCase()
 
                 //If search by a team or trainers
-                if(trainer == 'trainer' || trainer.includes('team')){
+                if(trainer == 'trainer' || trainer == 'shuckle' || trainer.includes('team')){
                     if(pokeObj.pokedex_number.includes(checkTrainerMod(pokeObj, trainer))){
                         pokemonSearch.push(pokeObj)
                     }
                 }else{
-                    if(pTrainer == trainer){
+                    if(pTrainer.toLowerCase() == trainer.toLowerCase()){
                         pokemonSearch.push(pokeObj)
                     }
                 }
             });
         });
     }else{
-        pokemonData.forEach(pokeObj => {            
-            if(pokeObj.hasOwnProperty('trainer') && pokeObj.trainer == ''){
+        pokemonData.forEach(pokeObj => { 
+            if(!pokeObj.hasOwnProperty('trainer')){
                 pokemonSearch.push(pokeObj)
-            }
+            }else{
+                if(pokeObj.hasOwnProperty('trainer') && pokeObj.trainer == ''){
+                    pokemonSearch.push(pokeObj)
+                }
+            }        
         });
     }
     return pokemonSearch
@@ -445,11 +451,16 @@ function searchByTrainer(pokemonData, trainers){
 
 //Returns the mod for the trainer of the pokemon
 function checkTrainerMod(pokemon, trainer) {
-    if(pokemon.pokedex_number.includes('-x')){ return '-gl'}
-    
+
+    if(pokemon.pokedex_number.includes('-x')){ 
+        return '-gl'
+    }
+
+    let pTrainer = pokemon.hasOwnProperty('trainer') ? pokemon.trainer.toLowerCase() : null
+
     switch (trainer) {
         case 'galactic_team':
-            switch (pokemon.trainer.toLowerCase()) {
+            switch (pTrainer) {
                 case 'galactic grunt':
                 case 'mars':
                 case 'jupiter':
@@ -463,7 +474,7 @@ function checkTrainerMod(pokemon, trainer) {
             }
         break;
         case 'magma_team':
-            switch (pokemon.trainer.toLowerCase()) {
+            switch (pTrainer) {
                 case 'magma grunt':
                 case 'tabitha':
                 case 'courtney':
@@ -475,7 +486,7 @@ function checkTrainerMod(pokemon, trainer) {
             }
         break;
         case 'aqua_team':
-            switch (pokemon.trainer.toLowerCase()) {
+            switch (pTrainer) {
                 case 'aqua grunt':
                 case 'matt':
                 case 'shelly':
@@ -487,7 +498,7 @@ function checkTrainerMod(pokemon, trainer) {
             }
         break;
         case 'plasma_team':
-            switch (pokemon.trainer.toLowerCase()) {
+            switch (pTrainer) {
                 case 'plasma grunt':
                 case 'plasma ace':
                 case 'colress':
@@ -498,7 +509,7 @@ function checkTrainerMod(pokemon, trainer) {
             }
         break;
         case 'rocket_team':
-            switch (pokemon.trainer.toLowerCase()) {
+            switch (pTrainer) {
                 case 'rocket grunt':
                 case 'rocket ace':
                 case 'proton':
@@ -506,6 +517,18 @@ function checkTrainerMod(pokemon, trainer) {
                 case 'archer':
                 case 'giovanni':
                         return '-trck'
+                    break;
+                default:
+                    break;
+            }
+        break;
+        case 'shuckle':
+            switch (pTrainer) {
+                case 'shuckle_t1':
+                case 'shuckle_t2':
+                case 'shuckle_t3':
+                case 'rusty':
+                        return '-shuc'
                     break;
                 default:
                     break;
@@ -811,16 +834,16 @@ function searchPokemon(pokemonData, moveData) {
 
         //Search a pokemon by expansion
         searchList = searchByExpansion(searchList, searchExpansions)
-
+        
         //Search a pokemon by generation
         searchList = searchByGenerations(searchList, searchGenerations, pokemonRarity)
-
+        
         //Search a pokemon by trainer
         searchList = searchByTrainer(searchList, pokemonTrainers)
-
+        
         //Sort the array by pokedex_number
         searchList = sortByDexNumber(searchList)
-
+        
         drawPokemonCards(searchList)
 
         //Cierra la ventana de busqueda para menu responsive
@@ -1727,6 +1750,7 @@ function checkDexNumber(modDex) {
     modDex = modDex.includes('-trai') ? modDex.slice(0, -5) : modDex //Trainer (Freeze)
     modDex = modDex.includes('-taqu') ? modDex.slice(0, -5) : modDex //Team Aqua (Freeze)
     modDex = modDex.includes('-tmag') ? modDex.slice(0, -5) : modDex //Team Magma (Freeze)
+    modDex = modDex.includes('-shuc') ? modDex.slice(0, -5) : modDex //Shuckle
 
     //Pumpkaboo & gourgheist
     modDex = modDex.substr(-3, 3) == '-ps' && modDex.includes('-ps') ? modDex.slice(0, -3) : modDex //small
@@ -1832,6 +1856,8 @@ function checkExpB(exp) {
             return 'Johto War'
         case 'wildlands':
             return 'Wildlands'
+        case 'shuckle':
+            return 'shuckle'
         default:
             return 'base'
     }
@@ -1856,6 +1882,8 @@ function checkExp(exp) {
             return 'johtoWar'
         case 'wildlands':
             return 'wildlands'
+        case 'shuckle':
+            return 'shuckle'
         default:
             return 'los'
     }
@@ -1974,7 +2002,7 @@ function checkTrainersBox() {
     
                 if (node == 'galactic_team.png' || node == 'plasma_team.png' || 
                     node == 'aqua_team.png' || node == 'magma_team.png' || node == 'rocket_team.png' ||
-                    node == 'trainer.png') {
+                    node == 'trainer.png' || node == 'shuckle.png') {
                     selectLocations.removeChild(selectLocations.lastChild)
                 }
             }
@@ -2071,6 +2099,25 @@ function checkTrainersBox() {
                             case 'ariana':
                             case 'archer':
                             case 'giovanni':
+                                if(option.checked){
+                                    t.disabled = true
+                                    t.checked = false
+                                }else{
+                                    t.disabled = false
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    break;
+                case 'shuckle':
+                    trainersBoxChecks.forEach(t => {
+                        switch (t.value) {
+                            case 'shuckle_T1':
+                            case 'shuckle_T2':
+                            case 'shuckle_T3':
+                            case 'rusty':
                                 if(option.checked){
                                     t.disabled = true
                                     t.checked = false
@@ -2446,9 +2493,10 @@ function createImg(type, name, clas, expansion, dexNumber) {
         case 'poke':
             let imgSrc = 'assets/img/pokemon/' + checkExp(expansion) + '/' + name + '.png'
             let imgSrcGeneral = 'assets/img/pokemon/' + name + '.png'
+
             if(dexNumber.includes('-shiny')){image.classList.add('shinyCard')}
 
-            image.src = searchDexExceptions(dexNumber, expansion) ? imgSrc : imgSrcGeneral
+            image.src = searchDexExceptions(checkDexNumber(dexNumber), expansion) ? imgSrc : imgSrcGeneral
 
             break;
         case 'icon':
@@ -2502,7 +2550,6 @@ function sortByDexNumber(searchList) {
     searchList.sort(((a, b) =>
         fixDexNumber(a.pokedex_number) - fixDexNumber(b.pokedex_number)
     ));
-
     return searchList
 }
 

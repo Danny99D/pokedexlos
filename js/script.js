@@ -1,5 +1,5 @@
 const typeList = ['normal', 'grass', 'fire', 'water', 'flying', 'fighting', 'poison', 'electric', 'ground', 'rock', 'psychic', 'ice', 'bug', 'ghost', 'steel', 'dragon', 'dark', 'fairy', 'typeless']
-const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigantamax', 'fossil', 'shuckle 1', 'shuckle 2', 'shuckle 3', 'shuckle']
+const rarityList = ['starter', 'weak', 'moderate', 'strong', 'legendary', 'ultra beast', 'noble', 'mega', 'gigantamax', 'fossil', 'shuckle1', 'shuckle2', 'shuckle3', 'shuckle']
 const climateList = ['cold', 'temperate', 'warm', 'space', 'cold ruins', 'temperate ruins', 'warm ruins', 'ancient ruins', 'future ruins']
 const biomeList = ['forest', 'ocean', 'mountain', 'plains']
 const moveEffectList = ['burned', 'frozen', 'paralysed', 'drowsy', 'confused', 'poisoned', 'sleep', 'hexed', 'intimidated', 'grappled', 'drenched', 'rooted','switch out', 'add roll', 'remove roll', 'second move', 'next attacked', 'next attacks', 'increase damage', 'minus damage', 'extra damage', 'double damage', 'take damage', 'change form', 'change type', 'heal', 'attack strength', 'battle fatigue']
